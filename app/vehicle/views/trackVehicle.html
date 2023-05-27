@@ -1,0 +1,39 @@
+<div style=" height: 100%; overflow-y: scroll;overflow-x: hidden;">
+<div class="card-header ch-al p-3">
+	<div class="row">
+		<div class="col-md-5 col-xs-12  pt-1">
+			<h2>Track Vehicle</h2>
+		</div>
+
+		<div class="col-md-3 col-xs-12  pt-2">
+			<angucomplete-alt id="autoSearch" placeholder="Search by bus number" pause="100"
+				remote-url="{{trackVehicleCtrl.baseApi}}/vehicle/search?vehicleInfo="
+				title-field="busNumber"
+				selected-object="trackVehicleCtrl.getVehicleTrips" minlength="1"
+				input-class="form-control form-control-small"
+				description-field="registrationNumber"
+				match-class="highlight" />
+		</div>
+		<div class="col-md-3 col-xs-12  pt-2">
+            <select id="tripName" class="form-control form-control-sm" data-ng-disabled="!trackVehicleCtrl.vehicleRouteTrip.length" data-ng-change ="trackVehicleCtrl.startInterval(trackVehicleCtrl.vehicleRouteTripId)" name = "tripName" data-ng-model = "trackVehicleCtrl.vehicleRouteTripId"
+                    ng-options="vehiclelocation as vehiclelocation.tripName
+    for vehiclelocation in trackVehicleCtrl.vehicleRouteTrip">
+				<option value="" disabled selected>Select trip name</option>
+			</select>
+
+        </div>
+		<div class="col-md-1 col-xs-12  pt-2">
+			<button type="submit" style="vertical-align: sub;"
+				class="btn btn-danger"
+				data-ng-click="trackVehicleCtrl.clearVehicleSearch('autoSearch')">Clear</button>
+		</div>
+
+    </div>
+</div>
+<div class="album-container p-2"   style="height: calc(100% - 75px);" >
+	<ng-map class="map-responsive" zoom="15" center="{{trackVehicleCtrl.map.center}}" style="height:100%;width:100%">
+	<traffic-layer></traffic-layer>
+		<marker ng-repeat="pos in trackVehicleCtrl.positions  track by pos.busNumber" position="{{pos.latitude}},{{pos.longitude}}"
+			title="'{{pos.busNumber}}'"/>
+	 </ng-map>
+</div></div>

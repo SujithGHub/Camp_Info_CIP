@@ -1,0 +1,270 @@
+<div class="card-header ch-al pb-1-25 pt-1-25">
+    <div class="row">
+        <h2>Attendance Analysis</h2>
+    </div>
+</div>
+<div class="card-body" data-ng-init="attendanceAnalysisCtrl.init()">
+    <form class="form-horizontal pad-top" role="form" novalidate name="attendanceAnalysis">
+        <div class="row" style="margin: 0px !important">
+            <div class="col-md-3 col-sm-4 col-xs-4 pl-0">
+                <div class="card allSides content">
+                    <div style="padding: 20px;">
+                        <md-input-container flex style="margin-right: 0px !important;" class="required-mark">
+                            <label>From Date</label>
+                            <input datepicker class="md-input" id='fromDate' name="fromDate" required data-ng-model="attendanceAnalysisCtrl.form.fromDate" class="form-control">
+                            <div data-ng-messages="attendanceAnalysis.fromDate.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="attendanceAnalysis.$submitted" class="help-block">
+                                    <small>From date is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container flex style="margin: 0px auto!important" class="required-mark">
+                            <label>To Date</label>
+                            <input datepicker class="md-input" required name="toDate" data-ng-model="attendanceAnalysisCtrl.form.toDate" class="form-control">
+
+                            <div data-ng-messages="attendanceAnalysis.toDate.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="attendanceAnalysis.$submitted" class="help-block">
+                                    <small>To date is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container class="align-center" data-ng-if="attendanceAnalysisCtrl.role != 'ROLE_USER'"
+                                            data-ng-show="attendanceAnalysisCtrl.instituteType == 'College' && attendanceAnalysisCtrl.role == 'ROLE_STAFF_HOD'">
+                            <label>Department</label>
+                            <md-select name="myModel" data-ng-model="attendanceAnalysisCtrl.form.department" data-ng-change="attendanceAnalysisCtrl.getClass(attendanceAnalysisCtrl.form.department)" disabled>
+                                <md-option ng-repeat="dept in attendanceAnalysisCtrl.departments" ng-value="dept.id">{{dept.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+
+                        <md-input-container class="align-center" data-ng-if="attendanceAnalysisCtrl.role != 'ROLE_USER'"
+                                            data-ng-show="attendanceAnalysisCtrl.instituteType=='College' && attendanceAnalysisCtrl.role != 'ROLE_STAFF_HOD'">
+                            <label>Department</label>
+                            <md-select name="myModel" data-ng-model="attendanceAnalysisCtrl.form.department" data-ng-change="attendanceAnalysisCtrl.getClass(attendanceAnalysisCtrl.form.department)">
+                                <md-option ng-repeat="dept in attendanceAnalysisCtrl.departments" ng-value="dept.id">{{dept.name}}</md-option>
+                                <md-option value="all">All</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="align-center" data-ng-if="attendanceAnalysisCtrl.role != 'ROLE_USER'">
+                            <label data-ng-if="attendanceAnalysisCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="attendanceAnalysisCtrl.instituteType == 'School'">Standard</label>
+                            <md-select name="myModel" data-ng-model="attendanceAnalysisCtrl.form.classYear" data-ng-change="(attendanceAnalysisCtrl.form.classYear == 'all' || attendanceAnalysisCtrl.form.classYear == '') ?attendanceAnalysisCtrl.form.section=undefined:attendanceAnalysisCtrl.getSection();">
+                                <md-option value=""></md-option>
+                                <md-option ng-repeat="class in attendanceAnalysisCtrl.classYear" ng-value="class.id">{{class.name}}</md-option>
+                                <md-option data-ng-if="attendanceAnalysisCtrl.instituteType == 'School'" value="all">All</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="align-center" data-ng-if="attendanceAnalysisCtrl.role != 'ROLE_USER'">
+                            <label>Section</label>
+                            <md-select name="myModel" data-ng-model="attendanceAnalysisCtrl.form.section">
+                                <md-option value=""></md-option>
+                                <md-option ng-repeat="section in attendanceAnalysisCtrl.sectionList" ng-value="section.id">{{section.sectionName}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                       <div class="row" data-ng-if="attendanceAnalysisCtrl.role != 'ROLE_USER'" >
+		                     <div class="col-sm-12"><angucomplete-alt  pause="100" placeholder="Roll number" remote-url="{{attendanceAnalysisCtrl.baseApi}}/student/rollno/classyear?classYearId={{attendanceAnalysisCtrl.form.classYear}}&searchValue="
+			                     title-field="rollNumber" selected-object="attendanceAnalysisCtrl.form.searchRollNo" 
+			                     minlength="1" input-class="form-control form-control-small" initial-value="attendanceAnalysisCtrl.form.searchText"/></div>
+		              </div>
+		              <div class="row">
+			              <div class="col-sm-12 mt-3">
+			                  <button type="submit" data-ng-click="attendanceAnalysis.$valid ?attendanceAnalysisCtrl.getSearchResult(attendanceAnalysisCtrl.form): ''" class="btn btn-danger">SUBMIT</button>
+			              </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+    </form>
+    <div class="col-md-9 col-sm-8 col-xs-8 p-0" id="student" style="display: none;">
+        <div class="card allSides">
+            <div class="row" id="nameDiv" style="margin: 0px !important; padding-right: 0px">
+                <div class="col-sm-10 col-xs-10">
+                    <h4 class="card-title" style="padding-top: 4px; padding-left: 8px; font-family: roboto !important; font-size: 14px !important; font-weight: 500;">
+						Student Name: {{studentName}}</h4>
+                </div>
+                <div data-ng-show="reportStatus == 1" class="col-sm-2 " style="padding-top: 20px; padding-right: 8px;">
+                    <button class="btn bgm-teal btn-xs pull-right" data-ng-click="attendanceAnalysisCtrl.getReportPage()" data-ui-sref="report">Report</button>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th style="background-color: #f7f7f7">Total Number of Working {{attendanceAnalysisCtrl.attendanceLabel}}</th>
+                            <th style="background-color: #f7f7f7">Number Of {{attendanceAnalysisCtrl.attendanceLabel}} Present</th>
+                            <th style="background-color: #f7f7f7">Number Of {{attendanceAnalysisCtrl.attendanceLabel}} Absent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                            <!-- <td>{{$index+1}}</td> -->
+                            <td>{{attendanceAnalysisCtrl.totalDays}}</td>
+                            <td>{{attendanceAnalysisCtrl.daysPresent}}</td>
+                            <td>{{attendanceAnalysisCtrl.daysAbsent}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" style="margin: 0 !important;padding-bottom: 10px;">
+                <div class="col-sm-3 col-sm-3">
+                    <label style="color: teal;font-size: small" class="checkbox checkbox-inline"><b>P</b> - Present</label>
+                </div>
+                <div class="col-sm-3 col-sm-3 has-error has-feedback">
+                    <label style="font-size: small;color: #f44336" class="checkbox checkbox-inline"><b>A</b>- Absent</label>
+                </div>
+                <div class="col-sm-3 col-sm-3 has-success">
+                    <label style="font-size: small;color: #4caf50" class="checkbox checkbox-inline"><b>O</b> - On Duty </label>
+                </div>
+                <div class="col-sm-3 col-sm-3 has-warning">
+                    <label style="font-size: small;color: #ff9800;" class="checkbox checkbox-inline"><b>L</b> - Leave</label>
+                </div>
+            </div>
+            <div class="card-body card-padding content attendance-alignment" id="chart" style="padding-left: 2px !important;padding-top: 8px;">
+                <div class="" id="table" style="background-color: rgb(255,255,255);overflow-x: auto;">
+                    <table data-ng-table="tableData" class="table table-striped table-vmiddle" data-ng-class="{ 'no-pager': totalCount.length <= 6, 'no-counts':true, 'custom-pager':true}">
+                        <thead>
+                            <tr class="thead-row">
+                                <th>Date</th>
+                                <th >1 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount != 1">2 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount != 1 && attendanceAnalysisCtrl.hourCount != 2">3 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount != 1 && attendanceAnalysisCtrl.hourCount != 2">4 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount != 1 && attendanceAnalysisCtrl.hourCount != 2 && attendanceAnalysisCtrl.hourCount != 4">5 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount == 6 || attendanceAnalysisCtrl.hourCount == 7 || attendanceAnalysisCtrl.hourCount == 8 ">6 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount == 7 || attendanceAnalysisCtrl.hourCount == 8 ">7 Hr</th>
+                                <th data-ng-if="attendanceAnalysisCtrl.hourCount == 8 ">8 Hr</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-ng-repeat="result in resultList">
+                                <td>{{result.date}}</td>
+                                <td>
+                                    <div data-ng-if="result.hour1=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour1=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour1=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour1=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="attendanceAnalysisCtrl.hourCount != 1">
+                                    <div data-ng-if="result.hour2=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour2=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour2=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour2=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="attendanceAnalysisCtrl.hourCount != 1 && attendanceAnalysisCtrl.hourCount != 2">
+                                    <div data-ng-if="result.hour3=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour3=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour3=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour3=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="attendanceAnalysisCtrl.hourCount != 1 && attendanceAnalysisCtrl.hourCount != 2">
+                                    <div data-ng-if="result.hour4=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour4=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour4=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour4=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+                                    <div data-ng-if="result.hour5=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour5=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour5=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour5=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="attendanceAnalysisCtrl.hourCount == 6 || attendanceAnalysisCtrl.hourCount == 7 || attendanceAnalysisCtrl.hourCount == 8 ">
+                                    <div data-ng-if="result.hour6=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour6=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour6=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour6=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="attendanceAnalysisCtrl.hourCount == 7 || attendanceAnalysisCtrl.hourCount == 8 ">
+                                    <div data-ng-if="result.hour7=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour7=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour7=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour7=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                                <td data-ng-if="attendanceAnalysisCtrl.hourCount == 8 ">
+                                    <div data-ng-if="result.hour8=='PRESENT'" class="presence"><b>P</b>
+                                    </div>
+                                    <div data-ng-if="result.hour8=='LEAVE'" class="leave"><b>L</b>
+                                    </div>
+                                    <div data-ng-if="result.hour8=='OD'" class="od"><b>O</b>
+                                    </div>
+                                    <div data-ng-if="result.hour8=='ABSENT'" class="absent"><b>A</b>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-sm-8 col-xs-8 p-0" id="chart_card">
+        <div class="card allSides">
+            <div class="card-body card-padding chart-content" style="height: 72vh;" style="padding-left: 2px !important">
+        	<div data-ng-show="reportStatus == 1" class="col-sm-2 " style="padding-top: 20px; padding-right: 8px;float: right !important;">
+                    <button class="btn bgm-teal btn-xs pull-right" data-ng-click="attendanceAnalysisCtrl.getReportPage()" data-ui-sref="report">Report</button>
+      		</div>
+                <div id="container" class="" style="min-width: 310px; margin-top: 45px"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <link rel="stylesheet" href="\assets\css\ngTable.css">
+    <style>
+        md-autocomplete {
+            min-width: inherit;
+        }
+        #student {
+            font-family: roboto;
+            font-size: 12px;
+            line-height: 1.42857143;
+            color: #5e5e5e;
+        }
+        md-autocomplete[md-floating-label] md-input-container {
+            padding-bottom: 0px !important;
+        }
+        .table-bordered>tbody>tr>td,
+        .table-bordered>thead>tr>th,
+        .thead-row {
+            border: 1px solid #f0f0f0;
+        }
+        .leave {
+        	color: #ff9800;
+        }
+        .od {
+        	color: #4caf50;
+        }
+        .absent {
+        	color: #f44336;
+        }
+        .presence {
+        	color: teal;
+        }
+    </style>

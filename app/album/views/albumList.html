@@ -1,0 +1,28 @@
+<div class="card-header" data-ng-init="albumCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2>Albums<small class="hidden-xs">
+                  <div class="grid-ellipsis">Lists the details of all the available albums</div>
+               </small></h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="albumCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" form-modal
+         template-url="/app/album/views/create.html"
+            m-title="Album" m-scope="albumCtrl.mScope" init-data="albumCtrl.initData" form-submit="albumCtrl.saveOrUpdateAlbum(mForm)" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Album</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="albumDataTable" class="display table" cellspacing="0"></table>
+</div>

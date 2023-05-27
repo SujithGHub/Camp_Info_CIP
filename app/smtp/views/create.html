@@ -1,0 +1,54 @@
+<md-dialog-content class="card-header" >
+   <div class="md-dialog-content">
+	<md-input-container class="align-center required-mark">
+		<label>Institute Name</label>
+        <md-select name="institute" ng-model="mScope.mForm.institute.id" data-ng-required="true">
+       		<md-option ng-value="institute.id" data-ng-repeat="institute in mScope.instituteList">{{::institute.instituteName}}</md-option>
+        </md-select>
+        <div data-ng-messages="modelForm.institute.$error" data-ng-if="modelForm.$submitted" class="has-error">
+             <div data-ng-message="required"><small>Institute Name is required !</small></div>
+    	</div>
+    </md-input-container>
+
+	<!-- <div layout layout-sm="column"> -->
+	<md-input-container flex class="required-mark"> 
+		<label>SMTP Username</label> 
+		<input type="text" name="smtpUsername" data-ng-model="mScope.mForm.smtpUserName" data-ng-required="true" class="md-input" />
+		<div data-ng-messages="modelForm.smtpUsername.$error"  data-ng-if="modelForm.smtpUsername.$touched || modelForm.$submitted"  class="has-error">
+				<div data-ng-message="required"   class="help-block"><small>SMTP Username is required !</small></div>
+			</div> 
+	</md-input-container>
+	<md-input-container flex class="required-mark"> 
+		<label>SMTP Password</label> 
+		<input type="text" name="smtpPassword" data-ng-model="mScope.mForm.smtpPassword" data-ng-required="true" class="md-input" />
+		<div data-ng-messages="modelForm.smtpPassword.$error"  data-ng-if="modelForm.smtpPassword.$touched || modelForm.$submitted"  class="has-error">
+				<div data-ng-message="required"   class="help-block"><small>SMTP Password is required !</small></div>
+			</div> 
+	</md-input-container>
+	<!-- </div>
+	<div layout layout-sm="column"> -->
+	<md-input-container flex class="required-mark"> 
+		<label>SMTP Server Name</label> 
+		<input type="text" name="smtpServerName" data-ng-model="mScope.mForm.smtpServerName" data-ng-required="true" class="md-input" />
+		<div data-ng-messages="modelForm.smtpServerName.$error"  data-ng-if="modelForm.smtpServerName.$touched || modelForm.$submitted"  class="has-error">
+				<div data-ng-message="required"   class="help-block"><small>SMTP Server Name is required !</small></div>
+			</div> 
+	</md-input-container>
+	<md-input-container flex class="required-mark"> 
+		<label>SMTP Port Number</label> 
+		<input type="text" name="smtpPortNumber" data-ng-model="mScope.mForm.smtpPortNumber" data-ng-required="true" class="md-input" />
+		<div data-ng-messages="modelForm.smtpPortNumber.$error"  data-ng-if="modelForm.smtpPortNumber.$touched || modelForm.$submitted"  class="has-error">
+				<div data-ng-message="required"   class="help-block"><small>SMTP Port Number is required !</small></div>
+			</div> 
+	</md-input-container>
+	<div class="row fluid" style="padding-left: initial;margin-left: -15px;">
+		<label class="radio radio-inline m-r-20">Status</label>
+		<md-radio-group ng-model="mScope.mForm.status"> <label
+			class="radio radio-inline m-r-20"> <md-radio-button
+				value="ACTIVE">Active</md-radio-button>
+		</label> <label class="radio radio-inline m-r-20"> <md-radio-button
+				value="INACTIVE">InActive</md-radio-button>
+		</label> </md-radio-group>
+	</div>
+   </div>
+</md-dialog-content>

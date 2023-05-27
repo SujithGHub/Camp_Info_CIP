@@ -1,0 +1,171 @@
+<div>
+    <div id="reportHolder"></div>
+    <div class="card-header pb-1-25 pt-1-25">
+        <h2>Analysis Report</h2>
+    </div>
+    <div class="card-body content" style="height: 74vh; ">
+        <div class="card mb-sm-2" style="height: 29vh !important;" data-ng-if="reportAnalysisCtrl.role != 'ROLE_USER'">
+            <div class="card-header bgm-gray">
+                <h2 style="padding-left: 10px; font-size: 16px;" class="card-title">Examination Report</h2>
+            </div>
+            <div class="" id="table" style="background-color: rgb(255, 255, 255); font-size: 14px;">
+                <table data-ng-table="tableData" class="table table-striped table-vmiddle">
+                    <tbody>
+                        <tr data-ng-if="reportAnalysisCtrl.instituteType == 'School'">
+                            <td>Section Wise Result By School</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="examinationReport/SectionWiseResultBySchool"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-ng-if="reportAnalysisCtrl.instituteType != 'School'">
+                            <td>Section Wise Result By College</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="examinationReport/SectionWiseResultByCollege"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card" style="height: 44vh !important;">
+            <div class="card-header bgm-gray">
+                <h2 style="padding-left: 10px; font-size: 16px;" class="card-title">Attendance
+                    Report</h2>
+            </div>
+            <div class="" id="table" style="background-color: rgb(255, 255, 255); font-size: 14px;">
+                <table data-ng-table="tableData" class="table table-striped table-vmiddle">
+                    <tbody>
+                        <!-- <tr data-ng-if="reportAnalysisCtrl.role != 'ROLE_USER'">
+                            <td>View Attendance</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs" type="button" data-ng-click="reportAnalysisCtrl.getReport('ViewAttendance')">View Report
+                                </button>
+                            </td>
+                        </tr> -->
+                        <!-- <tr>
+                            <td>Attendance Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="attendanceReport/AttendanceReportByStandard"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr> -->
+                        <tr>
+                            <td>Attendance Analysis</td>
+                            <td data-ng-if="reportAnalysisCtrl.instituteType != 'School'">
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-param ="reportAnalysisCtrl.report_status"
+                                report-path="attendanceAnalysis/AttendanceAnalysisReportBySectionForCollege"
+                               >View Report
+                                </button>
+                            </td>
+                            <td data-ng-if="reportAnalysisCtrl.instituteType == 'School'">
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-param ="reportAnalysisCtrl.report_status"
+                                report-path="attendanceAnalysis/AttendanceAnalysisReportBySection"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Attendance Analysis by Roll No</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-param ="reportAnalysisCtrl.report_status"
+                                report-path="attendanceAnalysis/AttendanceDetailsByRollNumber"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-ng-if="reportAnalysisCtrl.role != 'ROLE_USER' && reportAnalysisCtrl.instituteType == 'School'">
+                            <td>Subject Wise Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="SubjectWiseAttendanceReport/SubjectWiseAttendanceByAdminForSchool"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-ng-if="reportAnalysisCtrl.role == 'ROLE_USER' && reportAnalysisCtrl.instituteType == 'School'">
+                            <td>Subject Wise Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="SubjectWiseAttendanceReport/SubjectWiseAttendanceByStudentForSchool"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                        <tr data-ng-if="reportAnalysisCtrl.instituteType != 'School'">
+                            <td>Subject Wise Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="SubjectWiseAttendanceReport/SubjectWiseAttendanceByAdminForCollege"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                         <tr data-ng-if="reportAnalysisCtrl.role != 'ROLE_USER' && reportAnalysisCtrl.instituteType != 'School'">
+                            <td>Hours Wise Attendance Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs"
+                                report-view
+                                report-path="attendanceReport/CurrentAcademicReportByCollege"
+                               >View Report
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>      
+        </div>
+        <div class="card" style="height: 30vh !important;" data-ng-if="reportAnalysisCtrl.instituteType != 'School' && reportAnalysisCtrl.role != 'ROLE_USER'">
+            <!-- <div class="card-header bgm-gray">
+                <h2 style="padding-left: 10px; font-size: 16px;" class="card-title">Work Plan Report</h2>
+            </div>
+            <div class="" id="table" style="background-color: rgb(255, 255, 255); font-size: 14px;">
+                <table data-ng-table="tableData" class="table table-striped table-vmiddle">
+                    <tbody> -->
+                        <!-- <tr data-ng-if="reportAnalysisCtrl.role != 'ROLE_USER'">
+                            <td>Section Wise Work Plan Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs" type="button" data-ng-click="reportAnalysisCtrl.getReport('WorkPlanReportBySection')">View Report
+                                </button>
+                            </td>
+                        </tr>
+                       
+                         <tr data-ng-if="reportAnalysisCtrl.role != 'ROLE_USER'">
+                            <td>Staff Wise Work Plan Report</td>
+                            <td>
+                                <button class="btn bgm-teal btn-xs" type="button" data-ng-click="reportAnalysisCtrl.getReport('WorkPlanReportByStaff')">View Report
+                                </button>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.table>tbody>tr>td:first-child {
+    padding-left: 200px;
+}
+</style>
+

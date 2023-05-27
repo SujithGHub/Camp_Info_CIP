@@ -1,0 +1,45 @@
+<div class="card-header" data-ng-init="standardCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div data-ng-if="standardCtrl.mScope.instituteType=='School'">
+            <h2>
+               Standard
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">List of all Standards</div>
+               </small>
+            </h2>
+         </div>
+         <div data-ng-if="standardCtrl.mScope.instituteType=='College'">
+            <h2>
+               Year
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Lists all Years in each department</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="standardCtrl.initDataTable()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" template-url="/app/standard/views/create.html" form-modal
+         	data-ng-if="standardCtrl.mScope.instituteType=='College'" m-title = "year"
+            m-scope="standardCtrl.mScope" form-submit="standardCtrl.saveOrUpdateStandard(mForm)" init-data="standardCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip data-ng-if="standardCtrl.mScope.instituteType=='College'">Add Year</md-tooltip>
+         </md-button>
+         <md-button class="md-fab md-mini md-primary" aria-label="add" template-url="/app/standard/views/create.html" form-modal
+         	data-ng-if="standardCtrl.mScope.instituteType=='School'" m-title ='Standard'
+             m-scope="standardCtrl.mScope" form-submit="standardCtrl.saveOrUpdateStandard(mForm)" init-data="standardCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip data-ng-if="standardCtrl.mScope.instituteType=='School'">Add Standard</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="standardDataTable" class="display table" cellspacing="0"></table>
+</div>

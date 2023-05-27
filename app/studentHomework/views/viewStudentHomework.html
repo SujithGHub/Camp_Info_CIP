@@ -1,0 +1,111 @@
+<md-dialog-content style="font-size:13px">
+<div class="md-dialog-content px-0">
+	 <md-content class="md-padding row mx-0">
+	<div class="col-md-6" style="line-height: 2">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600;word-break: break-word;">Student Name</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.student.firstName}} {{::mScope.mForm.student.lastName}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600;word-break: break-word;">Roll Number</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.student.rollNumber}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2" data-ng-if="studentHomeworkCtrl.modelValue.homeWork.department">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600;word-break: break-word;">Department Name</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.homeWork.department.name}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600" data-ng-if="mScope.mForm.institute =='College'">Year</label>
+				<label style="font-weight: 600" data-ng-if="mScope.mForm.institute =='School'">Standard</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.homeWork.classYear.name}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600">Section</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.homeWork.section.sectionName}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600">Subject Name</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.homeWork.subject.subjectName}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2"
+		data-ng-if="mScope.mForm.homeWork.subject.isElective">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600">Elective SubjectName</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.homeWork.subjectElective.electiveSubjectName}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6" style="line-height: 2">
+		<div class="row mx-0">
+			<div class="col-md-4 px-0">
+				<label style="font-weight: 600">Title</label>
+			</div>
+			<div class="col-md-8">
+				<p>:&nbsp;{{::mScope.mForm.homeWork.title}}</p>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12"
+		data-ng-if="mScope.mForm.image.length > 0 ">
+		<label style="font-weight: 600">Submitted File</label><br>
+		<div class="col-sm-12 py-3"
+			style="padding-top: 0px; font-size: smaller;">
+			<div style="float: left;margin-right:5px;"
+				data-ng-repeat="homeWorkalbumPicture in mScope.mForm.image">
+				<a class="fancybox" target="_blank" href="{{homeWorkalbumPicture.path}}" download="{{homeWorkalbumPicture.name}}"
+					rel="gallery" style="margin-right: 5px;"> <img
+					class="fancy homeWorkPicture" data-ng-src="{{homeWorkalbumPicture.path}}" data-image-on-error/></a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12" style="line-height: 2"
+			   data-ng-if="mScope.mForm.image.length > 0 ">
+		 <label style="font-weight: 600">Status</label>
+		 <md-radio-group ng-model="mScope.mForm.status">
+			 <label class="radio radio-inline m-r-20"> <md-radio-button value="ACCEPTED">Accepted</md-radio-button></label>
+			 <label class="radio radio-inline m-r-20"> <md-radio-button value="REJECTED">Rejected</md-radio-button></label>
+		 </md-radio-group>
+	 </div>
+
+	</md-content> 
+</div>
+</md-dialog-content>
+

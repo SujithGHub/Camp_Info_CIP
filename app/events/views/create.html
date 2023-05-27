@@ -1,0 +1,59 @@
+<md-dialog-content>
+<div class="md-dialog-content">
+	<md-input-container flex class="required-mark">
+	<label>Event Name</label>
+	<input class="md-input" data-ng-model="mScope.mForm.name" name="name" data-ng-required="true" data-ng-minlength="5" data-ng-maxlength="50"> 
+	 <div data-ng-messages="modelForm.name.$error"  data-ng-show="modelForm.name.$touched || modelForm.$submitted">
+		<div data-ng-message="required"><small>Event name is required !</small></div>
+		<div data-ng-message="minlength"><small>Event name is too short.</small></div>
+		<div data-ng-message="maxlength"><small>Event name is too long.</small></div></div> 
+		</md-input-container>
+	<md-input-container flex class="required-mark">
+	<label>Event Date</label>
+	<input class="md-input" datepicker data-ng-model="mScope.mForm.eventDate" name="date" data-ng-required="true">
+		<div data-ng-messages="modelForm.date.$error" data-ng-show="modelForm.date.$touched || modelForm.$submitted">
+			<div data-ng-message="required"><small>Event date is required !</small></div>
+		</div> 
+		</md-input-container>
+	<md-input-container flex class="required-mark">
+	<label>Description</label>
+	<input class="md-input" data-ng-model="mScope.mForm.description" name="description" data-ng-minlength="5" data-ng-required="true">
+		 <div data-ng-messages="modelForm.description.$error" data-ng-show="modelForm.description.$touched || modelForm.$submitted">
+			 <div data-ng-message="required"><small>Description is required !</small></div>
+			 <div data-ng-message="minlength"><small>Description is too short.</small></div>
+		</div>
+	</md-input-container>
+	<div class="form-group row pl-0 required-mark">
+		<label class="col-sm-2 col-xs-3">Picture</label>
+		<div class="col-sm-6 col-xs-9">
+			<div class="fileUpload btn btn-danger" data-ng-if="!mScope.mForm.image[0].id">
+				<span data-ng-if="!mScope.upload.fileName">BROWSE FILE</span><span data-ng-if="mScope.upload.fileName">CHANGE</span><input type="file" id="fileInput"  name="file" class="fileInput upload" data-ng-required="!mScope.upload.fileName" data-ng-model="file" custom-on-change="mScope.readFile"/>
+			</div>
+				<div class="col-lg-8" data-ng-if="mScope.mForm.image[0].id">
+				<img
+					data-ng-src="{{mScope.mForm.image[0].path}}"
+					title="Click to remove" data-ng-click="mScope.removeEventImage(mScope.mForm.image[0])"
+					width="60" height="60" />
+			</div>
+			<span style="font-size:small">{{mScope.upload.fileName | limitTo : 10}}&nbsp&nbsp<a href="" class="close-file" data-ng-click="mScope.clearFile()" data-ng-if="mScope.upload.fileName">&times;</a><br></span>
+			<div data-ng-messages="modelForm.file.$error"
+				data-ng-if="modelForm.$submitted">
+				<div data-ng-message="required">
+					<small style="color: rgb(213, 0, 0);">Please select a photo
+						!</small>
+				</div>
+			</div>
+		</div>
+		<span style="font-size:small" data-ng-if="mScope.upload.fileLength > 1"><strong>{{mScope.upload.fileLength - 1}}  more files</strong></span>
+		<div class="col-sm-4"></div>
+	</div>
+	
+	<div class="row fluid col-sm-12" style="padding-left: initial;">
+		<label class="radio radio-inline m-r-20">Status</label>
+		<md-radio-group ng-model="mScope.mForm.status"> 
+			<label class="radio radio-inline m-r-20"> <md-radio-button value="ACTIVE">Active</md-radio-button></label> 
+			<label class="radio radio-inline m-r-20"> <md-radio-button value="INACTIVE">InActive</md-radio-button></label>
+		</md-radio-group>
+	</div>
+</div>
+</md-dialog-content>

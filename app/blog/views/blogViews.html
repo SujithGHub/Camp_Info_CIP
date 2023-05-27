@@ -1,0 +1,200 @@
+<div class="content" style="height:60vh">
+   <div data-ng-repeat="blog in blogList"
+      style="margin-bottom: 10px">
+      <div class="card-header ch-al" style="height: 80px">
+         <div class="media">
+            <div data-ng-hide="blog.profilePicture.length" class="pull-left">
+               <img class="lv-img" src="../assets/images/1.jpg" alt="">
+            </div>
+            <div data-ng-show="blog.profilePicture.length" class="pull-left">
+               <img class="lv-img"
+                  data-ng-src="data:image/jpg;base64,{{blog.profilePicture}}" alt="">
+            </div>
+            <div class="media-body m-t-5">
+               <h2>{{blog.postedBy}}<small>Posted on {{blog.createdDate | date : "dd-MM-yyyy"}}</small></h2>
+            </div>
+         </div>
+      </div>
+      <div class="card-body card-padding" style="word-wrap: break-word;">
+         <div class="form-group">
+            <b style="font-size: 18px;">{{::blog.title}}</b>
+         </div>
+         <div class="form-group" data-ng-bind-html="blog.html"
+            style="font-size: small; font-weight: 400px"></div>
+         <ul class="wall-attrs clearfix list-inline list-unstyled">
+            <li class="wa-users" style="margin-bottom: 5px">
+               <button data-ng-show="blog.userId == blogCtrl.loggedInUser"
+                  class="btn btn-cancel btn-xs waves-effect" data-ng-click="blogCtrl.showAdvanced(ev,blog)">
+               <i class="zmdi zmdi-edit zmdi-hc-fw"></i>EDIT
+               </button>
+               <button data-ng-show="blog.userId == blogCtrl.loggedInUser"
+                  style="color: #fff" id="deleteButton "
+                  class="btn btn-delete btn-xs waves-effect"
+                  data-ng-click="blogCtrl.deleteBlog(blog)">
+               <i class="zmdi zmdi-delete zmdi-hc-fw"></i>DELETE
+               </button>
+               <button class="btn bgm-teal btn-xs waves-effect"
+                  data-ng-click="blogCtrl.getBlogComments(blog.id);">
+               <i class="zmdi zmdi-comment zmdi-hc-fw"></i>COMMENT
+               </button>
+            </li>
+         </ul>
+         <div class="commentDiv" style="font-size: smaller;" data-ng-if="blog.id == blogCtrl.commentList[0].blog.id || !blogCtrl.commentList.length ">
+            <div class="wall-comment-list">
+               <a data-ng-show="false"><span>View more comments</span></a>
+               <div class="form-group"></div>
+               <div class="wcl-list">
+                  <div class="media" data-ng-repeat="comment in blogCtrl.commentList">
+                     <div data-ng-hide="comment.profilePicture.length" class="pull-left">
+                        <img class="lv-img" src="../assets/images/1.jpg" alt="">
+                     </div>
+                     <div data-ng-show="comment.profilePicture.length" class="pull-left">
+                        <img class="lv-img" data-ng-src="data:image/jpg;base64,{{comment.profilePicture}}" alt="">
+                     </div>
+                     <div class="pull-right">
+                        <md-menu md-position-mode="target-right target">
+                           <md-button class="md-icon-button" aria-label="Messages" ng-click="$mdOpenMenu($event)"> 
+                              <i class="zmdi zmdi-more-vert"></i> 
+                           </md-button>
+                           <md-menu-content width="2">
+                              <md-menu-item style="min-height: 25px;height: 30px;" data-ng-show="comment.userId == blogCtrl.loggedInUser">
+                                 <md-button style="height: 10px;" data-ng-click="blogCtrl.commentId = comment.id;editor('commentEditEditor'+($index+1))">
+                                    <p style="font-size: 13px;">Edit</p>
+                                 </md-button>
+                              </md-menu-item>
+                              <md-menu-item style="min-height: 25px;height: 30px;">
+                                 <md-button style="height: 10px;" data-ng-click="blogCtrl.reply=comment.id;editor('commentReplyEditor'+($index+1))">
+                                    <p style="font-size: 13px;">Reply</p>
+                                 </md-button>
+                              </md-menu-item>
+                              <md-menu-item style="min-height: 25px;height: 40px;" data-ng-show="comment.userId == blogCtrl.loggedInUser">
+                                 <md-button style="height: 10px;" data-ng-click="blogCtrl.deleteComment(comment)"> 
+                                    <p style="font-size: 13px;">Delete</p>
+                                 </md-button>
+                              </md-menu-item>
+                           </md-menu-content>
+                        </md-menu>
+                     </div>
+                     <div class="media-body" style="word-wrap: break-word;">
+                        <div data-ng-show="blogCtrl.commentId != comment.id">
+                           <span class="a-title" style="font-weight: 500;">{{comment.commentedBy}}</span>
+                           <small class="c-gray m-l-10">Posted on {{comment.createdDate}}</small>
+                           <p class="m-t-5 m-b-0" style="width: 83% !important;"
+                              data-ng-bind-html="comment.html"></p>
+                        </div>
+                        <div data-ng-show="blogCtrl.commentId == comment.id" class="">
+                           <textarea id="commentEditEditor{{$index+1}}"
+                              data-ng-model="comment.comment" class="wcci-text col-sm-6"
+                              style="width: 67% !important"></textarea>
+                           <div class="m-t-15">
+                              <button class="btn btn-sm btn-primary bgm-teal"
+                                 data-ng-click="blogCtrl.saveComment(blog,comment,$event,'commentEditEditor'+($index+1))">UPDATE</button>
+                              &nbsp
+                              <button class="btn btn-sm btn-cancel"
+                                 data-ng-click="blogCtrl.commentId='';blogCtrl.getBlogComments(blog.id);blogCtrl.clearEditor('commentEditEditor'+($index+1))">CANCEL</button>
+                           </div>
+                        </div>
+                        <div class="form-group"></div>
+                        <div class="media"
+                           data-ng-repeat="commentReply in comment.commentReply">
+                           <div data-ng-hide="commentReply.profilePicture.length"
+                              class="pull-left">
+                              <img class="lv-img" src="../assets/images/1.jpg"
+                                 alt="">
+                           </div>
+                           <div data-ng-show="commentReply.profilePicture.length"
+                              class="pull-left">
+                              <img class="lv-img"
+                                 data-ng-src="data:image/jpg;base64,{{commentReply.profilePicture}}"
+                                 alt="">
+                           </div>
+                           <div class="pull-right" data-ng-show="commentReply.userId == blogCtrl.loggedInUser">
+                              <md-menu md-position-mode="target-right target">
+                                 <md-button class="md-icon-button" aria-label="Messages" ng-click="$mdOpenMenu($event)"> 
+                                    <i class="zmdi zmdi-more-vert"></i> 
+                                 </md-button>
+                                 <md-menu-content width="2">
+                                    <md-menu-item style="min-height: 25px;height: 30px;">
+                                       <md-button style="height: 10px;" data-ng-click="blogCtrl.commentReplyId=commentReply.id;editor('commentReplyEditEditor'+comment.id+($index+1))">
+                                          <p style="font-size: 13px;">Edit</p>
+                                       </md-button>
+                                    </md-menu-item>
+                                    <md-menu-item style="min-height: 25px;height: 40px;">
+                                       <md-button style="height: 10px;" data-ng-click="blogCtrl.deleteCommentReply(comment,commentReply,blog);"> 
+                                          <a style="font-size: 13px; color: black" href="logout">Delete</a>
+                                       </md-button>
+                                    </md-menu-item>
+                                 </md-menu-content>
+                              </md-menu>
+                           </div>
+                           <div class="media-body">
+                              <div data-ng-show="blogCtrl.commentReplyId !=commentReply.id">
+                                 <span class="a-title" style="cursor: default;">{{commentReply.commentedBy}}</span>
+                                 <small class="c-gray m-l-10">Posted on
+                                 {{commentReply.updatedAt}}</small>
+                                 <p class="m-t-5 m-b-0" style="width: 67% !important;"
+                                    data-ng-bind-html="commentReply.html"></p>
+                              </div>
+                              <div data-ng-show="blogCtrl.commentReplyId == commentReply.id" class=" ">
+                                 <textarea id="commentReplyEditEditor{{comment.id}}{{$index+1}}"
+                                    data-ng-model="commentReply.comment"
+                                    class="wcci-text col-sm-6" style="width: 67% !important"></textarea>
+                                 <div class="m-t-15">
+                                    <button class="btn btn-sm btn-primary bgm-teal"
+                                       data-ng-click="blogCtrl.commentReplyId='';blogCtrl.updateCommentReply(blog,comment,commentReply,$event,'commentReplyEditEditor'+comment.id+($index+1))">UPDATE</button>
+                                    &nbsp
+                                    <button class="btn btn-sm btn-cancel"
+                                       data-ng-click="blogCtrl.commentReplyId='';blogCtrl.clearEditor('commentReplyEditEditor'+($index+1))">CANCEL</button>
+                                 </div>
+                              </div>
+                           </div>
+                           <br> <br> <br>
+                        </div>
+                        <div class="wcl-form" data-ng-show="blogCtrl.reply==comment.id">
+                           <div class="wc-comment">
+                              <div class="wcc-inner">
+                                 <textarea id="commentReplyEditor{{$index+1}}"
+                                    class="wcci-text" data-ng-model="mForm.commentReply"
+                                    maxlength="1000" name="commentReply"
+                                    placeholder="Write a comment..."></textarea>
+                              </div>
+                              <div class="m-t-15">
+                                 <button class="btn btn-sm btn-primary bgm-teal"
+                                    data-ng-click="blogCtrl.saveCommentReply(blog,comment,mForm,$event,'commentReplyEditor'+($index+1));blogCtrl.reply=false">REPLY</button>
+                                 &nbsp
+                                 <button class="btn btn-sm btn-cancel"
+                                    data-ng-click="blogCtrl.reply=false;blogCtrl.clearEditor('commentReplyEditor'+($index+1))">CANCEL</button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="wcl-form" data-ng-show="blogCtrl.temp==blog.id">
+                  <div class="wc-comment" data-ng-show="!blogCtrl.wallCommenting" data-ng-click="editor(blog.id+'commenteditor'+($index+1));blogCtrl.wallCommenting = true;">
+                     <div class="wcc-inner">Write a comment...</div>
+                  </div>
+                  <div class="wc-comment" data-ng-show="blogCtrl.wallCommenting">
+                     <div class="wcc-inner">
+                        <textarea id="{{blog.id}}commenteditor{{$index+1}}"
+                           class="wcci-text" data-ng-model="form.comment" maxlength="1000"
+                           name="comment" placeholder="Write a comment..."></textarea>
+                     </div>
+                     <div class="m-t-15">
+                        <button class="btn btn-sm  bgm-teal"
+                           data-ng-click="blogCtrl.saveComment(blog,form,$event,blog.id+'commenteditor'+($index+1));blogCtrl.wallCommenting = false">POST</button>
+                        &nbsp
+                        <button class="btn btn-sm btn-cancel"
+                           data-ng-click="blogCtrl.clearEditor(blog.id+'commenteditor'+($index+1));blogCtrl.wallCommenting = false">CANCEL</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="no-record" style="padding-top: 110px;">
+      <div class="alert alert-warning" data-ng-hide="blogList.length != 0"
+         style="text-align: center;">{{blogConstants.gridNoRecord}}</div>
+   </div>
+</div>

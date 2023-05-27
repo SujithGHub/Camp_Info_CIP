@@ -1,0 +1,47 @@
+<md-dialog aria-label="Academic" ng-cloak style="width: 642px;">
+    <form name="academicForm" role="form" novalidate>
+        <div class="md-toolbar-tools modal-header" style="height: 50px">
+            <h2 style="color: white;">Feedback</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="modal.hide()"><i
+                    class="zmdi zmdi-close zmdi-hc-fw" style="color: white;"></i></md-button>
+        </div>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container flex>
+                    <p>Feedback</p>
+                    <div>
+                        <div class="col-lg-12" style="word-wrap: break-word;">
+                            <div class="col-md-12">
+                                <span style="font-size: 14px;">{{modal.mForm.description}}</span></div>
+                        </div>
+                    </div>
+                </md-input-container>
+                <br>
+                <md-input-container ng-show="modal.feedbackComments.length">
+                    <p class="">Comments</p>
+                    <div class="">
+                        <div class="col-lg-12" style="word-wrap: break-word;"
+                             data-ng-repeat="comment in modal.feedbackComments">
+                            <div class="col-md-12">
+                                <span style="color:#009688;font-size: 14px;">{{comment.commentedBy}}</span>&nbsp&nbsp&nbsp
+                                <span class="pull-right" style="font-size: 11px;">{{comment.lastUpdatedDate}}</span>
+                                <br>
+                            </div>
+                            <div class="col-md-12">
+                                <span style="font-size: 14px;">{{comment.comment}}</span>
+                                <br><br>
+                            </div>
+                        </div>
+                    </div>
+                </md-input-container>
+
+            </div>
+        </md-dialog-content>
+        <div class="md-actions" layout="row">
+            <button aria-label="..." class="btn bgm-teal" type="submit"
+                    data-ng-click="modal.hide()">Ok
+            </button>
+        </div>
+    </form>
+</md-dialog>

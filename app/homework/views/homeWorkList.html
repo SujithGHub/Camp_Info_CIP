@@ -1,0 +1,121 @@
+<div class="card-header" data-ng-init="homeWorkCtrl.init()">
+  <div class="row">
+    <div class="col-md-4 col-sm-4">
+      <div data-ng-if="homeWorkCtrl.mScope.instituteType=='School'">
+        <h2> Home Work
+          <small class="hidden-xs">
+            <div class="grid-ellipsis ">Homework given to Students</div>
+          </small>
+        </h2>
+      </div>
+      <div data-ng-if="homeWorkCtrl.mScope.instituteType=='College'">
+        <h2> Assignment
+          <small class="hidden-xs">
+            <div class="grid-ellipsis ">Assignments given to Students</div>
+          </small>
+        </h2>
+      </div>
+    </div>
+    <div class="col-md col-sm">
+      <md-input-container data-ng-if="homeWorkCtrl.role != 'ROLE_USER'">
+        <label data-ng-if="homeWorkCtrl.mScope.instituteType=='School'">Standard</label>
+        <label data-ng-if="homeWorkCtrl.mScope.instituteType=='College'">Department</label>
+        <md-select name="classYear" id="classyear" data-ng-model="homeWorkCtrl.classYear"
+          data-ng-if="homeWorkCtrl.mScope.instituteType=='College'" data-ng-change="homeWorkCtrl.initDataTable()">
+          <md-option value="">All</md-option>
+          <md-option ng-repeat="class in homeWorkCtrl.mScope.departmentList" ng-value="class.id">
+            {{class.name}}
+          </md-option>
+        </md-select>
+        <md-select name="classYear" id="classyear" data-ng-model="homeWorkCtrl.classYear"
+          data-ng-if="homeWorkCtrl.mScope.instituteType =='School'" data-ng-change="homeWorkCtrl.getSection()">
+          <md-option value="">All</md-option>
+          <md-option ng-repeat="class in homeWorkCtrl.yearAndStandardList" ng-value="class.id">
+            {{class.name}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+<!-- Section Column for School -->
+    <div class="col-md col-sm" data-ng-if="homeWorkCtrl.mScope.instituteType=='School'">
+      <md-input-container data-ng-if="homeWorkCtrl.role != 'ROLE_USER'">
+        <label data-ng-if="homeWorkCtrl.mScope.instituteType=='School'">Section</label>
+        <md-select name="section" id="section" data-ng-model="homeWorkCtrl.section"
+          data-ng-if="homeWorkCtrl.mScope.instituteType=='School'" data-ng-change="homeWorkCtrl.initDataTable()">
+          <md-option value="">All</md-option>
+          <md-option ng-repeat="section in homeWorkCtrl.sectionList" ng-value="section.id">
+            {{section.sectionName}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+<!-- Section column -->
+    <div class="col-md-3 col-sm-3">
+      <md-input-container>
+        <label>Search here</label>
+        <input type="search" id="search" data-ng-model="search" data-ng-change="homeWorkCtrl.searchData()"
+          autocomplete="off">
+      </md-input-container>
+    </div>
+
+    <div class="col-md-1 col-sm-2">
+      <md-button class="md-fab md-mini md-primary m-0" aria-label="add"
+        data-ng-if="homeWorkCtrl.mScope.instituteType == 'College' && (homeWorkCtrl.role == 'ROLE_SUPER_ADMIN' || homeWorkCtrl.role == 'ROLE_ADMIN' || homeWorkCtrl.role == 'ROLE_STAFF' || homeWorkCtrl.role == 'ROLE_STAFF_HOD')"
+        form-modal template-url="/app/homework/views/create.html" m-title="Assignment" m-scope="homeWorkCtrl.mScope"
+        init-data="homeWorkCtrl.initData" form-submit="homeWorkCtrl.saveOrUpdateHomeWork(mForm)"
+        ok-button-text="SUBMIT">
+        <md-icon class="material-icons">+</md-icon>
+        <md-tooltip>Add Assignment</md-tooltip>
+      </md-button>
+      <md-button class="md-fab md-mini md-primary m-0" aria-label="add"
+        data-ng-if="homeWorkCtrl.mScope.instituteType == 'School' && (homeWorkCtrl.role == 'ROLE_SUPER_ADMIN' || homeWorkCtrl.role == 'ROLE_ADMIN' || homeWorkCtrl.role == 'ROLE_STAFF' || homeWorkCtrl.role == 'ROLE_STAFF_HOD')"
+        form-modal template-url="/app/homework/views/create.html" m-title="Home Work" m-scope="homeWorkCtrl.mScope"
+        init-data="homeWorkCtrl.initData" form-submit="homeWorkCtrl.saveOrUpdateHomeWork(mForm)"
+        ok-button-text="SUBMIT">
+        <md-icon class="material-icons">+</md-icon>
+        <md-tooltip>Add HomeWork</md-tooltip>
+      </md-button>
+    </div>
+  </div>
+</div>
+<div id="table-responsive" class="table-responsive content" data-ng-if="homeWorkCtrl.role != 'ROLE_USER'"
+  ng-init="homeWorkCtrl.initDataTable()">
+  <table id="homeWorkDataTable" class="display table" cellspacing="0"></table>
+</div>
+<md-content class="card-body md-dark-teal-theme">
+  <md-tabs md-dynamic-height="" md-border-bottom="" data-ng-if="homeWorkCtrl.role == 'ROLE_USER'">
+    <md-tab ng-click="homeWorkCtrl.initDataTable()">
+      <md-tab-label>{{homeWorkCtrl.mScope.pendingHomeWork}}</md-tab-label>
+      <md-tab-body>
+        <md-content class="md-padding">
+          <md-input-container flex id="editor" ng-init="homeWorkCtrl.initDataTable()">
+            <div id="table-responsive" class="table-responsive content">
+              <table id="homeWorkDataTable" class="display table" cellspacing="0"></table>
+            </div>
+          </md-input-container>
+        </md-content>
+      </md-tab-body>
+    </md-tab>
+    <md-tab ng-click="homeWorkCtrl.initclosedHomeWorkDataTable()">
+      <md-tab-label>{{homeWorkCtrl.mScope.closedHomeWork}}</md-tab-label>
+      <md-tab-body>
+        <md-content class="md-padding">
+          <md-input-container flex id="editor">
+            <md-button class="md-fab md-mini md-primary" hide-footer="false" aria-label="homework" id="closed-homework"
+              ng-hide="true" template-url="/app/homework/views/viewHomeWork.html" form-modal
+              m-title="Submitted Homework" m-scope="homeWorkCtrl.mScope">
+            </md-button>
+            <div id="table-responsive" class="table-responsive content">
+              <table id="closedHomeWorkDataTable" class="display table" cellspacing="0"></table>
+            </div>
+          </md-input-container>
+        </md-content>
+      </md-tab-body>
+    </md-tab>
+  </md-tabs>
+</md-content>
+<style>
+  .dataTables_scrollBody {
+    overflow: auto !important;
+  }
+</style>

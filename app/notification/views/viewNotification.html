@@ -1,0 +1,31 @@
+<md-dialog aria-label="Notification" ng-cloak style="width: 50%;">
+<md-toolbar>
+<div class="md-toolbar-tools" style="height: 50px">
+	<h2 style="font-size: 17px">{{notificationCtrl.scopeValue.title}}</h2>
+	<span flex><small style="color: white;" class="pull-right" data-ng-if="!notificationCtrl.scopeValue.viewTitle">{{notificationCtrl.scopeValue.lastUpdatedDate | date : "dd-MM-yyyy"}}</small></span>
+	<md-button class="md-icon-button" ng-click="notificationCtrl.cancel()">
+	<i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i>
+	</md-button>
+</div>
+</md-toolbar> <md-dialog-content style="font-size:13px">
+<div class="md-dialog-content">
+	<md-input-container data-ng-if="!notificationCtrl.scopeValue.viewTitle">
+	<p>{{notificationCtrl.scopeValue.description}}</p>
+	</md-input-container>
+	<div class="box-body" data-ng-if="notificationCtrl.scopeValue.viewTitle">
+		<div class="col-md-12">
+			<label style="font-weight: 600">Posted Date</label>
+			<p data-ng-bind="notificationCtrl.scopeValue.createdDate"></p>
+		</div>
+		<div class="col-md-12">
+			<label style="font-weight: 600">Title</label>
+			<p data-ng-bind="notificationCtrl.scopeValue.title"></p>
+		</div>
+		<div class="col-md-12">
+			<label style="font-weight: 600">Description</label>
+			<p data-ng-bind="notificationCtrl.scopeValue.description"></p>
+		</div>
+	</div>
+	<md-input-container data-ng-if="notificationCtrl.scopeValue.viewTitle"></md-input-container>
+</div>
+</md-dialog-content> </md-dialog>

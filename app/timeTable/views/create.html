@@ -1,0 +1,1016 @@
+<div class="card-header ch-al pb-1-25 pt-1-25">
+    <div class="row">
+        <h2 data-ng-if="timeTableCtrl.role != 'ROLE_STAFF' ">Time Table</h2>
+        <h2 data-ng-if="timeTableCtrl.role == 'ROLE_STAFF' ">Staff Time Table</h2>
+    </div>
+</div>
+<div class="card-body row" data-ng-init='timeTableCtrl.init()'>
+    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-4 pr-0">
+        <form class="form-horizontal pad-top" role="form" name="timeTableForm" novalidate>
+                <div class="card allSides content" data-ng-if="timeTableCtrl.input_div">
+                    <div style="padding: 10px;">
+                        <h4 class="card-title" style="margin-top: 0px; padding-top: 0px; font-family: roboto !important; text-align: center; font-weight: 400;"></h4>
+                        <md-input-container class="align-center  required-mark"> <label>Academic
+                            Year</label> <md-select data-ng-model="timeTableCtrl.form.academic"
+                            name="academic" required> <md-option
+                            data-ng-repeat="academic in timeTableCtrl.academic"
+                            data-ng-value="academic.id">{{academic.academicYear}}</md-option>
+                        </md-select>
+                        <div data-ng-messages="timeTableForm.academic.$error"
+                            class="has-error">
+                            <div data-ng-message="required"
+                                data-ng-if="timeTableForm.$submitted" class="help-block"
+                                style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                <small>Academic year is required !</small>
+                            </div>
+                        </div>
+                        </md-input-container>
+                        <div ng-show="timeTableCtrl.role == 'ROLE_STAFF_HOD'">
+                        <md-input-container class="align-center required-mark"
+                                            ng-show="timeTableCtrl.instituteType == 'College'">
+                            <label>Department</label> <md-select
+                                data-ng-model="timeTableCtrl.form.department" name="dept"
+                                data-ng-required="timeTableCtrl.instituteType == 'College'"
+                                data-ng-change="timeTableCtrl.getClassByDepartmentId(timeTableCtrl.form.department)" disabled>
+                            <md-option ng-repeat="dept in timeTableCtrl.departmentList"
+                                       ng-value="dept.id">{{dept.name}}</md-option> </md-select>
+                            <div data-ng-messages="timeTableForm.dept.$error"
+                                 class="has-error">
+                                <div data-ng-message="required"
+                                     data-ng-if="timeTableForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        </div>
+                        <md-input-container class="align-center required-mark"
+                            ng-show="timeTableCtrl.instituteType == 'College' && timeTableCtrl.role != 'ROLE_STAFF_HOD'">
+                        <label>Department</label> <md-select
+                            data-ng-model="timeTableCtrl.form.department" name="dept"
+                            data-ng-required="timeTableCtrl.instituteType == 'College'"
+                            data-ng-change="timeTableCtrl.getClassByDepartmentId(timeTableCtrl.form.department)">
+                        <md-option ng-repeat="dept in timeTableCtrl.departmentList"
+                            ng-value="dept.id">{{dept.name}}</md-option> </md-select>
+                        <div data-ng-messages="timeTableForm.dept.$error"
+                            class="has-error">
+                            <div data-ng-message="required"
+                                data-ng-if="timeTableForm.$submitted" class="help-block"
+                                style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                <small>Department is required !</small>
+                            </div>
+                        </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"> <label
+                            data-ng-if="timeTableCtrl.instituteType != 'School'">Year</label>
+                        <label data-ng-if="timeTableCtrl.instituteType == 'School'">Standard</label>
+                        <md-select aria-label="classType"
+                            data-ng-model="timeTableCtrl.form.classType.id"
+                            data-ng-change="timeTableCtrl.getSection(timeTableCtrl.form.classType.id); timeTableCtrl.instituteType != 'School' ? timeTableCtrl.getSemesterByClassYear(timeTableCtrl.form.classType.id):null;"
+                            name="class" required=""> <md-option
+                            ng-repeat="class in timeTableCtrl.classList" ng-value="class.id">{{class.name}}</md-option>
+                        </md-select>
+                        <div data-ng-messages="timeTableForm.class.$error"
+                            class="has-error">
+                            <div data-ng-message="required"
+                                data-ng-if="timeTableForm.$submitted" class="help-block"
+                                style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                <small ng-show="timeTableCtrl.instituteType == 'School'">Standard
+                                    is required !</small> <small
+                                    ng-show="timeTableCtrl.instituteType != 'School'">Year
+                                    is required !</small>
+                            </div>
+                        </div>
+                        </md-input-container>
+
+                        <md-input-container class="align-center required-mark"
+                            ng-show="timeTableCtrl.instituteType == 'College'">
+                        <label>Semester</label> <md-select name="semester"
+                            data-ng-model="timeTableCtrl.form.semester"
+                            data-ng-required="timeTableCtrl.instituteType == 'College'">
+                        <md-option ng-value="semester"
+                            data-ng-repeat="semester in timeTableCtrl.semestersLists">{{::semester}}</md-option>
+                        </md-select>
+                        <div data-ng-messages="timeTableForm.semester.$error"
+                            class="has-error">
+                            <div data-ng-message="required"
+                                data-ng-if="timeTableForm.$submitted" class="help-block"
+                                style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                <small>Semester is required !</small>
+                            </div>
+                        </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"> <label>Section</label>
+                        <md-select data-ng-model="timeTableCtrl.form.section"
+                            name="section" required=""> <md-option
+                            ng-repeat="section in timeTableCtrl.sectionList"
+                            ng-value="section.id">{{section.sectionName}}</md-option> </md-select>
+                        <div data-ng-messages="timeTableForm.section.$error"
+                            class="has-error">
+                            <div data-ng-message="required"
+                                data-ng-if="timeTableForm.$submitted" class="help-block"
+                                style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                <small>Section is required !</small>
+                            </div>
+                        </div>
+                        </md-input-container>
+                        <div class="row fluid" style="margin-left: -17px;">
+                            <md-radio-group data-ng-model="timeTableCtrl.form.status">
+                            <label class="radio radio-inline "> <md-radio-button
+                                    value="Friday">Monday - Friday</md-radio-button>
+                            </label> <label class="radio radio-inline"> <md-radio-button
+                                    value="Saturday">Monday - Saturday</md-radio-button>
+                            </label> </md-radio-group>
+                        </div>
+                        <button type="submit" style="margin-top: 8px;"
+                            data-ng-click="timeTableForm.$valid ? timeTableCtrl.getTimeTable(timeTableCtrl.form) : null;"
+                            class="btn btn-danger mb-3">SUBMIT</button>
+                    </div>
+                </div>
+        </form>
+    </div>
+    <div class="{{timeTableCtrl.column_width}}">
+        <div id="no-record" style="display: none;"></div>
+        <div class="card-container" style="display: none;">
+            <table width="99%" align="center" style="margin-top: 5px;">
+                <tr>
+                    <th>Day</th>
+                    <th>1</th>
+                    <th ng-show="timeTableCtrl.hourCount != 1">2</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">3</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">4</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">5</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">6</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">7</th>
+                    <th ng-show="timeTableCtrl.hourCount == 8 ">8</th>
+                </tr>
+                <tr>
+                    <th>MONDAY <br>
+                    <a href='' data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        ng-click="timeTableCtrl.day='Monday';timeTableCtrl.initData = timeTableCtrl.tForm[0]"
+                        template-url="/app/timeTable/views/SubjectSelection.html"
+                        form-modal m-title="Time Table" m-scope="timeTableCtrl.mScope"
+                        form-submit="timeTableCtrl.getSubjects(timeTableCtrl.mScope)"
+                        init-data="timeTableCtrl.initData" ok-button-text="SUBMIT">Add
+                            Subjects</a>
+                    </th>
+                    <td><label
+                        data-ng-if="!timeTableCtrl.tForm[0].hour1.isElective">{{timeTableCtrl.tForm[0].hour1.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour1.isElective">{{timeTableCtrl.tForm[0].hour1.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour1.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 2 || timeTableCtrl.hourCount == 4 ||
+                             timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[0].hour2.isElective">{{timeTableCtrl.tForm[0].hour2.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour2.isElective">{{timeTableCtrl.tForm[0].hour2.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour2.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[0].hour3.isElective">{{timeTableCtrl.tForm[0].hour3.displayName}}
+                    </label> <label data-ng-if="timeTableCtrl.tForm[0].hour3.isElective">{{timeTableCtrl.tForm[0].hour3.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour3.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[0].hour4.isElective">{{timeTableCtrl.tForm[0].hour4.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour4.isElective">{{timeTableCtrl.tForm[0].hour4.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour4.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[0].hour5.isElective">{{timeTableCtrl.tForm[0].hour5.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour5.isElective">{{timeTableCtrl.tForm[0].hour5.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour5.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[0].hour6.isElective">{{timeTableCtrl.tForm[0].hour6.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour6.isElective">{{timeTableCtrl.tForm[0].hour6.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour6.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[0].hour7.isElective">{{timeTableCtrl.tForm[0].hour7.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour7.isElective">{{timeTableCtrl.tForm[0].hour7.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour7.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td ng-show="timeTableCtrl.hourCount == 8 "><label
+                        data-ng-if="!timeTableCtrl.tForm[0].hour8.isElective">{{timeTableCtrl.tForm[0].hour8.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[0].hour8.isElective">{{timeTableCtrl.tForm[0].hour8.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[0].hour8.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    </div>
+                </tr>
+
+                <tr>
+                    <th>TUESDAY <br> <a href=''
+                        data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        ng-click="timeTableCtrl.day = 'Tuesday';timeTableCtrl.initData = timeTableCtrl.tForm[1]"
+                        template-url="/app/timeTable/views/SubjectSelection.html"
+                        form-modal m-title="Time Table" m-scope="timeTableCtrl.mScope"
+                        form-submit="timeTableCtrl.getSubjects()"
+                        init-data="timeTableCtrl.initData" ok-button-text="SUBMIT">Add
+                            Subjects</a>
+                    </td>
+                    <td><label
+                        data-ng-if="!timeTableCtrl.tForm[1].hour1.isElective">{{timeTableCtrl.tForm[1].hour1.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour1.isElective">{{timeTableCtrl.tForm[1].hour1.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour1.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 2 || timeTableCtrl.hourCount == 4 ||
+                             timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[1].hour2.isElective">{{timeTableCtrl.tForm[1].hour2.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour2.isElective">{{timeTableCtrl.tForm[1].hour2.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour2.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[1].hour3.isElective">{{timeTableCtrl.tForm[1].hour3.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour3.isElective">{{timeTableCtrl.tForm[1].hour3.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour3.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[1].hour4.isElective">{{timeTableCtrl.tForm[1].hour4.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour4.isElective">{{timeTableCtrl.tForm[1].hour4.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour4.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[1].hour5.isElective">{{timeTableCtrl.tForm[1].hour5.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour5.isElective">{{timeTableCtrl.tForm[1].hour5.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour5.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[1].hour6.isElective">{{timeTableCtrl.tForm[1].hour6.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour6.isElective">{{timeTableCtrl.tForm[1].hour6.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour6.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[1].hour7.isElective">{{timeTableCtrl.tForm[1].hour7.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour7.isElective">{{timeTableCtrl.tForm[1].hour7.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour7.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td ng-show="timeTableCtrl.hourCount == 8 "><label
+                        data-ng-if="!timeTableCtrl.tForm[1].hour8.isElective">{{timeTableCtrl.tForm[1].hour8.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[1].hour8.isElective">{{timeTableCtrl.tForm[1].hour8.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[1].hour8.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    </div>
+                </tr>
+
+                <tr>
+                    <th>WEDNESDAY <br> <a href=''
+                        data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        ng-click="timeTableCtrl.day='Wednesday';timeTableCtrl.initData = timeTableCtrl.tForm[2]"
+                        template-url="/app/timeTable/views/SubjectSelection.html"
+                        form-modal m-title="Time Table" m-scope="timeTableCtrl.mScope"
+                        form-submit="timeTableCtrl.getSubjects()"
+                        init-data="timeTableCtrl.initData" ok-button-text="SUBMIT">Add
+                            Subjects</a>
+                    </td>
+
+                    <td><label
+                        data-ng-if="!timeTableCtrl.tForm[2].hour1.isElective">{{timeTableCtrl.tForm[2].hour1.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour1.isElective">{{timeTableCtrl.tForm[2].hour1.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour1.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 2 || timeTableCtrl.hourCount == 4 ||
+                             timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[2].hour2.isElective">{{timeTableCtrl.tForm[2].hour2.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour2.isElective">{{timeTableCtrl.tForm[2].hour2.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour2.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[2].hour3.isElective">{{timeTableCtrl.tForm[2].hour3.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour3.isElective">{{timeTableCtrl.tForm[2].hour3.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour3.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[2].hour4.isElective">{{timeTableCtrl.tForm[2].hour4.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour4.isElective">{{timeTableCtrl.tForm[2].hour4.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour4.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[2].hour5.isElective">{{timeTableCtrl.tForm[2].hour5.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour5.isElective">{{timeTableCtrl.tForm[2].hour5.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour5.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[2].hour6.isElective">{{timeTableCtrl.tForm[2].hour6.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour6.isElective">{{timeTableCtrl.tForm[2].hour6.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour6.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[2].hour7.isElective">{{timeTableCtrl.tForm[2].hour7.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour7.isElective">{{timeTableCtrl.tForm[2].hour7.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour7.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td ng-show="timeTableCtrl.hourCount == 8 "><label
+                        data-ng-if="!timeTableCtrl.tForm[2].hour8.isElective">{{timeTableCtrl.tForm[2].hour8.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[2].hour8.isElective">{{timeTableCtrl.tForm[2].hour8.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[2].hour8.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    </div>
+                </tr>
+                <tr>
+                    <th>THURSDAY <br> <a href=''
+                        data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        data-ng-click="timeTableCtrl.day='Thursday';timeTableCtrl.initData = timeTableCtrl.tForm[3]"
+                        template-url="/app/timeTable/views/SubjectSelection.html"
+                        form-modal m-title="Time Table" m-scope="timeTableCtrl.mScope"
+                        form-submit="timeTableCtrl.getSubjects()"
+                        init-data="timeTableCtrl.initData" ok-button-text="SUBMIT">Add
+                            Subjects</a>
+                    </td>
+                    <td><label
+                        data-ng-if="!timeTableCtrl.tForm[3].hour1.isElective">{{timeTableCtrl.tForm[3].hour1.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour1.isElective">{{timeTableCtrl.tForm[3].hour1.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour1.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 2 || timeTableCtrl.hourCount == 4 ||
+                             timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[3].hour2.isElective">{{timeTableCtrl.tForm[3].hour2.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour2.isElective">{{timeTableCtrl.tForm[3].hour2.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour2.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[3].hour3.isElective">{{timeTableCtrl.tForm[3].hour3.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour3.isElective">{{timeTableCtrl.tForm[3].hour3.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour3.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[3].hour4.isElective">{{timeTableCtrl.tForm[3].hour4.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour4.isElective">{{timeTableCtrl.tForm[3].hour4.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour4.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[3].hour5.isElective">{{timeTableCtrl.tForm[3].hour5.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour5.isElective">{{timeTableCtrl.tForm[3].hour5.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour5.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[3].hour6.isElective">{{timeTableCtrl.tForm[3].hour6.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour6.isElective">{{timeTableCtrl.tForm[3].hour6.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour6.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[3].hour7.isElective">{{timeTableCtrl.tForm[3].hour7.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour7.isElective">{{timeTableCtrl.tForm[3].hour7.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour7.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td ng-show="timeTableCtrl.hourCount == 8 "><label
+                        data-ng-if="!timeTableCtrl.tForm[3].hour8.isElective">{{timeTableCtrl.tForm[3].hour8.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[3].hour8.isElective">{{timeTableCtrl.tForm[3].hour8.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[3].hour8.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    </div>
+                </tr>
+
+                <tr>
+                    <th>FRIDAY <br> <a href=''
+                        data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        ng-click="timeTableCtrl.day='Friday';timeTableCtrl.initData = timeTableCtrl.tForm[4]"
+                        template-url="/app/timeTable/views/SubjectSelection.html"
+                        form-modal m-title="Time Table" m-scope="timeTableCtrl.mScope"
+                        form-submit="timeTableCtrl.getSubjects()"
+                        init-data="timeTableCtrl.initData" ok-button-text="SUBMIT">Add
+                            Subjects</a>
+                    </td>
+                    <td><label
+                        data-ng-if="!timeTableCtrl.tForm[4].hour1.isElective">{{timeTableCtrl.tForm[4].hour1.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour1.isElective">{{timeTableCtrl.tForm[4].hour1.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour1.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 2 || timeTableCtrl.hourCount == 4 ||
+                             timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[4].hour2.isElective">{{timeTableCtrl.tForm[4].hour2.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour2.isElective">{{timeTableCtrl.tForm[4].hour2.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour2.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[4].hour3.isElective">{{timeTableCtrl.tForm[4].hour3.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour3.isElective">{{timeTableCtrl.tForm[4].hour3.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour3.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[4].hour4.isElective">{{timeTableCtrl.tForm[4].hour4.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour4.isElective">{{timeTableCtrl.tForm[4].hour4.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour4.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[4].hour5.isElective">{{timeTableCtrl.tForm[4].hour5.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour5.isElective">{{timeTableCtrl.tForm[4].hour5.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour5.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[4].hour6.isElective">{{timeTableCtrl.tForm[4].hour6.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour6.isElective">{{timeTableCtrl.tForm[4].hour6.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour6.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[4].hour7.isElective">{{timeTableCtrl.tForm[4].hour7.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour7.isElective">{{timeTableCtrl.tForm[4].hour7.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour7.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td ng-show="timeTableCtrl.hourCount == 8 "><label
+                        data-ng-if="!timeTableCtrl.tForm[4].hour8.isElective">{{timeTableCtrl.tForm[4].hour8.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[4].hour8.isElective">{{timeTableCtrl.tForm[4].hour8.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[4].hour8.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    </div>
+                </tr>
+
+                <tr
+                    ng-if="timeTableCtrl.form.status == 'Saturday' || timeTableCtrl.saturday">
+                    <th>SATURDAY <br> <a href=''
+                        data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        ng-click="timeTableCtrl.day='Saturday';timeTableCtrl.initData = timeTableCtrl.tForm[5]"
+                        template-url="/app/timeTable/views/SubjectSelection.html"
+                        form-modal m-title="Time Table" m-scope="timeTableCtrl.mScope"
+                        form-submit="timeTableCtrl.getSubjects()"
+                        init-data="timeTableCtrl.initData" ok-button-text="SUBMIT">Add
+                            Subjects</a>
+                    </td>
+                    <td><label
+                        data-ng-if="!timeTableCtrl.tForm[5].hour1.isElective">{{timeTableCtrl.tForm[5].hour1.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour1.isElective">{{timeTableCtrl.tForm[5].hour1.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour1.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 2 || timeTableCtrl.hourCount == 4 ||
+                             timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[5].hour2.isElective">{{timeTableCtrl.tForm[5].hour2.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour2.isElective">{{timeTableCtrl.tForm[5].hour2.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour2.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[5].hour3.isElective">{{timeTableCtrl.tForm[5].hour3.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour3.isElective">{{timeTableCtrl.tForm[5].hour3.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour3.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 4 || timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+
+                        <label data-ng-if="!timeTableCtrl.tForm[5].hour4.isElective">{{timeTableCtrl.tForm[5].hour4.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour4.isElective">{{timeTableCtrl.tForm[5].hour4.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour4.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 5 || timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[5].hour5.isElective">{{timeTableCtrl.tForm[5].hour5.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour5.isElective">{{timeTableCtrl.tForm[5].hour5.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour5.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[5].hour6.isElective">{{timeTableCtrl.tForm[5].hour6.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour6.isElective">{{timeTableCtrl.tForm[5].hour6.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour6.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+                        <label data-ng-if="!timeTableCtrl.tForm[5].hour7.isElective">{{timeTableCtrl.tForm[5].hour7.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour7.isElective">{{timeTableCtrl.tForm[5].hour7.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour7.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label>
+                    </td>
+                    <td ng-show="timeTableCtrl.hourCount == 8 "><label
+                        data-ng-if="!timeTableCtrl.tForm[5].hour8.isElective">{{timeTableCtrl.tForm[5].hour8.displayName}}</label>
+                        <label data-ng-if="timeTableCtrl.tForm[5].hour8.isElective">{{timeTableCtrl.tForm[5].hour8.displayName}}
+                            - <span
+                            data-ng-repeat="subject in timeTableCtrl.tForm[5].hour8.subjectElectives">
+                                {{subject.electiveDisplayName}}<span ng-hide="$last">,</span>
+                        </span>
+                    </label></td>
+                    </div>
+                </tr>
+            </table>
+            <div class="form-group">
+                <div class="offset-6">
+                    <button
+                        ng-click="timeTableCtrl.getTimeTableValues(timeTableCtrl.tForm)"
+                        data-ng-if="timeTableCtrl.role == 'ROLE_ADMIN' "
+                        class="btn btn-primary btn-sm waves-effect waves-effect bgm-teal">{{timeTableCtrl.btnText}}
+                        Time Table</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="{{timeTableCtrl.column_width}}" data-ng-if="timeTableCtrl.role == 'ROLE_STAFF' ">
+        <div id="no-record" style="display: none;"></div>
+        <div class="card-container">
+            <table width="99%" align="center" style="margin-top: 5px;">
+                <tr>
+                    <th style="width: 20%">Day</th>
+                    <th>1</th>
+                    <th ng-show="timeTableCtrl.hourCount != 1">2</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">3</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">4</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">5</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">6</th>
+                    <th
+                        ng-show="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">7</th>
+                    <th ng-show="timeTableCtrl.hourCount == 8 ">8</th>
+                </tr>
+                 <!-- <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" style="display: hidden">
+                 
+                 </tr> -->
+                <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" data-ng-if="key == 'Monday'">
+                    <th style="width: 20%">MONDAY</th>
+                    <td width="{{timeTableCtrl.withInPercentage}}">
+	                    <label data-ng-if="value.hour1_subject">{{value.hour1_subject}}<br>{{value.hour1_class}}</label>
+	                    <label data-ng-if="!value.hour1_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour2_subject">{{value.hour2_subject}}<br>{{value.hour2_class}}</label>
+	                    <label data-ng-if="!value.hour2_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour3_subject">{{value.hour3_subject}}<br>{{value.hour3_class}}</label>
+	                    <label data-ng-if="!value.hour3_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour4_subject">{{value.hour4_subject}}<br>{{value.hour4_class}}</label>
+	                    <label data-ng-if="!value.hour4_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+	                   	<label data-ng-if="value.hour5_subject">{{value.hour5_subject}}<br>{{value.hour5_class}}</label>
+	                    <label data-ng-if="!value.hour5_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour6_subject">{{value.hour6_subject}}<br>{{value.hour6_class}}</label>
+	                    <label data-ng-if="!value.hour6_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour7_subject">{{value.hour7_subject}}<br>{{value.hour7_class}}</label>
+	                    <label data-ng-if="!value.hour7_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 8 ">
+                     	<label data-ng-if="value.hour8_subject">{{value.hour8_subject}}<br>{{value.hour8_class}}</label>
+	                    <label data-ng-if="!value.hour8_subject">-</label>
+                    </td>
+                </tr>
+                   <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" data-ng-if="key == 'Tuesday'">
+                    <th style="width: 20%">TUESDAY</th>
+                  <td width="{{timeTableCtrl.withInPercentage}}">
+	                    <label data-ng-if="value.hour1_subject">{{value.hour1_subject}}<br>{{value.hour1_class}}</label>
+	                    <label data-ng-if="!value.hour1_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour2_subject">{{value.hour2_subject}}<br>{{value.hour2_class}}</label>
+	                    <label data-ng-if="!value.hour2_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour3_subject">{{value.hour3_subject}}<br>{{value.hour3_class}}</label>
+	                    <label data-ng-if="!value.hour3_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour4_subject">{{value.hour4_subject}}<br>{{value.hour4_class}}</label>
+	                    <label data-ng-if="!value.hour4_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+	                   	<label data-ng-if="value.hour5_subject">{{value.hour5_subject}}<br>{{value.hour5_class}}</label>
+	                    <label data-ng-if="!value.hour5_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour6_subject">{{value.hour6_subject}}<br>{{value.hour6_class}}</label>
+	                    <label data-ng-if="!value.hour6_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour7_subject">{{value.hour7_subject}}<br>{{value.hour7_class}}</label>
+	                    <label data-ng-if="!value.hour7_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 8 ">
+                     	<label data-ng-if="value.hour8_subject">{{value.hour8_subject}}<br>{{value.hour8_class}}</label>
+	                    <label data-ng-if="!value.hour8_subject">-</label>
+                    </td>
+                </tr>
+                <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" data-ng-if="key == 'Wednesday'">
+                    <th style="width: 20%">WEDNESDAY</th>
+                   <td width="{{timeTableCtrl.withInPercentage}}">
+	                    <label data-ng-if="value.hour1_subject">{{value.hour1_subject}}<br>{{value.hour1_class}}</label>
+	                    <label data-ng-if="!value.hour1_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour2_subject">{{value.hour2_subject}}<br>{{value.hour2_class}}</label>
+	                    <label data-ng-if="!value.hour2_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour3_subject">{{value.hour3_subject}}<br>{{value.hour3_class}}</label>
+	                    <label data-ng-if="!value.hour3_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour4_subject">{{value.hour4_subject}}<br>{{value.hour4_class}}</label>
+	                    <label data-ng-if="!value.hour4_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+	                   	<label data-ng-if="value.hour5_subject">{{value.hour5_subject}}<br>{{value.hour5_class}}</label>
+	                    <label data-ng-if="!value.hour5_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour6_subject">{{value.hour6_subject}}<br>{{value.hour6_class}}</label>
+	                    <label data-ng-if="!value.hour6_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour7_subject">{{value.hour7_subject}}<br>{{value.hour7_class}}</label>
+	                    <label data-ng-if="!value.hour7_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 8 ">
+                     	<label data-ng-if="value.hour8_subject">{{value.hour8_subject}}<br>{{value.hour8_class}}</label>
+	                    <label data-ng-if="!value.hour8_subject">-</label>
+                    </td>
+                </tr>
+                 <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" data-ng-if="key == 'Thursday'">
+                    <th style="width: 20%">THURSDAY</th>
+                    <td width="{{timeTableCtrl.withInPercentage}}">
+	                    <label data-ng-if="value.hour1_subject">{{value.hour1_subject}}<br>{{value.hour1_class}}</label>
+	                    <label data-ng-if="!value.hour1_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour2_subject">{{value.hour2_subject}}<br>{{value.hour2_class}}</label>
+	                    <label data-ng-if="!value.hour2_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour3_subject">{{value.hour3_subject}}<br>{{value.hour3_class}}</label>
+	                    <label data-ng-if="!value.hour3_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour4_subject">{{value.hour4_subject}}<br>{{value.hour4_class}}</label>
+	                    <label data-ng-if="!value.hour4_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+	                   	<label data-ng-if="value.hour5_subject">{{value.hour5_subject}}<br>{{value.hour5_class}}</label>
+	                    <label data-ng-if="!value.hour5_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour6_subject">{{value.hour6_subject}}<br>{{value.hour6_class}}</label>
+	                    <label data-ng-if="!value.hour6_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour7_subject">{{value.hour7_subject}}<br>{{value.hour7_class}}</label>
+	                    <label data-ng-if="!value.hour7_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 8 ">
+                     	<label data-ng-if="value.hour8_subject">{{value.hour8_subject}}<br>{{value.hour8_class}}</label>
+	                    <label data-ng-if="!value.hour8_subject">-</label>
+                    </td>
+                </tr>
+                <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" data-ng-if="key == 'Friday'">
+                    <th style="width: 20%">FRIDAY</th>
+                    <td width="{{timeTableCtrl.withInPercentage}}">
+	                    <label data-ng-if="value.hour1_subject">{{value.hour1_subject}}<br>{{value.hour1_class}}</label>
+	                    <label data-ng-if="!value.hour1_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour2_subject">{{value.hour2_subject}}<br>{{value.hour2_class}}</label>
+	                    <label data-ng-if="!value.hour2_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour3_subject">{{value.hour3_subject}}<br>{{value.hour3_class}}</label>
+	                    <label data-ng-if="!value.hour3_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour4_subject">{{value.hour4_subject}}<br>{{value.hour4_class}}</label>
+	                    <label data-ng-if="!value.hour4_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+	                   	<label data-ng-if="value.hour5_subject">{{value.hour5_subject}}<br>{{value.hour5_class}}</label>
+	                    <label data-ng-if="!value.hour5_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour6_subject">{{value.hour6_subject}}<br>{{value.hour6_class}}</label>
+	                    <label data-ng-if="!value.hour6_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour7_subject">{{value.hour7_subject}}<br>{{value.hour7_class}}</label>
+	                    <label data-ng-if="!value.hour7_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 8 ">
+                     	<label data-ng-if="value.hour8_subject">{{value.hour8_subject}}<br>{{value.hour8_class}}</label>
+	                    <label data-ng-if="!value.hour8_subject">-</label>
+                    </td>
+                </tr>
+                <tr data-ng-repeat="(key, value) in timeTableCtrl.staffTimeTable" data-ng-if="key == 'Saturday'">
+                    <th style="width: 20%">SATURDAY</th>
+                    <td width="{{timeTableCtrl.withInPercentage}}">
+	                    <label data-ng-if="value.hour1_subject">{{value.hour1_subject}}<br>{{value.hour1_class}}</label>
+	                    <label data-ng-if="!value.hour1_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour2_subject">{{value.hour2_subject}}<br>{{value.hour2_class}}</label>
+	                    <label data-ng-if="!value.hour2_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour3_subject">{{value.hour3_subject}}<br>{{value.hour3_class}}</label>
+	                    <label data-ng-if="!value.hour3_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2">
+	                    <label data-ng-if="value.hour4_subject">{{value.hour4_subject}}<br>{{value.hour4_class}}</label>
+	                    <label data-ng-if="!value.hour4_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount != 1 && timeTableCtrl.hourCount != 2 && timeTableCtrl.hourCount != 4">
+	                   	<label data-ng-if="value.hour5_subject">{{value.hour5_subject}}<br>{{value.hour5_class}}</label>
+	                    <label data-ng-if="!value.hour5_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 6 || timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour6_subject">{{value.hour6_subject}}<br>{{value.hour6_class}}</label>
+	                    <label data-ng-if="!value.hour6_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 7 || timeTableCtrl.hourCount == 8 ">
+	                    <label data-ng-if="value.hour7_subject">{{value.hour7_subject}}<br>{{value.hour7_class}}</label>
+	                    <label data-ng-if="!value.hour7_subject">-</label>
+                    </td>
+                    <td width="{{timeTableCtrl.withInPercentage}}" data-ng-if="timeTableCtrl.hourCount == 8 ">
+                     	<label data-ng-if="value.hour8_subject">{{value.hour8_subject}}<br>{{value.hour8_class}}</label>
+	                    <label data-ng-if="!value.hour8_subject">-</label>
+                    </td>
+                </tr>
+                </table>
+               </div>
+             </div>
+    
+</div>
+<style>
+td {
+    white-space: inherit !important;
+    text-overflow: inherit;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table>tbody>tr>td {
+    line-height: 1.628571;
+}
+
+.card-container {
+    height: 456px;
+    overflow: auto;
+    position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(142, 152, 143, 0.48) !important;
+}
+
+th, td {
+    margin: 0;
+    text-align: center;
+    border-collapse: collapse;
+    outline: 1px solid #e3e3e3;
+}
+
+td {
+    padding: 5px 10px;
+    font-size: small;
+}
+
+th {
+    background: #666;
+    color: white;
+    padding: 5px 10px;
+}
+
+tr>th>a {
+    color: #FFA500 !important;
+}
+
+</style>

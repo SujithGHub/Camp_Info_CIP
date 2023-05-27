@@ -1,0 +1,33 @@
+<div class="card-header ch-al p-0-75" data-ng-init="albumCtrl.initViewAlbum()">
+    <div class="row">
+        <div class="col-sm-9 col-xs-9 pt-1">
+            <h2>Albums</h2>
+        </div>
+        <div class="col-sm-3 col-xs-3 text-right">
+            <a class="btn btn-danger" data-ng-if="albumCtrl.albumImageShow" data-ng-click="albumCtrl.albumImageShow=false">BACK</a>
+        </div>
+    </div>
+</div>
+<div class="album-container p-3 content">
+    <div class="row">
+        <div class=" col-sm-2 col-xs-4 outline-none" style="height: 174px !important ; width:100px " data-ng-repeat="album in albumCtrl.albumList" data-ng-click="albumCtrl.getAlbumById(album.id,album.name)" data-ng-if="!albumCtrl.albumImageShow">
+            <img style="width:100px" src="assets/images/folder.png" class="img-responsive"> <span style="color: black; font-size: 13px; font-family: roboto;">{{::album.name}}</span>
+        </div>
+    </div>
+    <div class="row" >
+        <span data-ng-if="!albumCtrl.albumImageShow" class="col-md-4 " style="font-size: small">(Showing {{albumCtrl.noOfRecords}} Records of {{albumCtrl.totalCount}} entries) </span>
+        <div class="col-md-4 text-center">
+            <button class='btn bgm-teal ' style="width:100px; height: 23px;padding-right:0px;" data-ng-if="!albumCtrl.albumImageShow && albumCtrl.noOfRecords != albumCtrl.totalCount"  data-ng-click=albumCtrl.viewMore()> view more<img  src="assets/images/scroll-down-ani.gif" style="float: right; width: 23px;margin-top: -7px" class="img-responsive"></button>
+        </div>
+    <div class="no-record" data-ng-hide="albumCtrl.albumList.length ">
+        <div class="alert alert-warning text-center">No record found!</div>
+    </div>
+    <div id="albumContent" data-ng-show="albumCtrl.albumImageShow"></div>
+</div>
+<style>
+    .no-record {
+        padding-top: 100px;
+        padding-left: 50px;
+        padding-right: 50px
+    }
+</style>

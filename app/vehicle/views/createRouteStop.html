@@ -1,0 +1,59 @@
+<div class="col-sm-6 p-0">
+<section>
+    <div class="table-container">
+        <table width="100%">
+            <thead>
+                <tr class="header">
+                    <th width="30%">Stop Name <div>Stop Name</div> </th>
+                    <th width="25%">Latitude <div>Latitude</div> </th>
+                    <th width="25%">Longitude <div>Longitude</div> </th>
+                    <th width="20%"><div class="ml-0" style="margin-top: -5px;"><button class="btn btn-danger" type="submit" ng-if="vehicleRouteCtrl.isEnableSubmitStopBtn" data-ng-click="vehicleRouteCtrl.saveOrUpdateVehicleRoute(routeForm, 'vehicleRouteStop')">SUBMIT</button></div></th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="stop in routeForm.vehicleRouteStops track by $index">
+            		<td ng-hide= "true" class="border-none" >
+                        <input type="text" class="form-control form-control-small" data-ng-model="routeForm.vehicleRouteStops[$index].stopOrder"
+                       name="stopName" aria-label="stop name"  ng-value="routeForm.vehicleRouteStops[$index].stopOrder = $index+1"/>
+                    </td>
+                    <td class="border-none" ng-class="{'active':(vehicleRouteCtrl.infoWindowStopOrder == $index+1), 'invalid':(vehicleRouteCtrl.invalidaStopOrderRow == $index+1)}">
+                        <input type="text" class="form-control form-control-small" data-ng-model="routeForm.vehicleRouteStops[$index].name"
+                       name="stopName" data-ng-minlength="1" data-ng-maxlength="255"
+                       aria-label="stop name"  ng-click="vehicleRouteCtrl.infoWindowStopOrder=stop.stopOrder"/>
+                    </td>
+                    <td class="border-none" ng-class="{'active':(vehicleRouteCtrl.infoWindowStopOrder == $index+1), 'invalid':(vehicleRouteCtrl.invalidaStopOrderRow == $index+1)}">
+                        <input type="text" name="latitude" class="form-control form-control-small" data-ng-model="routeForm.vehicleRouteStops[$index].latitude"
+                            data-ng-change="vehicleRouteCtrl.initMap()" aria-label="latitude" data-ng-maxlength="255" data-ng-minlength="1"
+                            ng-click="vehicleRouteCtrl.infoWindowStopOrder=stop.stopOrder"/>
+                    </td>
+                    <td class="border-none" ng-class="{'active':(vehicleRouteCtrl.infoWindowStopOrder == stop.stopOrder), 'invalid':(vehicleRouteCtrl.invalidaStopOrderRow == stop.stopOrder)}">
+                        <input type="text" name="longitude" class="form-control form-control-small" data-ng-model="routeForm.vehicleRouteStops[$index].longitude"
+                           data-ng-change="vehicleRouteCtrl.initMap()" aria-label="longitude"  data-ng-maxlength="255" data-ng-minlength="1"
+                           ng-click="vehicleRouteCtrl.infoWindowStopOrder=stop.stopOrder"/>
+                   </td>
+                   <td class="border-none text-center" ng-class="{'active':(vehicleRouteCtrl.infoWindowStopOrder == stop.stopOrder), 'invalid':(vehicleRouteCtrl.invalidaStopOrderRow == stop.stopOrder)}">
+                       <button type="button" class="btn btn-default btn-info-light" data-ng-click="vehicleRouteCtrl.vehicleRouteStopsAdd($index)"
+                        style="color: black; padding: 4px 10px; box-shadow: none;">
+                        <i class="zmdi zmdi-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" data-ng-show="routeForm.vehicleRouteStops.length > 1" data-ng-click="vehicleRouteCtrl.infoWindowStopOrder=stop.stopOrder;vehicleRouteCtrl.removeStop($index);"
+                        style="background-color: rgba(158, 158, 158, 0.07); border: 1px solid #e0e0e0; color: black; padding: 4px 10px; box-shadow: none;">
+                        <i class="zmdi zmdi-close"></i>
+                    </button>
+                   </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section></div>
+<div class="col-sm-6">
+<ng-map zoom="13" center="{{vehicleRouteCtrl.mScope.map.center}}" style="height:100%" on-click="vehicleRouteCtrl.onclickGetLocation($event)"> 
+    <marker ng-repeat="pos in routeForm.vehicleRouteStops" label="'{{$index+1}}'" id='stopInfo{{$index+1}}' position="{{pos.latitude}},{{pos.longitude}}"
+    draggable="true" on-click="vehicleRouteCtrl.showInfowindow(pos)" on-dragend="vehicleRouteCtrl.markerLocation($index,$event)"></marker>
+    <info-window id="foo-iw">
+        <div ng-non-bindable="">
+            <p>Stop name: {{vehicleRouteCtrl.stopName}}</p>
+        <br />
+     </div>
+</info-window> </ng-map>
+</div>

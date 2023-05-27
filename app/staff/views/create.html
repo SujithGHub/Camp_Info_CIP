@@ -1,0 +1,299 @@
+<md-dialog-content class="card-header">
+   <div class="md-dialog-content">
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex required-mark">
+            <label>First Name</label>
+            <input type="text"class="md-input" data-ng-model="mScope.mForm.firstName"
+               data-ng-maxlength="30" data-ng-minlength="3" name="firstName" required>
+            <div data-ng-messages="modelForm.firstName.$error"
+               data-ng-if="modelForm.firstName.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="required" class="help-block">
+                  <small>First name is required !</small>
+               </p>
+               <p data-ng-message="minlength" class="help-block">
+                  <small>First name is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>First name is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="flex required-mark">
+            <label>Last Name</label>
+            <input type="text" class="md-input" data-ng-model="mScope.mForm.lastName" 
+               data-ng-maxlength="30" data-ng-minlength="1" name="lastName"  required>
+            <div data-ng-messages="modelForm.lastName.$error"
+               data-ng-if="modelForm.lastName.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="required" class="help-block">
+                  <small>Last name is required !</small>
+               </p>
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Last name is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Last name is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex required-mark">
+            <label>Staff
+            Id</label> <input type="text" class="md-input" data-ng-disabled="mScope.mForm.id"
+               data-ng-model="mScope.mForm.staffId" data-ng-maxlength="15"
+               data-ng-minlength="3" name="staffId" required>
+            <div data-ng-messages="modelForm.staffId.$error"
+               data-ng-if="modelForm.staffId.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="required" class="help-block">
+                  <small>Staff id is required !</small>
+               </p>
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Staff id is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Staff id is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="flex required-mark" data-ng-if="mScope.instituteType != 'School'">
+            <label>Department Name</label>
+            <md-select data-ng-model="mScope.mForm.department.id" name="department" required>
+               <md-option ng-value="department.id" data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.department.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required" class="help-block">
+                  <small>Department name is required !</small>
+               </div>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex"> <label>Date
+            of birth</label> <input type="text" class="md-input"
+                                    name="dob" datepicker data-ng-model="mScope.mForm.dob">
+         </md-input-container>
+         <md-input-container class="flex">
+            <label>Blood Group</label>
+            <md-select name="bloodGroup" data-ng-model="mScope.mForm.bloodGroup">
+               <md-option ng-value="key"
+                          data-ng-repeat="(key,value) in mScope.bloodGroupList">{{::value}}</md-option>
+            </md-select>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row" style="padding-bottom: 10px;">
+         <md-input-container  class="flex required-mark" ng-init="mScope.mForm.id ? null : mScope.mForm.role=[]">
+            <label>Role</label>
+            <md-select data-ng-model="mScope.mForm.role[0].name" name="role" required>
+               <md-option ng-value="role.name" 
+                  data-ng-repeat="role in mScope.staffRoleList">{{::role.name}}</md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.role.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required" class="help-block">
+                  <small>Role name is required !</small>
+               </div>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="align-center required-mark">
+            <label>Gender</label>
+            <md-select name="gender" data-ng-model="mScope.mForm.gender" required>
+               <md-option value="Male">Male</md-option>
+               <md-option value="Female">Female</md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.gender.$error"
+               data-ng-if="modelForm.$submitted" class="has-error">
+               <p data-ng-message="required" class="help-block">
+                  <small>Gender is required !</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="align-center">
+            <label>Marital status</label> 
+            <md-select name="maritalStatus" data-ng-model="mScope.mForm.maritalStatus">
+               <md-option value="Single">Single</md-option>
+               <md-option value="Married">Married</md-option>
+               <md-option value="Widow">Widow</md-option>
+            </md-select>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex">
+            <label>Designation</label>
+            <input type="text" class="md-input" data-ng-maxlength="30"
+               data-ng-minlength="3" name="designation" 
+               data-ng-model="mScope.mForm.designation">
+            <div data-ng-messages="modelForm.designation.$error"
+               data-ng-if="modelForm.designation.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Designation is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Designation is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="flex">
+            <label>Qualification</label>
+            <input type="text" class="md-input" data-ng-maxlength="30" 
+               data-ng-minlength="3" name="qualification"
+               data-ng-model="mScope.mForm.qualification">
+            <div data-ng-messages="modelForm.qualification.$error"
+               data-ng-if="modelForm.designation.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Qualification is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Qualification is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex">
+            <label>Experience</label>
+            <input type="text"class="md-input" data-ng-maxlength="2" data-ng-pattern="/^[0-9]{1,7}$/" 
+               name="experience"data-ng-model="mScope.mForm.experience">
+            <div data-ng-messages="modelForm.experience.$error"
+               data-ng-if="modelForm.experience.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="pattern" class="help-block">
+                  <small>Not a valid number!</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Experience is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="flex"> <label>Date
+            of Joining</label> <input type="text" class="md-input" datepicker
+               data-ng-model="mScope.mForm.dateOfJoining" 
+               name="dateOfJoining">
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex required-mark">
+            <label>Phone Number</label>
+            <input type="text"class="md-input" data-ng-maxlength="15" data-ng-minlength="10" data-ng-pattern="/^[0-9+ -]{10,15}$/" name="phoneNumber"
+               data-ng-model="mScope.mForm.phoneNumber" data-ng-disabled="mScope.mForm.id" required>
+            <div data-ng-messages="modelForm.phoneNumber.$error"
+               data-ng-if="modelForm.phoneNumber.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="pattern" class="help-block">
+                  <small>Not a valid number!</small>
+               </p>
+               <p data-ng-message="required" class="help-block">
+                  <small>Contact number is required !</small>
+               </p>
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Contact number is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Contact number is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="flex">
+            <label>E-Mail</label>
+            <input type="text" data-ng-minlength="3" name="emailId"
+               class="md-input" data-ng-model="mScope.mForm.emailId">
+            <div data-ng-messages="modelForm.emailId.$error"
+               data-ng-if="modelForm.emailId.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="email" class="help-block">
+                  <small>Not valid email! </small>
+               </p>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex">
+                <label>Aadhar Number</label>
+                <input type="text" class="md-input" data-ng-model="mScope.mForm.aadharNumber"   mask="9999-9999-9999" clean="true"  name="aadharNumber">
+                <div data-ng-messages="modelForm.aadharNumber.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                </div>
+         </md-input-container>
+         <md-input-container class="flex">
+            <label>Emergency Contact</label>
+            <input type="text"class="md-input" data-ng-maxlength="15" data-ng-minlength="10" data-ng-pattern="/^[0-9+ -]{10,15}$/" name="emergencyContact"
+               data-ng-model="mScope.mForm.emergencyContact">
+            <div data-ng-messages="modelForm.emergencyContact.$error"
+               data-ng-if="modelForm.emergencyContact.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="pattern" class="help-block">
+                  <small>Not a valid number!</small>
+               </p>
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Emergency Contact number is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Emergency Contact number is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <md-input-container class="flex">
+            <label>Contact Person</label>
+            <input type="text"class="md-input" data-ng-model="mScope.mForm.contactPerson"
+               data-ng-maxlength="30" data-ng-minlength="3" name="contactPerson">
+            <div data-ng-messages="modelForm.contactPerson.$error"
+               data-ng-if="modelForm.contactPerson.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Contact Person is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Contact Person is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+         <md-input-container class="flex">
+            <label>Relation</label>
+            <input type="text" class="md-input" data-ng-model="mScope.mForm.relation" 
+               data-ng-maxlength="30" data-ng-minlength="3" name="relation">
+            <div data-ng-messages="modelForm.relation.$error"
+               data-ng-if="modelForm.relation.$touched || modelForm.$submitted"
+               class="has-error">
+               <p data-ng-message="minlength" class="help-block">
+                  <small>Relation is too short.</small>
+               </p>
+               <p data-ng-message="maxlength" class="help-block">
+                  <small>Relation is too long.</small>
+               </p>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="layout-sm-column layout-row">
+         <div class="col-sm-6 col-xs-6 pl-0">
+            <label>Publication</label>
+            <textarea class="form-control" rows="2" data-ng-model="mScope.mForm.publications"
+            placeholder="Publication"></textarea>
+         </div>
+         <div class="col-sm-6 col-xs-6 pl-0">
+            <label>Seminor/WorkShop</label>
+            <textarea class="form-control" rows="2" data-ng-model="mScope.mForm.seminors"
+                      placeholder="Seminor / WorkShop"></textarea>
+         </div>
+      </div>
+      <div class="layout-sm-column layout-row mt-5">
+         <label class="radio m-r-20">Status</label>
+         <md-radio-group ng-model="mScope.mForm.status">
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value= "ACTIVE" class="pr-0">Active</md-radio-button>
+            </label>
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value="INACTIVE" class="pr-0">InActive</md-radio-button>
+            </label>
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value="LONGLEAVE" class="pr-0">LongLeave</md-radio-button>
+            </label>
+         </md-radio-group>
+      </div>
+   </div>
+</md-dialog-content>

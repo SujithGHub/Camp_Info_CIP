@@ -1,0 +1,29 @@
+<div class="card-header" data-ng-init="feesCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2> Fees Structure
+               <small class="hidden-xs">
+                 <div class="grid-ellipsis ">An amount of money paid for a particular piece of work or service</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div ng-class="{'col-md-3 col-sm-3' : feesCtrl.loggedInUser === 'ROLE_ADMIN', 'col-md-6 col-sm-6' : feesCtrl.loggedInUser != 'ROLE_ADMIN'}">
+         <md-input-container>
+            <label>Search here</label>
+           <input type="search" id="search" data-ng-model="search" data-ng-change="feesCtrl.initDataTable()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-3 col-sm-3 my-2" ng-if="feesCtrl.loggedInUser === 'ROLE_ADMIN'">
+         <button class="btn bgm-teal btn-xs" title="Add fee structure" template-url="/app/feesStructure/views/create.html"
+                 form-modal m-title="Fees Structure" m-scope="feesCtrl.mScope"
+                 form-submit="feesCtrl.saveOrUpdateFees(mForm)" init-data="feesCtrl.initData"
+                 ok-button-text="SUBMIT"><span>Add fee</span></button>
+         <button class="btn bgm-teal btn-xs" ui-sref="studentPaymentMode"><span>Student Payment Mode</span></button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="feesDataTable" class="display table" cellspacing="0"></table>
+</div>

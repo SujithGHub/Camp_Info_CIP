@@ -1,0 +1,25 @@
+<md-dialog-content >
+	<div class="md-dialog-content">
+		<div class="layout-sm-column layout-row mb-5">
+			<div class="col-sm-12 col-xs-12">
+				<label>Add Feedback</label>
+				<textarea class="form-control" name="feedback" rows="2"
+						  data-ng-model="mScope.mForm.description"
+						  placeholder="Write your feedback"
+						  data-ng-required="true"
+						  data-ng-minlength="10"
+                          data-ng-maxlength="255"></textarea>
+				<div data-ng-messages="modelForm.feedback.$error"
+					 data-ng-show="modelForm.feedback.$touched || modelForm.$submitted"
+					 class="has-error">
+					<div data-ng-message="required"> <small>Feedback is required !</small> </div>
+                    <div data-ng-message="minlength"><small>Feedback is too short.</small></div>
+                    <div data-ng-message="maxlength"><small>Feedback is too long.</small></div>
+				</div>
+			</div>
+		</div>
+
+</div>
+
+
+</md-dialog-content>

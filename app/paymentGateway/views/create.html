@@ -1,0 +1,95 @@
+<md-dialog-content class="card-header" >
+   <div class="md-dialog-content">
+	<md-input-container class="align-center required-mark">
+		<label>Institute Name</label>
+        <md-select name="institute" ng-model="mScope.mForm.institute.id" data-ng-required="true">
+       		<md-option ng-value="institute.id" data-ng-repeat="institute in mScope.instituteList">{{::institute.instituteName}}</md-option>
+        </md-select>
+        <div data-ng-messages="modelForm.institute.$error" data-ng-if="modelForm.$submitted" class="has-error">
+             <div data-ng-message="required"><small>Institute Name is required !</small></div>
+    	</div>
+    </md-input-container>
+
+	 <md-input-container class="align-center required-mark">
+            <label>Payment Gateway</label>
+            <md-select name="paymentGateway" data-ng-model="mScope.mForm.paymentGateway" data-ng-required="true">
+               <md-option value="payU">PayU Money</md-option>
+            </md-select>
+              <div data-ng-messages="modelForm.paymentGateway.$error" data-ng-if="modelForm.$submitted" class="has-error">
+             <div data-ng-message="required"><small>Payment Gateway is required !</small></div>
+    	</div>
+     </md-input-container>
+     
+     <md-input-container flex class="required-mark"> <label>Payment
+			Gateway Id</label> <input type="text" name="merchantId"
+			data-ng-model="mScope.mForm.merchantId" class="md-input"
+			required data-ng-minlength="7"
+			data-ng-maxlength="7" />
+		<div data-ng-messages="modelForm.merchantId.$error"
+			data-ng-if="modelForm.merchantId.$touched || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Payment Gateway Id is Required !</small>
+			</div>
+			<div data-ng-message="minlength" class="help-block">
+				<small>This field is too short.</small>
+			</div>
+			<div data-ng-message="maxlength" class="help-block">
+				<small>This field is too long.</small>
+			</div>
+		</div>
+		</md-input-container>
+		
+     <md-input-container flex class="required-mark"> <label>Payment
+			Gateway Key</label> <input type="text" name="merchantKey"
+			data-ng-model="mScope.mForm.merchantKey" class="md-input"
+			required data-ng-minlength="4"
+			data-ng-maxlength="60" />
+		<div data-ng-messages="modelForm.merchantKey.$error"
+			data-ng-if="modelForm.merchantKey.$touched || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Payment Gateway Key is Required !</small>
+			</div>
+			<div data-ng-message="minlength" class="help-block">
+				<small>This field is too short.</small>
+			</div>
+			<div data-ng-message="maxlength" class="help-block">
+				<small>This field is too long.</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container flex class="required-mark"> <label>Payment
+			Gateway Salt</label> <input type="text" name="merchantSalt"
+			data-ng-model="mScope.mForm.merchantSalt" class="md-input"
+			required data-ng-minlength="4"
+			data-ng-maxlength="60" />
+		<div data-ng-messages="modelForm.merchantSalt.$error"
+			data-ng-if="modelForm.merchantSalt.$touched || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Payment Gateway Salt is Required !</small>
+			</div>
+			<div data-ng-message="minlength" class="help-block">
+				<small>This field is too short.</small>
+			</div>
+			<div data-ng-message="maxlength" class="help-block">
+				<small>This field is too long.</small>
+			</div>
+		</div>
+		</md-input-container>
+		
+	<div class="row fluid" style="padding-left: initial;margin-left: -15px;">
+		<label class="radio radio-inline m-r-20">Status</label>
+		<md-radio-group ng-model="mScope.mForm.status"> 
+			<label class="radio radio-inline m-r-20"> 
+				<md-radio-button value="ACTIVE">Active</md-radio-button>
+		    </label>
+		    <label class="radio radio-inline m-r-20"> 
+		    	<md-radio-button value="INACTIVE">InActive</md-radio-button>
+			</label> 
+		</md-radio-group>
+	</div>
+	
+   </div>
+</md-dialog-content>

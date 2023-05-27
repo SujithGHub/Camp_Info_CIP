@@ -1,0 +1,66 @@
+<md-dialog aria-label="classified" ng-cloak style="width: 60%;height:450px;position: relative;overflow: unset;">
+    <img alt="nice" class="custom-close-btn"
+         src="../../assets/images/close_btn.png"
+         ng-click="classifiedCtrl.cancel()">
+    <!--<md-toolbar>
+       <div class="md-toolbar-tools" style="height: 50px">
+          <h2>{{classifiedCtrl.formData.title}}</h2>
+          <span flex></span>
+          <md-button class="md-icon-button" ng-click="classifiedCtrl.cancel()">
+             <i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i>
+          </md-button>
+       </div>
+    </md-toolbar>-->
+    <md-dialog-content style="font-size:13px;width: auto;height:100%">
+        <div class="md-dialog-content p-0" style="height: inherit;">
+         <div id="viewClassified" class="row mx-0 px-0" style="height: inherit;">
+            <div class="col-sm-12 col-md-6 p-4" style="width: auto;height:100%;background: #484855;">
+                  <div id="custom-thumbnail" class="thumbnail" style="width: auto;height:100%">
+                     <div class="lightbox-item custom-image-center p-item" style="text-align: center;height:100%;overflow: auto">
+                        <a class="fancybox" target="_blank" href="{{classifiedCtrl.formData.image[0].path}}"
+                           rel="gallery">
+                        <img class="image-alignment"  data-ng-show="classifiedCtrl.formData.image[0]"
+                           data-ng-src="{{classifiedCtrl.formData.image[0].path}}"
+                             alt="" style="height: auto;" data-image-on-error></a>
+                        <img  data-ng-hide="classifiedCtrl.formData.image[0]"
+                           src="/assets/images/no-image-found.png" alt=""
+                           style="max-height: 310px;width: auto;max-width:364px;">
+                     </div>
+                  </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 p-4" style="padding-bottom: 10px;">
+                <div>
+                    <h2 class="mt-0">{{classifiedCtrl.formData.title}}</h2>
+                </div>
+                <div class=" mx-0" style="margin:10px;min-height:80px;">
+                    <h3 style="color:green;">Description</h3>
+                    <span style="text-indent: 20px;">{{classifiedCtrl.formData.description}}</span>
+                </div>
+                <hr>
+               <div class="m-0">
+                   <h3 class="" style="padding-top:8px">Contact Details</h3>
+                   <div class="row mx-0">
+                       <div class="col-4">
+                           <span style="font-weight:500">Name</span>
+                       </div>
+                       <div class="col-1">:</div>
+                       <div class="col-7">
+                           <p class="" style="font-size:14px">{{classifiedCtrl.formData.user.Student.firstName}}{{classifiedCtrl.formData.user.staff.firstName}}{{classifiedCtrl.formData.user.institute.instituteName}}</p>
+                       </div>
+                   </div>
+                   <div class="row mx-0">
+                       <div class="col-4">
+                           <span style="font-weight:500">Contact Number</span>
+                       </div>
+                       <div class="col-1">:</div>
+                       <div class="col-7">
+                           <p class="" style="font-size:14px">{{classifiedCtrl.formData.contactNumber}}</p>
+                       </div>
+                   </div>
+               </div>
+
+            </div>
+         </div>
+      </div>
+   </md-dialog-content>
+</md-dialog>

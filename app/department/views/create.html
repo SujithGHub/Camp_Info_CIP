@@ -1,0 +1,32 @@
+<md-dialog-content>
+<div class="md-dialog-content">
+	<md-input-container flex class="required-mark" style="margin: 0px auto!important;">
+	<label>Department Name</label> <input class="md-input"
+		data-ng-model="mScope.mForm.name" style="text-transform: uppercase"
+		name="name" data-ng-required="true" data-ng-minlength="2"
+		data-ng-maxlength="100" autocomplete="off"> 
+		<div data-ng-messages="modelForm.name.$error"  data-ng-if="modelForm.name.$touched || modelForm.$submitted"  class="has-error">
+		<p data-ng-message="required"   class="help-block"><small>Department name is required !</small></p>
+		 <p data-ng-message="minlength" class="help-block"> <small>Department name is too short.</small></p>
+		  <p data-ng-message="maxlength" class="help-block"><small>Department name is too long.</small></p>
+			</div> </md-input-container>
+	<md-input-container flex style="margin: 0px auto!important">
+	<label>Department Display Name</label> <input class="md-input" style="text-transform:uppercase"
+		data-ng-model="mScope.mForm.displayName" name="displayName" data-ng-required="true" data-ng-minlength="2" data-ng-maxlength="10" autocomplete="off">
+			<div data-ng-messages="modelForm.displayName.$error"  data-ng-if="modelForm.displayName.$touched || modelForm.$submitted"  class="has-error">
+				<div data-ng-message="required"   class="help-block"><small>Department display name is required !</small></div>
+			    <div data-ng-message="minlength" class="help-block"> <small>Department display name is too short.</small></div>
+			    <div data-ng-message="maxlength" class="help-block"><small>Department display name is too long.</small></div>
+			</div> 
+		 </md-input-container>
+	<div class="row fluid" style="padding-left: initial;margin-left: -15px;">
+		<label class="radio radio-inline m-r-20">Status</label>
+		<md-radio-group ng-model="mScope.mForm.status"> <label
+			class="radio radio-inline m-r-20"> <md-radio-button
+				value="ACTIVE">Active</md-radio-button>
+		</label> <label class="radio radio-inline m-r-20"> <md-radio-button
+				value="INACTIVE">InActive</md-radio-button>
+		</label> </md-radio-group>
+	</div>
+</div>
+</md-dialog-content>

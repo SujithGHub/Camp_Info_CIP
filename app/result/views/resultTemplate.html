@@ -1,0 +1,122 @@
+<md-dialog-content class="card-header" >
+    <div class="md-dialog-content">
+        <div class="row">
+        <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Academic Year</label></div>
+            <div class="col-sm-7 col-xs-7">
+                <md-input-container class="align-center">
+                    <md-select aria-label="academic" name="academic" data-ng-required="true" ng-model="mScope.mForm.academic.id">
+                        <md-option ng-value="academic.id" data-ng-repeat="academic in mScope.academicList">{{::academic.academicYear}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.academic.$error" data-ng-if="modelForm.academic.$touched || modelForm.$submitted">
+                        <div data-ng-message="required"><small>Academic is Required !</small></div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row" data-ng-if="mScope.instituteType=='College'">
+            <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Department</label></div>
+            <div class="col-sm-7 col-xs-7">
+	            <md-input-container class="align-center">
+	                <md-select aria-label="department" name="department" data-ng-required="true" ng-model="mScope.mForm.department.id" data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+                        <md-option ng-value="department.id" data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+	                </md-select>
+	                <div data-ng-messages="modelForm.department.$error" data-ng-show="modelForm.$submitted">
+                        <div data-ng-message="required"><small>Department Name is Required !</small></div>
+	         	    </div>
+	            </md-input-container>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label" data-ng-if="mScope.instituteType=='College'">Year</label>
+            <label class="control-label" data-ng-if="mScope.instituteType=='School'">Standard</label></div>
+            <div class="col-sm-7 col-xs-7">
+	            <md-input-container class="align-center">
+	                <md-select aria-label="class year" name="class" data-ng-required="true" ng-model="mScope.mForm.classYear.id" data-ng-change="mScope.instituteType=='College' ? mScope.getSectionByClassId(mScope.mForm.classYear.id, true) : mScope.getSectionByClassId(mScope.mForm.classYear.id); mScope.instituteType=='College' ? mScope.getSemesterByClassYear(mScope.mForm.classYear.id):null;">
+                        <md-option ng-value="standard.id" data-ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}</md-option>
+                    </md-select>
+	                <div data-ng-messages="modelForm.class.$error" data-ng-if="modelForm.class.$touched || modelForm.$submitted">
+		                <div data-ng-message="required" data-ng-if="mScope.instituteType=='School'"><small>Standard is Required !</small></div>
+		                <div data-ng-message="required" data-ng-if="mScope.instituteType=='College'"><small>Year is Required !</small></div>
+                    </div>
+	            </md-input-container>
+            </div>
+        </div>
+        <div class="row" data-ng-if="mScope.instituteType=='College'">
+            <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Semester</label></div>
+            <div class="col-sm-7 col-xs-7">
+                <md-input-container class="align-center">
+                    <md-select aria-label="semester" name="semester" data-ng-model="mScope.mForm.semester" required data-ng-change="mScope.getSectionByClassId(mScope.mForm.classYear.id);">
+                        <md-option ng-value="semester" data-ng-repeat="semester in mScope.semestersLists">{{::semester}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.semester.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                        <div data-ng-message="required"><small>Semester is required !</small>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Section</label></div>
+            <div class="col-sm-7 col-xs-7">
+                <md-input-container class="align-center">
+	                <md-select aria-label="section" name="section" data-ng-required="true" ng-model="mScope.mForm.section.id" 
+	                   data-ng-change="mScope.instituteType=='College' ? mScope.getExamByClassAndAcademicId(mScope.mForm.classYear.id, mScope.mForm.academic.id, mScope.mForm.section.id, mScope.mForm.semester) : mScope.getExamByClassAndAcademicId(mScope.mForm.classYear.id, mScope.mForm.academic.id, mScope.mForm.section.id)">
+	                    <md-option ng-value="section.id" data-ng-repeat="section in mScope.sectionList">{{::section.sectionName}}</md-option>
+	                </md-select>
+	               <div data-ng-messages="modelForm.section.$error" data-ng-if="modelForm.section.$touched || modelForm.$submitted">
+		               <div data-ng-message="required"><small>Section is Required !</small>
+		               </div>
+		           </div>
+	            </md-input-container>
+            </div>
+        </div>
+        <div class="row mb-0">
+            <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Examination</label></div>
+            <div class="col-sm-7 col-xs-7">
+                <md-input-container class="align-center">
+	                <md-select aria-label="examination" name="exam" data-ng-required="true" ng-model="mScope.mForm.examination.id" data-ng-change="mScope.getSubjectByExamId(mScope.mForm.examination.id)">
+	                    <md-option ng-value="examination.id" data-ng-repeat="examination in mScope.examinationList">{{::examination.examName}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.exam.$error" data-ng-if="modelForm.exam.$touched || modelForm.$submitted">
+		                <div data-ng-message="required"> <small>Examination is Required !</small> </div>
+		            </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row">
+           <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Subject</label></div>
+            <div class="col-sm-7 col-xs-7">
+	           <md-input-container class="align-center">
+	               <md-select aria-label="subject" name="subject" data-ng-required="true" ng-model="mScope.mForm.subject.id" 
+	                  data-ng-change="mScope.getElectiveSubjectBySubjectId(mScope.mForm.subject.id, mScope.mForm.examination.id, 'ModelForm')">
+	                   <md-option ng-value="subject.subject.id" data-ng-repeat="subject in mScope.subjectsList">{{::subject.subject.subjectName}}</md-option>
+	               </md-select>
+	               <div data-ng-messages="modelForm.subject.$error" data-ng-if="modelForm.subject.$touched || modelForm.$submitted">
+	                   <div data-ng-message="required"> <small>Subject is Required !</small> </div>
+	               </div>
+	           </md-input-container>
+            </div>
+        </div>
+        <div class="row" data-ng-if="mScope.subjectElectiveList.length">
+            <div class="col-sm-4 col-xs-5 text-right required-mark">
+            <label class="control-label">Elective Subject</label></div>
+            <div class="col-sm-7 col-xs-7">
+                <md-input-container class="align-center">
+                    <md-select aria-label="subject elective" name="subjectElective" data-ng-required="true" ng-model="mScope.mForm.subjectElective.id">
+                        <md-option ng-value="subjectElective.subjectElective.id" data-ng-repeat="subjectElective in mScope.subjectElectiveList">{{::subjectElective.subjectElective.electiveSubjectName}}</md-option>
+	                </md-select>
+                    <div data-ng-messages="modelForm.subjectElective.$error" data-ng-if="modelForm.subjectElective.$touched || modelForm.$submitted">
+                        <div data-ng-message="required"> <small>Subject Elective is Required !</small> </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+</md-dialog-content>

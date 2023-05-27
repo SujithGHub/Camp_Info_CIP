@@ -1,0 +1,163 @@
+<md-dialog-content class="card-header">
+    <div class="md-dialog-content">
+        <md-input-container class="align-center required-mark"
+                            data-ng-if="mScope.instituteType == 'College' && !mScope.mForm.id">
+            <label>Department Name</label>
+            <md-select ng-model="mScope.mForm.department" name="departments" required
+            data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+                <!-- <md-button class="select-all-btn" value="all"
+                           ng-if="mScope.mForm.departments.length != mScope.departmentList.length"
+                           data-ng-click="mScope.selectAllPageStatus()">Select All
+                </md-button>
+                <md-button class="select-all-btn" value="all"
+                           ng-if="mScope.mForm.departments.length == mScope.departmentList.length"
+                           data-ng-click="mScope.deselectAllPageStatus()">Deselect All
+                </md-button> -->
+                
+                <md-option data-ng-value="department" data-ng-repeat="department in mScope.departmentList">
+                    {{::department.name}}
+                </md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.departments.$error"
+                 data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Department name is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="align-center required-mark"
+                            data-ng-if="mScope.instituteType == 'College' && mScope.mForm.id">
+            <label>Department Name</label>
+            <md-select ng-model="mScope.mForm.department.id" name="department" required
+                       data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)"
+                       ng-init="(mScope.mForm.department.id == null)? '' : mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+                <md-option data-ng-value="department.id" data-ng-repeat="department in mScope.departmentList">
+                    {{::department.name}}
+                </md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.department.$error"
+                 data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Department name is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="align-center required-mark"
+                            data-ng-if="mScope.instituteType == 'College' && !mScope.mForm.id">
+            <label data-ng-if="mScope.instituteType =='College'">Year</label>
+            <md-select label="classYear" data-ng-model="mScope.mForm.classYear" name="classYears"
+                       required>
+                <md-option ng-value="classYear"
+                           data-ng-repeat="classYear in mScope.yearAndStandardList">{{::classYear.name}}
+                </md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.classYears.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Year is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="align-center required-mark"
+                            data-ng-if="mScope.instituteType == 'College' && mScope.mForm.id">
+            <label data-ng-if="mScope.instituteType =='College'">Year</label>
+            <md-select aria-label="classYear" data-ng-model="mScope.mForm.classYear.id" name="classYear" required>
+                <md-option ng-value="classYear.id"
+                           data-ng-repeat="classYear in mScope.yearAndStandardList">{{::classYear.name}}
+                </md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.classYears.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Year is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="align-center required-mark" data-ng-if="mScope.instituteType == 'School'">
+            <label>Standard</label>
+            <md-select aria-label="classYear" data-ng-model="mScope.mForm.classYear.id" name="classYear" required>
+                <md-option ng-value="classYear.id"
+                           data-ng-repeat="classYear in mScope.yearAndStandardList">{{::classYear.name}}
+                </md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.classYears.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Year is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container flex class="required-mark">
+            <label>Fees structure name</label>
+            <input class="md-input" data-ng-model="mScope.mForm.name" style="text-transform: uppercase" name="name"
+                   data-ng-required="true" data-ng-minlength="2"
+                   data-ng-maxlength="100" autocomplete="off">
+            <div data-ng-messages="modelForm.name.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Fees type is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="flex">
+            <label>Payment mode</label>
+            <md-select aria-label="paymentMode" name="paymentMode" data-ng-model="mScope.mForm.paymentMode">
+                <md-option ng-value="key"
+                           data-ng-repeat="(key,value) in mScope.paymentModeList">{{::value}}
+                </md-option>
+            </md-select>
+            <div class="md-errors-spacer"></div>
+        </md-input-container>
+
+
+        <div class="layout-sm-column layout-row">
+            <md-input-container class="flex required-mark">
+                <label>Start Date</label>
+                <input type="text" class="md-input" datepicker name="startDate" data-ng-model="mScope.mForm.startDate"
+                       data-ng-required="true">
+                <div data-ng-messages="modelForm.startDate.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block">
+                        <small>Start date is required !</small>
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="flex required-mark">
+                <label>End Date</label>
+                <input type="text" class="md-input" datepicker name="lastDate" data-ng-model="mScope.mForm.lastDate"
+                       data-ng-required="true">
+                <div data-ng-messages="modelForm.lastDate.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block">
+                        <small>End date is required !</small>
+                    </div>
+                </div>
+            </md-input-container>
+        </div>
+        <div class="layout-sm-column layout-row">
+            <div class="col-sm-6 p-0">
+                <md-input-container flex class="required-mark">
+                    <label>Amount</label>
+                    <input class="md-input" data-ng-model="mScope.mForm.fee" style="text-transform: uppercase"
+                           name="fee"
+                           data-ng-required="true" data-ng-pattern="/^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/" autocomplete="off">
+                    <div data-ng-messages="modelForm.fee.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                        <div data-ng-messages="modelForm.fee.$error" data-ng-show="modelForm.$submitted"
+                             class="help-block">
+                            <div data-ng-message="required">
+                                <small>Fee is required !</small>
+                            </div>
+                            <div data-ng-message="pattern">
+                                <small>Please enter valid fee</small>
+                            </div>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div class="col-sm-6 my-3"><label class="radio m-r-20">Status</label>
+                <md-radio-group ng-model="mScope.mForm.status">
+                    <label class="radio radio-inline m-r-20">
+                        <md-radio-button value="ACTIVE">Active</md-radio-button>
+                    </label>
+                    <label class="radio radio-inline m-r-20">
+                        <md-radio-button value="INACTIVE">InActive</md-radio-button>
+                    </label>
+                </md-radio-group>
+            </div>
+        </div>
+    </div>
+</md-dialog-content>

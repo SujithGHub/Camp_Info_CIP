@@ -1,0 +1,79 @@
+<div layout="column" class="md-inline-form">
+    <md-content layout-padding>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block required-mark col-sm-5 " >
+                <label style="padding-left: 17px;">From date</label>
+                <input datepicker class="md-input" type="text" name="fromDate" data-ng-required="true"
+                       data-ng-model="mScope.mForm.fromDate">
+                <div data-ng-messages="modelForm.fromDate.$error"
+                     data-ng-if="modelForm.fromDate.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block">
+                        <small>From Date is required !</small>
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block required-mark col-sm-5" >
+                <label style="padding-left: 17px;">To date</label>
+                <input class="md-input" datepicker type="text" data-ng-model="mScope.mForm.toDate"
+                       data-ng-class="(mScope.mForm.fromDate == null)?' ' : mScope.checkAcademic(mScope.mForm.fromDate,mScope.mForm.toDate)"
+                       data-ng-minlength="mScope.isValid" data-ng-required="true" name="toDate"
+                       data-my-validation-check="mScope.isValid">
+                <div data-ng-messages="modelForm.toDate.$error"
+                     data-ng-if="modelForm.toDate.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block" class="message">
+                        <small>To Date is required !</small>
+                    </div>
+                    <div ng-if="mScope.isValid"
+                         ng-class="mScope.isValid == true? modelForm.$valid = false: modelForm.$valid = true;"
+                         class="help-block" class="message">
+                        <small class="errormessage">Academic year should be within 10-12 months.</small>
+                    </div>
+                    <div data-ng-message="checkTrue" class="help-block" class="message">
+                        <small>Academic year should be within 10-12 months.</small>
+                    </div>
+                    <div data-ng-message="validationError" class="help-block" class="message">
+                        this is the error
+                    </div>
+                </div>
+            </md-input-container>
+
+            <md-input-container class="col-sm-2">
+
+                <button style="vertical-align: sub;" class="btn btn-danger"
+                       ng-click="modelForm.$valid ? mScope.getInstituteSmsStatisticsReport() : null">Submit
+                </button>
+            </md-input-container>
+        </div>
+        <div class="row mx-0 p-2">
+            <section class="w-100">
+                <div class="table-container w-100" style="height:100%;max-height:336px;font-size: smaller">
+                    <table width="100%" align="center">
+                        <thead>
+                        <tr class="header">
+                            <th width="35%">S No <div>S No</div> </th>
+                            <th style ="text-align:center" width="35%">Date <div>Date</div></th>
+                            <th width="30%">Total Message Count <div>Message Count</div></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr data-ng-repeat="staticsReport in mScope.smsStaticsReport.entityList">
+                            <td>{{$index + 1}}</td>
+                            <td>{{mScope.getDateFormat(staticsReport.date)|date:'dd-MM-yyyy'}}</td>
+                            <td style ="text-align:center" >{{staticsReport.total}}</td>
+                        </tr>
+                        <tr data-ng-if="mScope.smsStaticsReport.entityList && mScope.smsStaticsReport.entityList.length > 0" ><td style="background-color: darkgray ;color: white;"></td>
+                            <td style="background-color: darkgray;color: white;">Total Message : </td>
+                            <td  style ="text-align:center ;background-color: darkgray ;color: white;">{{mScope.smsStaticsReport.totalCount}}</td>
+                        </tr>
+                        <tr data-ng-if="!mScope.smsStaticsReport.entityList || mScope.smsStaticsReport.entityList.length == 0">
+                            <td colspan="9" align="center">No matching records found</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </md-content>
+</div>
+

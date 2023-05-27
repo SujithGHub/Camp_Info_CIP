@@ -1,0 +1,31 @@
+<div class="card-header" data-ng-init="eventsCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2>
+               Events
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">All Events happening in our Institution</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="eventsCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add"
+            template-url="/app/events/views/create.html" form-modal
+            m-title="Events" m-scope="eventsCtrl.mScope" init-data="eventsCtrl.initData" form-submit="eventsCtrl.saveOrUpdateEvent(mForm)" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Event</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="eventDataTable" class="display table" cellspacing="0"></table>
+</div>

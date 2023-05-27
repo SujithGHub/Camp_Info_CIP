@@ -1,0 +1,30 @@
+<div class="card-header" data-ng-init="notificationCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2>
+               Notifications
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis">All your notifications in one place</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="notificationCtrl.init()">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" data-ng-if="notificationCtrl.role == 'ROLE_SUPER_ADMIN' || notificationCtrl.role == 'ROLE_ADMIN'"
+           data-ui-sref="notification">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Notification</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="notificationDataTable" class="display table" cellspacing="0"></table>
+</div>

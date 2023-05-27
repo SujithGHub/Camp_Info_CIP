@@ -1,0 +1,55 @@
+<md-dialog-content>
+   <div class="md-dialog-content">
+         <md-input-container flex> <label>Subject Code</label>
+         	<input class="md-input" data-ng-model="mScope.mForm.electiveSubjectCode"  name="code" 
+         	 data-ng-minlength="4"  data-ng-maxlength="20" required autocomplete="off">
+         	  <div data-ng-messages="modelForm.code.$error"
+        data-ng-if="modelForm.code.$touched || modelForm.$submitted"
+        class="has-error">
+        <div data-ng-message="required" class="help-block">
+            <small>Subject code is required !</small>
+        </div>
+        <div data-ng-message="minlength" class="help-block">
+            <small>Subject code is too short.</small>
+        </div>
+        <div data-ng-message="maxlength" class="help-block">
+            <small>Subject code is too long.</small>
+        </div>
+    </div>
+         </md-input-container>
+         <md-input-container flex> <label>Subject Name</label>
+         	<input class="md-input" data-ng-model="mScope.mForm.electiveSubjectName" required
+         	name="subjectName"  data-ng-minlength="2"  data-ng-maxlength="100" autocomplete="off" >
+         	  <div data-ng-messages="modelForm.subjectName.$error"
+        data-ng-if="modelForm.subjectName.$touched || modelForm.$submitted"
+        class="has-error">
+        <div data-ng-message="required" class="help-block">
+            <small>Subject name is required !</small>
+        </div>
+        <div data-ng-message="minlength" class="help-block">
+            <small>Subject name is too short.</small>
+        </div>
+        <div data-ng-message="maxlength" class="help-block">
+            <small>Subject name is too long.</small>
+        </div>
+    </div>
+        </md-input-container>
+              <md-input-container flex>
+         <label>Subject Display Name</label><input name="subjectDisplayName" class="md-input" required data-ng-model="mScope.mForm.electiveDisplayName"
+          data-ng-minlength="1"  data-ng-maxlength="6" autocomplete="off" >
+    <div data-ng-messages="modelForm.subjectDisplayName.$error"
+        data-ng-if="modelForm.subjectDisplayName.$touched || modelForm.$submitted"
+        class="has-error">
+        <div data-ng-message="required" class="help-block">
+            <small>Subject display name is required !</small>
+        </div>
+        <div data-ng-message="minlength" class="help-block">
+            <small>Subject display name is too short.</small>
+        </div>
+        <div data-ng-message="maxlength" class="help-block">
+            <small>Subject display name is too long.</small>
+        </div>
+    </div>
+    </md-input-container>
+   </div>
+</md-dialog-content>

@@ -1,0 +1,44 @@
+<md-dialog-content class="card-header">
+<div style="width: 477px;padding-left: 50px;">
+   <div>
+   <label><b style="font-size: 14px;">STUDENT DETAILS</b></label>
+   </div>
+   <div class="content-flex ">
+         <div class="column-lable label-align" ><label>REG NO</label></div>
+         :
+         <div class="column-contain label-value-align" data-ng-model="mScope.mForm.rollNumber">{{mScope.mForm.student.rollNumber}}</div>
+      </div>
+      <div class="content-flex ">
+         <div class="  column-lable label-align" ><label>STUDENT NAME</label></div>
+         :
+         <div class="column-contain label-value-align"  data-ng-model="mScope.mForm.firstName" data-ng-model="mScope.mForm.lastName" >{{mScope.mForm.student.firstName}} &nbsp {{mScope.mForm.student.lastName}} </div>
+      </div>
+      <div class="content-flex">
+         <div class=" column-lable label-align" ><label>YEAR</label></div>
+         :
+         <div class="column-contain label-value-align"  data-ng-model="mScope.mForm.classYear">{{mScope.mForm.classYear}} </div>
+      </div>
+       <div class="content-flex">
+         <div class=" column-lable label-align" ><label>SEMESTER</label></div>
+         :
+         <div class="column-contain label-value-align"  data-ng-model="mScope.mForm.semester">{{mScope.mForm.semester}} </div>
+      </div>
+      <div class="content-flex">
+         <div class=" column-lable label-align" ><label>ATTENDANCE DATE</label></div>
+         :
+         <div class="column-contain label-value-align">{{mScope.mForm.date}}</div>
+      </div>
+       <div class="content-flex">
+         <div class=" column-lable label-align" ><label>ATTENDANCE HOUR </label></div>
+         :
+         <div class="column-contain label-value-align" data-ng-model="mScope.mForm.hour" >{{mScope.mForm.hour}}</div>
+      </div>
+      <div class="content-flex">
+         <div class="column-lable label-align" ><label>REASON</label></div>
+         :
+         <div class= "label-value-align">
+            <textarea rows="5" cols="30" data-ng-model="mScope.mForm.reason"></textarea>
+         </div>
+      </div>
+   </div>
+</md-dialog-content>

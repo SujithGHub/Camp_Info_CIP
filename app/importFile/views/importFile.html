@@ -1,0 +1,248 @@
+<div class="card-header ch-al p-0-75" data-ng-init="importFileCtrl.init()">
+   <div class="row">
+      <div class="col-sm-8 col-xs-5 pt-1">
+         <h2>Import File</h2>
+      </div>
+      <div class="col-sm-4 col-xs-7 text-right">
+         <button class="btn btn-danger" aria-label="add"
+            template-url="{{importFileCtrl.JSONtemplate.url}}"
+            m-title="{{importFileCtrl.JSONtemplate.title}}"
+            m-scope="importFileCtrl.mScope" 
+            form-submit="importFileCtrl.downloadTemplate(mForm)"
+            ok-button-text="{{importFileCtrl.JSONtemplate.okText}}" init-data="" form-modal>DOWNLOAD TEMPLATE</button> 
+      </div>
+   </div>
+</div>
+<div class="card-body content" >
+   <form class="form-horizontal pad-top" role="form" name="dataImportForm" novalidate>
+      <div class="form-group mb-0">
+      <div class="row">
+      <div class="col-sm-2 col-xs-3 text-right required-mark">
+         <label class="control-label">Import File</label></div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select name="name"  data-ng-model="importFileCtrl.form.name" required>
+                  <md-option value="Department" data-ng-if="importFileCtrl.mScope.instituteType == 'College'">Department</md-option>
+                  <md-option value="Class" data-ng-if="importFileCtrl.mScope.instituteType == 'College'">Year</md-option>
+                  <md-option value="Class" data-ng-if="importFileCtrl.mScope.instituteType == 'School'">Standard</md-option>
+                  <md-option value="Section">Section</md-option>
+                  <md-option value="Subject">Subject</md-option>
+                  <md-option value="Staff">Staff</md-option>
+                  <md-option value="Holiday">Holiday</md-option>
+                  <md-option value="Student">Student</md-option>
+                  <md-option value="Examination">Examination</md-option>
+               </md-select>
+				<div data-ng-messages="dataImportForm.name.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>This field is required !</small>
+					</div>
+				</div>
+				</md-input-container>
+         </div></div>
+      
+      
+      </div>
+      <div class="form-group mb-0"
+         data-ng-if="importFileCtrl.form.name=='Holiday' || importFileCtrl.form.name=='Examination' || importFileCtrl.form.name=='Student'">
+          <div class="row">
+      <div class="col-sm-2 col-xs-3 text-right required-mark">
+        <label class="control-label">Academic Year</label></div>
+         <div class="col-sm-6 col-xs-6">
+				<md-input-container class="align-center"> <md-select data-ng-required="importFileCtrl.form.name=='Holiday' || importFileCtrl.form.name=='Examination'"
+					name="academic" ng-model="importFileCtrl.form.academic.id">
+				<md-option ng-value="academic.id"
+					data-ng-repeat="academic in importFileCtrl.mScope.academicList">{{::academic.academicYear}}</md-option>
+				</md-select>
+				<div data-ng-messages="dataImportForm.academic.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Academic year is required !</small>
+					</div>
+				</div>
+				</md-input-container>
+			</div></div>
+      </div>
+      <div class="form-group mb-0" data-ng-if="(importFileCtrl.mScope.instituteType=='College') && (importFileCtrl.form.name == 'Class' || importFileCtrl.form.name == 'Section' || importFileCtrl.form.name == 'Subject' || importFileCtrl.form.name == 'Student' ||  importFileCtrl.form.name == 'Staff'|| importFileCtrl.form.name == 'Examination')">
+        <div class="row">
+        <div class="col-sm-2 col-xs-3 control-label required-mark">
+         <label>Department</label></div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select ng-model="importFileCtrl.form.department.id" name="department" data-ng-change="importFileCtrl.mScope.getClassByDepartmentId(importFileCtrl.form.department.id)"
+               data-ng-required="(importFileCtrl.mScope.instituteType=='College') && (importFileCtrl.form.name == 'Class' || importFileCtrl.form.name == 'Section' || importFileCtrl.form.name == 'Subject' || importFileCtrl.form.name == 'Student' ||  importFileCtrl.form.name == 'Staff' || importFileCtrl.form.name == 'Examination')">
+                  <md-option ng-value="department.id" data-ng-repeat="department in importFileCtrl.mScope.departmentList">{{::department.name}}</md-option>
+               </md-select>
+               	<div data-ng-messages="dataImportForm.department.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Department is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+			
+			</div></div>
+      </div>
+      
+      <div class="form-group mb-0" data-ng-if="importFileCtrl.form.name == 'Staff'">
+         <div class="row">
+         <div class="col-sm-2 col-xs-3 control-label required-mark">
+         <label>Role</label></div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center" data-ng-init="importFileCtrl.form.name == 'Staff' ? importFileCtrl.form.role=[]:null;">
+               <md-select ng-model="importFileCtrl.form.role[0].name" name="role" 
+               data-ng-required="importFileCtrl.form.name == 'Staff' ">
+                  <md-option ng-value="role.name" data-ng-repeat="role in importFileCtrl.mScope.staffRoleList">{{::role.name}}</md-option>
+               </md-select>
+               	<div data-ng-messages="dataImportForm.role.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Role is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+			</div>
+      </div></div>
+      
+      <div class="form-group mb-0"
+         data-ng-if="importFileCtrl.form.name=='Section' || importFileCtrl.form.name=='Subject' || importFileCtrl.form.name=='Student' || importFileCtrl.form.name=='Examination'">
+         <div class="row">
+         <div class="col-sm-2 col-xs-3 control-label required-mark">
+         <label data-ng-if="importFileCtrl.mScope.instituteType=='College'">Year</label>
+         <label data-ng-if="importFileCtrl.mScope.instituteType=='School'">Standard</label></div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select name="class" ng-model="importFileCtrl.form.classYear.id" 
+               data-ng-required="importFileCtrl.form.name=='Section' || importFileCtrl.form.name=='Subject' || importFileCtrl.form.name=='Student' || importFileCtrl.form.name=='Examination'"
+               data-ng-change="importFileCtrl.getSectionByClassId(importFileCtrl.form.classYear.id);
+               importFileCtrl.mScope.instituteType != 'College' ? null:importFileCtrl.mScope.getSemesterByClassYear(importFileCtrl.form.classYear.id); ">
+                  <md-option ng-value="standard.id" data-ng-repeat="standard in importFileCtrl.mScope.yearAndStandardList">{{::standard.name}}</md-option>
+               </md-select>
+               	<div data-ng-messages="dataImportForm.class.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small data-ng-if="importFileCtrl.mScope.instituteType == 'College'">Year is required !</small>
+						<small data-ng-if="importFileCtrl.mScope.instituteType == 'School'">Standard is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+         </div>
+      </div>
+      </div>
+      <div class="form-group mb-0" data-ng-if="importFileCtrl.form.name=='Student' && importFileCtrl.mScope.instituteType=='College'">
+         <div class="row">
+         <div class="col-sm-2 col-xs-3 control-label required-mark">
+         <label>Semester</label></div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select name="semester" ng-model="importFileCtrl.form.semester" data-ng-required="importFileCtrl.form.name=='Student' && importFileCtrl.mScope.instituteType=='College'">
+                  <md-option ng-value="semester" data-ng-repeat="semester in importFileCtrl.mScope.semestersLists">{{::semester}}</md-option>
+               </md-select>
+                    
+               	<div data-ng-messages="dataImportForm.semester.$error" class="has-error">
+					<div data-ng-message="required" data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Semester is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+         </div></div>
+      </div>
+      <div class="form-group mb-0"  data-ng-if="(importFileCtrl.mScope.instituteType=='College') && (importFileCtrl.form.name=='Subject' || importFileCtrl.form.name == 'Examination')">
+         <div class="row">
+         <div class="col-sm-2 col-xs-3 control-label required-mark">
+         <label>Semester</label></div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select name="semester" ng-model="importFileCtrl.form.semester" data-ng-required="(importFileCtrl.mScope.instituteType=='College') && (importFileCtrl.form.name=='Subject' || importFileCtrl.form.name == 'Examination')">
+                  <md-option ng-value="semester" data-ng-repeat="semester in importFileCtrl.mScope.semestersLists">{{::semester}}</md-option>
+               </md-select>
+               	<div data-ng-messages="dataImportForm.semester.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Semester is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+         </div></div>
+      </div>
+      <div class="form-group mb-0"
+         data-ng-if="importFileCtrl.form.name=='Student'">
+         <div class="row">
+         <div class="control-label col-sm-2 col-xs-3 required-mark">
+         <label>Section</label></div>
+         <div class="col-sm-6 col-xs-6">
+				<md-input-container class="align-center"> <md-select data-ng-required="importFileCtrl.form.name=='Student'"
+					name="section" ng-model="importFileCtrl.form.section.id">
+				<md-option ng-value="section.id"
+					data-ng-repeat="section in importFileCtrl.mScope.sectionList">{{::section.sectionName}}</md-option>
+				</md-select>
+				<div data-ng-messages="dataImportForm.section.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Section is required !</small>
+					</div>
+				</div>
+				</md-input-container>
+			</div></div>
+      </div>
+      <div class="form-group"
+         data-ng-if="importFileCtrl.form.name=='Examination'">
+         <div class="row">
+         <div class="control-label col-sm-2 col-xs-3 required-mark">
+         <label>Examination Name</label></div>
+         <div class="col-sm-6 col-xs-6">
+				<md-input-container flex> <input
+					class="md-input" name="examName"
+					data-ng-required="importFileCtrl.form.name=='Examination'"
+					data-ng-model="importFileCtrl.form.examName">
+				<div data-ng-messages="dataImportForm.examName.$error"
+					class="has-error">
+					<div data-ng-message="required"
+						data-ng-if="dataImportForm.$submitted" class="help-block">
+						<small>Exam name is required !</small>
+					</div>
+				</div>
+				</md-input-container>
+			</div></div>
+      </div>
+       <div class="form-group mb-0" data-ng-if="false">
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container flex>
+               <input type="hidden" class="md-input" data-ng-model="importFileCtrl.form.name"> 
+            </md-input-container>
+         </div>
+      </div>
+      <div class="form-group row required-mark">
+         <label class="col-sm-2 col-xs-3 control-label" style="padding-top: 0px;">Choose File</label>
+         <div class="col-sm-6 col-xs-9">
+            <div class="fileUpload btn btn-danger">
+               <span data-ng-if="!fileName">BROWSE FILE</span><span data-ng-if="fileName">CHANGE</span> <input type="file" id="fileInput" name="filedata"  data-ng-required="!fileName"
+               onchange="angular.element(this).scope().readFile(this)" class="upload" data-ng-model="importFileCtrl.form.file" accept=".xlsx"/>
+            </div>
+            <span style="font-size:small">{{fileName | limitTo : 10}}&nbsp&nbsp<a href="" class="close-file" data-ng-click="importFileCtrl.clearFile()" data-ng-if="fileName">&times;</a><br><strong> </strong></span>
+				<div data-ng-messages="dataImportForm.filedata.$error">
+					<div data-ng-message="required" data-ng-if="dataImportForm.$submitted || dataImportForm.filedata.$touched" class="help-block">
+						<small style="color: rgb(213,0,0)!important;">Please select file to import!</small>
+					</div>
+				</div>
+				<div data-ng-if="!importFileCtrl.iscsvFile && fileName">
+					<small style="color: rgb(213,0,0)!important;">Invalid File. Please upload only .csv file !</small>
+				</div>
+			</div>
+      </div>
+      <div class="form-group">
+         <div class="row">
+         <div class="col-sm-2 col-xs-3"></div>
+         <div class="col-sm-6 col-xs-6">
+				<button type="submit" class="btn btn-danger" data-ng-click="dataImportForm.$valid ? importFileCtrl.fileUpload(importFileCtrl.form):null">UPLOAD</button>
+			</div></div>
+      </div>
+   </form>
+</div>

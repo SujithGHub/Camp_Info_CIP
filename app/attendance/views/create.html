@@ -1,0 +1,37 @@
+<md-dialog aria-label="Academic" ng-cloak style="width: 642px;">
+<form name="academicForm" role="form" novalidate>
+	<div class="md-toolbar-tools modal-header" style="height: 50px">
+		<h2 style="color: white;">Update Attendance</h2>
+		<span flex></span>
+		<md-button ng-click="modal.hide()"> <i
+			class="zmdi zmdi-close zmdi-hc-fw" style="color: white;"></i> </md-button>
+	</div>
+	<md-dialog-content style="max-width:800px;max-height:810px; ">
+		<div class="md-dialog-content">
+	 <div class="row fluid" style="margin-top:30px">
+         <label class="radio radio-inline m-r-20">Status</label>
+         <md-radio-group ng-model="mForm.status">
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value="ABSENT">Absent</md-radio-button>
+            </label>
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value="LEAVE">Leave</md-radio-button>
+            </label>
+             <label class="radio radio-inline m-r-20">
+               <md-radio-button value="OD">OD</md-radio-button>
+            </label>
+             <label class="radio radio-inline m-r-20">
+               <md-radio-button value="PRESENT">Present</md-radio-button>
+            </label>
+         </md-radio-group>
+      </div>
+		</div>
+	</md-dialog-content>
+	<div class="md-actions" layout="row">
+		<button aria-label="..." class="btn bgm-teal" type="submit"  data-ng-click="modal.showEvent(mForm)">Update</button>
+		
+		&nbsp&nbsp&nbsp&nbsp
+		<button aria-label="..." class="btn btn-cancel" data-ng-click="modal.hide()">Cancel</button>
+	</div>
+</form>
+</md-dialog>

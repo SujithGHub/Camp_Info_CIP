@@ -1,0 +1,70 @@
+<md-dialog-content>
+   <div class="md-dialog-content">
+      <md-input-container class="align-center required-mark" data-ng-if="mScope.instituteType == 'College'">
+         <label>Department Name</label> 
+         <md-select ng-model="mScope.mForm.department.id" name="department" required>
+            <md-option ng-value="department.id"
+               data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+         </md-select>
+         <div data-ng-messages="modelForm.department.$error"
+            data-ng-if="modelForm.$submitted" class="has-error">
+            <div data-ng-message="required" class="help-block">
+               <small>Department Name is Required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      
+      <md-input-container flex data-ng-if="mScope.instituteType =='School'" class="required-mark">
+         <label data-ng-if="mScope.instituteType =='School'">Standard</label>    
+         <input class="md-input" data-ng-model="mScope.mForm.name" style="text-transform: uppercase"	name="name" data-ng-required="true" data-ng-minlength="1"
+            data-ng-maxlength="100"> 
+         <div data-ng-messages="modelForm.name.$error"  data-ng-if="modelForm.$submitted"  class="has-error">
+            <div data-ng-message="minlength" class="help-block">
+               <small data-ng-if="mScope.instituteType == 'School'">Standard is too Short !</small>
+            </div>
+            <div data-ng-message="maxlength" class="help-block">
+               <small data-ng-if="mScope.instituteType == 'School'">Standard is too Long !</small>
+            </div>
+            <div data-ng-message="required" class="help-block">
+            <small>Standard is required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      <md-input-container flex data-ng-if="mScope.instituteType =='College'" class="required-mark">
+         <label data-ng-if="mScope.instituteType =='College'">Year</label>  
+         <md-select aria-label="classYear" data-ng-model="mScope.mForm.name" name="classYear" required>
+            <md-option ng-value="classYear" 
+               data-ng-repeat="classYear in mScope.classYearList">{{::classYear}}</md-option>
+         </md-select>
+         <div data-ng-messages="modelForm.classYear.$error" data-ng-if="modelForm.$submitted" class="has-error">
+            <div data-ng-message="required" class="help-block">
+               <small>Year is required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      
+      <md-input-container flex>
+         <label>Display Order</label> 
+         <input class="md-input" style="text-transform:uppercase" data-ng-model="mScope.mForm.displayOrder" 
+            name="displayOrder" data-ng-minlength="1" data-ng-maxlength="3" data-ng-pattern="/^[0-9]{1,7}$/">
+         <div data-ng-messages="modelForm.displayOrder.$error" class="has-error"
+            data-ng-if="modelForm.displayOrder.$touched || modelForm.$submitted">
+            <div data-ng-message="pattern" class="help-block"><small>Not a valid number!</small></div>
+            <div data-ng-message="minlength" class="help-block"> <small>Display Order is too short.</small></div>
+            <div data-ng-message="maxlength" class="help-block"><small>Display Order is too long.</small></div>
+         </div>
+      </md-input-container>
+      <div class="row fluid" style="padding-left: initial;margin-left: -15px;">
+         <label class="radio radio-inline">Status</label>
+         <md-radio-group ng-model="mScope.mForm.status">
+            <label class="radio radio-inline ">
+               <md-radio-button value="ACTIVE">Active</md-radio-button>
+            </label>
+            <label class="radio radio-inline">
+               <md-radio-button
+                  value="INACTIVE">InActive</md-radio-button>
+            </label>
+         </md-radio-group>
+      </div>
+   </div>
+</md-dialog-content>

@@ -1,0 +1,299 @@
+
+<div class="login-content" layout="column" data-ng-init="loginCtrl.init()" data-ng-controller="LoginController as loginCtrl">
+    <div id="sliderFrame" data-ng-if="loginCtrl.loginImages.length">
+        <div id="slider" style="width:{{loginCtrl.windowWidth}}px; height:{{loginCtrl.windowHeight}}px">
+            <div data-ng-repeat="image in loginCtrl.loginImages"><img ng-src="{{image}}">
+            </div>
+        </div>
+    </div>
+    <div class="row login-panel">
+        <div class="col-md-12 institute-name">
+            <span data-ng-bind="instituteName" class="institute-name"></span>
+        </div>
+        <div class="lc-block toggled login-panel" id="l-login">
+            <img data-ng-hide="instituteLogo" class="" style="width:125px;height:85px;" data-ng-src="../assets/images/logo2.png" alt="" src="">
+            <img data-ng-show="instituteLogo" class="" style="width:125px;height:85px;" data-ng-src="{{instituteLogo}}" alt="" src="">
+            <form role='form' ng-submit="login();" method="POST">
+                <div class="alert alert-danger" id="errorMessage" style="font-size: 13px;display:none;color: rgb(244,67,54);"></div>
+                <div class="form-group pl-0">
+                    <input type="text" class="form-control" ng-model="username"placeholder="Username" id="inputUsername" name="UserName">
+                </div>
+                <div class="form-group pl-0">
+                    <input type="password" ng-model="password"class="form-control" placeholder="Password" id="inputPassword" name="Password">
+                </div>
+                <div class="clearfix "></div>
+                <button type="submit" class="btn btn-block btn-primary btn-float m-t-25" style="width: 100%;">Sign In</button>
+            </form>
+            <div class="col-md-12">&nbsp;
+            </div>
+            <img class="" style="height: 53px;" src="/assets/images/ci_logo_bold.png" alt="" src="">
+        </div>
+    </div>
+    <div class="footer">
+        <div class="row">
+            <div class="col-xl-6 col-md-5 col-sm-4 col-xs-4 text-left">
+                <div class="footer-text pl-3"><a href="http://campinfo.in/" target="_blank">www.campinfo.in</a>
+                </div>
+            </div>
+            <div class="col-xl-4 col-md-5 col-sm-5 col-xs-4 text-right">
+                <div class="footer-text">Powered By</div>
+            </div>
+            <div class="col-xl-1 col-md-2 col-sm-1 col-xs-1 p-0 text-left">
+                <img src="/assets/images/SSB-Logo.png" style="max-height: 34px;margin-top: 5%;">
+            </div>
+        </div>
+    </div>
+    
+</div>
+  <style type="text/css">
+        .login-content {
+            overflow: hidden;
+            height: 100%;
+            background: #FFF;
+            padding: 0;
+            text-align: center;
+        }
+        .lc-block {
+            background: #fff;
+            border-radius: 2px;
+            width: 250px;
+            position: relative;
+            padding: 30px 30px 30px;
+        }
+        body {
+            min-height: 100vh;
+            position: relative;
+            font: normal 0.9em Arial;
+            margin: initial;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 23px;
+            line-height: 1.42857143;
+            color: rgb(250, 250, 250);
+        }
+        .login-content:after {
+            width: 1px;
+            height: 100vh;
+        }
+        .login-content:after {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .login-content:after {
+            content: "";
+        }
+        .row {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-flex-wrap: wrap;
+            -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+        .lc-block,
+        .login-content:after {
+            vertical-align: middle;
+            display: inline-block;
+        }
+        .lc-block {
+            box-shadow: 0 1px 11px rgba(0, 0, 0, .27);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            box-shadow: 0 0 0 40px transparent !important;
+            width: 100%;
+            height: 35px;
+            background-color: #fff;
+            border: 1px solid #e8e8e8;
+            font-size: 13px;
+            line-height: 1.42857143;
+            color: #9e9e9e;
+            display: block;
+        }
+        .lc-block .form-control {
+            text-align: center;
+        }
+        .btn:not (.btn-alt) {
+            border: 0;
+        }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+    .btn-primary {
+        background-color: #2196f3;
+        color: white;
+    }
+    .btn {
+        font-family: inherit;
+        display: inline-block;
+        margin-bottom: 0;
+        font-weight: 400;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        padding: 6px 12px;
+        font-size: 13px;
+        line-height: 1.42857143;
+        border-radius: 2px;
+        border: 1px solid transparent;
+    }
+    .footer {
+        height: 45px;
+        background-color: white;
+        color: black;
+        position: fixed;
+        bottom: 0;
+        width: 100%
+    }
+    @media (min-width: 1025px) {
+        .lc-block {
+            box-shadow: 0 1px 11px rgba(0, 0, 0, .27);
+        }
+    }
+    .login-panel {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        margin-left: 0px
+    }
+    .institute-name {
+        font-size: 27px;
+        margin-bottom: 480px
+    }
+    .footer-text {
+        font-size: 16px;
+        margin-top: 5px;
+        padding-top: 6px;
+        padding-bottom: 10px;
+        margin-bottom: 5px;
+        text-shadow: 0 1px 1px #5d5555;
+    }
+    .col-md-12,
+    .col-md-2,
+    .col-md-5,
+    .col-sm-1,
+    .col-sm-4,
+    .col-sm-5,
+    .col-xs-1,
+    .col-xs-4,
+    .col-xl-6,
+    .col-xl-4,
+    .col-xl-1 {
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    .institute-name {
+        font-weight: 800;
+        text-shadow: 0px 2px 2px black;
+        color: darkcyan;
+        font-style: italic;
+    }
+    @media (max-width: 576px) {
+        .col-xs-1 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 8.333333%;
+            -ms-flex: 0 0 8.333333%;
+            flex: 0 0 8.333333%;
+            max-width: 8.333333%;
+        }
+        .col-xs-4 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 33.333333%;
+            -ms-flex: 0 0 33.333333%;
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+    }
+    @media (min-width: 576px) {
+        .col-sm-1 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 8.333333%;
+            -ms-flex: 0 0 8.333333%;
+            flex: 0 0 8.333333%;
+            max-width: 8.333333%;
+        }
+        .col-sm-4 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 33.333333%;
+            -ms-flex: 0 0 33.333333%;
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+        .col-sm-5 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 41.666667%;
+            -ms-flex: 0 0 41.666667%;
+            flex: 0 0 41.666667%;
+            max-width: 41.666667%;
+        }
+    }
+    @media (min-width: 768px) {
+        .col-md-5 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 41.666667%;
+            -ms-flex: 0 0 41.666667%;
+            flex: 0 0 41.666667%;
+            max-width: 41.666667%;
+        }
+    }
+    @media (min-width: 1200px) {
+        .col-xl-1 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 8.333333%;
+            -ms-flex: 0 0 8.333333%;
+            flex: 0 0 8.333333%;
+            max-width: 8.333333%;
+        }
+        .col-xl-4 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 36.666667%;
+            -ms-flex: 0 0 36.666667%;
+            flex: 0 0 36.666667%;
+            max-width: 36.666667%;
+        }
+        .col-xl-6 {
+            -webkit-box-flex: 0;
+            -webkit-flex: 0 0 50%;
+            -ms-flex: 0 0 50%;
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+    .text-left {
+        text-align: left;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .pl-3 {
+        padding-left: 3rem !important;
+    }
+    .p-0 {
+        padding: 0 0 !important;
+    }
+    </style>
+

@@ -1,0 +1,426 @@
+<div class="card-header ch-al pb-1-25 pt-1-25">
+   <div class="row">
+      <h2>  <span style="font-size:20px;cursor:pointer;color:red" ng-click="attendanceCtrl.openNav()">&#9776;</span>&nbsp;  Attendance</h2>
+   </div>
+</div>
+<md-button id="modelForm" template-url="/app/attendance/views/updatePlanDetails.html" form-modal data-ng-hide="true" m-title="Work Plan" m-scope="attendanceCtrl.mScope" form-submit="attendanceCtrl.updateDailyWorkPlan(mForm)" init-data="attendanceCtrl.initData" ok-button-text="SUBMIT"></md-button>
+<div class="album-container" data-ng-init='attendanceCtrl.init()'>
+   <form class="form-horizontal pad-top form-width" role="form" name="attendanceForm" novalidate flex>
+      <div class="form-width" style="margin: 0px !important">
+         <div id="mySidenav"  class="sidenav">
+            <div>
+               <div  style="padding: 5px;max-height:66vh;">
+                  <a class="closebtn" ng-click="attendanceCtrl.closeNav()">&times;</a>
+                  <h4 class="card-title" style="margin-top: -20px;font-family: roboto !important; text-align: left; font-weight: 400;">
+                     Enter Attendance
+                  </h4>
+                  <md-input-container flex style="margin: 0px auto!important" class="required-mark">
+                     <label>Date</label>
+                     <input datepicker data-zdp_direction="false" class="md-input" data-ng-required="true" data-ng-model="attendanceCtrl.form.date" name="date" class="form-control">
+                     <div data-ng-messages="attendanceForm.date.$error" class="has-error">
+                        <div data-ng-message=" required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small>Date is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+
+                  <div data-ng-show="attendanceCtrl.role == 'ROLE_STAFF_HOD'">
+                  <md-input-container class="align-center required-mark" ng-show="attendanceCtrl.instituteType == 'College'">
+                     <label>Department</label>
+                     <md-select data-ng-model="attendanceCtrl.form.department" disabled name="dept" data-ng-required="attendanceCtrl.instituteType == 'College'" data-ng-change="attendanceCtrl.getClass(attendanceCtrl.form.department)">
+                        <md-option ng-repeat="dept in attendanceCtrl.departments" ng-value="dept.id">{{::dept.name}}</md-option>
+                     </md-select>
+                     <div data-ng-messages="attendanceForm.dept.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small>Department is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+                  </div>
+
+                  <md-input-container class="align-center required-mark" ng-show="attendanceCtrl.instituteType == 'College' && attendanceCtrl.role != 'ROLE_STAFF_HOD'">
+                     <label>Department</label>
+                     <md-select data-ng-model="attendanceCtrl.form.department" name="dept" data-ng-required="attendanceCtrl.instituteType == 'College'" data-ng-change="attendanceCtrl.getClass(attendanceCtrl.form.department)">
+                        <md-option ng-repeat="dept in attendanceCtrl.departments" ng-value="dept.id">{{::dept.name}}</md-option>
+                     </md-select>
+                     <div data-ng-messages="attendanceForm.dept.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small>Department is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+                  <md-input-container class="align-center required-mark">
+                     <label data-ng-if="attendanceCtrl.instituteType != 'School'">Year</label>
+                     <label data-ng-if="attendanceCtrl.instituteType == 'School'">Standard</label>
+                     <md-select data-ng-model="attendanceCtrl.form.classYear" data-ng-change="attendanceCtrl.getSection(attendanceCtrl.form.classYear);attendanceCtrl.getSubject();attendanceCtrl.getSemesterByClassYear(attendanceCtrl.form.classYear); " name="class" required="">
+                        <md-option ng-repeat="class in attendanceCtrl.classYear" ng-value="class.id">{{::class.name}}</md-option>
+                     </md-select>
+                     <div data-ng-messages="attendanceForm.class.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small ng-show="attendanceCtrl.instituteType == 'School'">Standard is required !</small>
+                           <small ng-show="attendanceCtrl.instituteType != 'School'">Year is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+                  <md-input-container class="align-center required-mark" ng-show="attendanceCtrl.instituteType == 'College'">
+                     <label>Semester</label>
+                     <md-select name="semester" data-ng-model="attendanceCtrl.form.semester" data-ng-required="attendanceCtrl.instituteType == 'College'">
+                        <md-option ng-value="semester" data-ng-repeat="semester in attendanceCtrl.semestersLists">{{::semester}}</md-option>
+                     </md-select>
+                     <div data-ng-messages="attendanceForm.semester.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small>Semester is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+                  <md-input-container class="align-center required-mark">
+                     <label>Section</label>
+                     <md-select data-ng-model="attendanceCtrl.form.section" name="section" required="">
+                        <md-option ng-repeat="section in attendanceCtrl.sectionList" ng-value="section.id">{{::section.sectionName}}</md-option>
+                     </md-select>
+                     <div data-ng-messages="attendanceForm.section.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small>Section is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+                  <md-input-container style="margin-bottom: 30px;" class="required-mark">
+                     <label data-ng-if="attendanceCtrl.attendanceType=='hours'">Hour</label>
+                     <label data-ng-if="attendanceCtrl.attendanceType=='day' || attendanceCtrl.attendanceType=='session'">Attendance Type</label>
+                     <md-select data-ng-model="attendanceCtrl.form.hour" data-ng-required="attendanceCtrl.role == 'ROLE_STAFF'" style="margin:0px!important" id="hour" name="type">
+                        <md-option value="" ng-if="(attendanceCtrl.role == 'ROLE_ADMIN' || attendanceCtrl.role == 'ROLE_STAFF_HOD') && (attendanceCtrl.attendanceType=='day' && attendanceCtrl.attendanceType=='session')"></md-option>
+                        <md-option value="1" data-ng-if="attendanceCtrl.attendanceType=='hours'">1st Hour</md-option>
+                        <md-option value="2" data-ng-if="attendanceCtrl.attendanceType=='hours'">2nd Hour</md-option>
+                        <md-option value="3" data-ng-if="attendanceCtrl.attendanceType=='hours'">3rd Hour</md-option>
+                        <md-option value="4" data-ng-if="attendanceCtrl.attendanceType=='hours'">4th Hour</md-option>
+                        <md-option value="5" data-ng-if="attendanceCtrl.attendanceType=='hours' && attendanceCtrl.hourCount >= 5">5th Hour</md-option>
+                        <md-option value="6" data-ng-if="attendanceCtrl.attendanceType=='hours' && attendanceCtrl.hourCount >= 6">6th Hour</md-option>
+                        <md-option value="7" data-ng-if="attendanceCtrl.attendanceType=='hours' && attendanceCtrl.hourCount >= 7">7th Hour</md-option>
+                        <md-option value="8" data-ng-if="attendanceCtrl.attendanceType=='hours' && attendanceCtrl.hourCount >= 8">8th Hour</md-option>
+                        <md-option value="1" data-ng-if="attendanceCtrl.attendanceType=='day'">Day</md-option>
+                        <md-option value="1" data-ng-if="attendanceCtrl.attendanceType=='session'">1st Session</md-option>
+                        <md-option value="2" data-ng-if="attendanceCtrl.attendanceType=='session'">2nd Session</md-option>
+                        <md-option value="All" ng-if="(attendanceCtrl.role == 'ROLE_ADMIN' || attendanceCtrl.role == 'ROLE_STAFF_HOD') && attendanceCtrl.attendanceType =='hours'">All Hours</md-option>
+                        <md-option value="AllSession" ng-if="(attendanceCtrl.role == 'ROLE_ADMIN' || attendanceCtrl.role == 'ROLE_STAFF_HOD') && attendanceCtrl.attendanceType =='session'">All Session</md-option>
+                     </md-select>
+                     <div data-ng-messages="attendanceForm.type.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="attendanceForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                           <small>Hour is required !</small>
+                        </div>
+                     </div>
+                  </md-input-container>
+                  <button type="submit" style="margin: 0 auto" data-ng-click="attendanceForm.$valid ? attendanceCtrl.getStudentList() : null;" class="btn btn-danger">
+                  SUBMIT</button>
+               </div>
+            </div>
+         </div>
+         <div id="main" class="col-md-12 col-sm-12 col-xs-12 p-0 form-width" style="float: none;height: 100%">
+            <div id="enterAttendance" class="container-card form-width">
+               <div id="iconStatus" class="form-width" style="height: 92vh">
+                  <div class="row" style="padding-top: 10px;" id="attanceHeader">
+                      <div class="col-sm-12">
+                      <div class="row">
+                      
+                     <div class="col-xs-2">
+                        <label style="color: teal;font-size: small" class="checkbox checkbox-inline"><b>P</b> - Present</label>
+                     </div>
+                     <div class="col-xs-2 has-error">
+                        <label class="checkbox checkbox-inline"><b>A</b>- Absent</label>
+                     </div>
+                     <div class="col-xs-2 has-success">
+                        <label class="checkbox checkbox-inline"><b>O</b> - On Duty</label>
+                     </div>
+                     <div class="col-xs-2 has-warning">
+                        <label class="checkbox checkbox-inline"><b>L</b> - Leave</label>
+                     </div>
+                     <div class="col-xs-4 has-error" data-ng-if="attendanceCtrl.instituteType == 'College'&&attendanceCtrl.instituteType != 'College'">
+                        <label class="checkbox checkbox-inline"><b>ACR</b> - Attendance Cor Req</label>
+                     </div>
+                     </div>
+                     </div>
+                  </div>
+                  <div  class="attendance-content attendance-table form-width" id="attanceTable" >
+                     <table class="table table-bordered" >
+                        <thead>
+                           <tr>
+                              <th class="text-left" style="width:50px">S.No</th>
+                              <th class="text-left" style="width:120px">Reg Number</th>
+                              <th class="text-left" style="width:300px;text-align: center;">Student Name</th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==1 || attendanceCtrl.attendanceHour=='All' || attendanceCtrl.attendanceHour=='AllSession') && attendanceCtrl.attendanceList.length">
+                                  {{attendanceCtrl.attendanceType == "day"?"Day":attendanceCtrl.attendanceType == "session"?"Session 1":"1 hr"}}
+                              </th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==2 || attendanceCtrl.attendanceHour=='All' || attendanceCtrl.attendanceHour=='AllSession') && attendanceCtrl.attendanceList.length">
+                                  {{attendanceCtrl.attendanceType == "session"?"Session 2":"2 hr"}}
+                              </th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==3 || attendanceCtrl.attendanceHour=='All') && attendanceCtrl.attendanceList.length">3 hr</th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==4 || attendanceCtrl.attendanceHour=='All') && attendanceCtrl.attendanceList.length">4 hr</th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==5 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 5)) && attendanceCtrl.attendanceList.length">5 hr</th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==6 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 6)) && attendanceCtrl.attendanceList.length">6 hr</th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==7 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 7)) && attendanceCtrl.attendanceList.length">7 hr</th>
+                              <th class="text-left" style="width:80px" data-ng-if="(attendanceCtrl.attendanceHour==8 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 8)) && attendanceCtrl.attendanceList.length">8 hr</th>
+                              <!-- <th class="text-left" style="width:124px" data-ng-if="userInfo.roles[0].id!=2 && attendanceCtrl.attendanceList.length && attendanceCtrl.instituteType == 'College'">Action</th> -->
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr class="tableRow" style="border-bottom:1px solid #f0f0f0;" data-ng-repeat="attendance in attendanceCtrl.attendanceList">
+                              <td style="text-align:left;padding: 14px 25px;">{{$index+1}}</td>
+                              <td style="padding-left:13px!important"> <img id="myImg" ng-click="imageModel(attendance.student.ProfilePicUrl || '../assets/images/defaultProfilePic.png')" data-ng-src="{{attendance.student.ProfilePicUrl || '../assets/images/defaultProfilePic.png'}}"  style="width: 20px; height: 18px;"> &nbsp&nbsp {{::attendance.student.rollNumber}} </td>
+                              <td style="word-break: break-word;padding: 14px 25px;text-overflow: ellipsis;"> {{::attendance.student.firstName}} {{::attendance.student.lastName}}  </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==1 || attendanceCtrl.attendanceHour=='All' || attendanceCtrl.attendanceHour=='AllSession'">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour1 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour1 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College' ) || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING' ) == true ? null : attendance.hour1 = attendanceCtrl.changeIcon(attendance.hour1)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour1 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour1')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour1 ? attendance.hour1='PRESENT' : null" data-ng-style="attendance.hour1=='PRESENT' && {'color': 'teal'} || attendance.hour1=='ABSENT' && {'color': '#f44336'} || attendance.hour1=='OD' && {'color': '#4caf50'} || attendance.hour1=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour1 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==2 || attendanceCtrl.attendanceHour=='All' || attendanceCtrl.attendanceHour=='AllSession'">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour2 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour2 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour2 = attendanceCtrl.changeIcon(attendance.hour2)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour2 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour2')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour2 ? attendance.hour2='PRESENT' : null" data-ng-style="attendance.hour2=='PRESENT' && {'color': 'teal'} || attendance.hour2=='ABSENT' && {'color': '#f44336'} || attendance.hour2=='OD' && {'color': '#4caf50'} || attendance.hour2=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour2 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==3 || attendanceCtrl.attendanceHour=='All'">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour3 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour3 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour3 = attendanceCtrl.changeIcon(attendance.hour3)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour3 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour3')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour3 ? attendance.hour3='PRESENT' : null" data-ng-style="attendance.hour3=='PRESENT' && {'color': 'teal'} || attendance.hour3=='ABSENT' && {'color': '#f44336'} || attendance.hour3=='OD' && {'color': '#4caf50'} || attendance.hour3=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour3 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==4 || attendanceCtrl.attendanceHour=='All'">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour4 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour4 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour4 = attendanceCtrl.changeIcon(attendance.hour4)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour4 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour4')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour4 ? attendance.hour4='PRESENT' : null" data-ng-style="attendance.hour4=='PRESENT' && {'color': 'teal'} || attendance.hour4=='ABSENT' && {'color': '#f44336'} || attendance.hour4=='OD' && {'color': '#4caf50'} || attendance.hour4=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour4 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==5 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 5)">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour5 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour5 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour5 = attendanceCtrl.changeIcon(attendance.hour5)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour5 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null :  attendanceCtrl.getModal(attendance, $index, 'hour5')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour5 ? attendance.hour5='PRESENT' : null" data-ng-style="attendance.hour5=='PRESENT' && {'color': 'teal'} || attendance.hour5=='ABSENT' && {'color': '#f44336'} || attendance.hour5=='OD' && {'color': '#4caf50'} || attendance.hour5=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour5 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==6 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 6)">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour6 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour6 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour6 = attendanceCtrl.changeIcon(attendance.hour6)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour6 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour6')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour6 ? attendance.hour6='PRESENT' : null" data-ng-style="attendance.hour6=='PRESENT' && {'color': 'teal'} || attendance.hour6=='ABSENT' && {'color': '#f44336'} || attendance.hour6=='OD' && {'color': '#4caf50'} || attendance.hour6=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour6 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==7 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 7)">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour7 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour7 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour7 = attendanceCtrl.changeIcon(attendance.hour7)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour7 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour7')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour7 ? attendance.hour7='PRESENT' : null" data-ng-style="attendance.hour7=='PRESENT' && {'color': 'teal'} || attendance.hour7=='ABSENT' && {'color': '#f44336'} || attendance.hour7=='OD' && {'color': '#4caf50'} || attendance.hour7=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour7 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="attendanceCtrl.attendanceHour==8 || (attendanceCtrl.attendanceHour=='All' && attendanceCtrl.hourCount >= 8)">
+                                 <label data-ng-disabled="(!attendance.attendanceCorrection && attendance.hour8 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING')" class="checkbox checkbox-inline m-r-20"
+                                    sglclick="(!attendance.attendanceCorrection && attendance.hour8 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendance.hour8 = attendanceCtrl.changeIcon(attendance.hour8)"
+                                    dbl-click="(!attendance.attendanceCorrection && attendance.hour8 && userInfo.roles[0].id!=2 && !attendanceCtrl.saveAttendanceBtn && attendanceCtrl.instituteType == 'College') || (attendance.attendanceCorrection && attendance.attendanceCorrection.status=='PENDING') == true ? null : attendanceCtrl.getModal(attendance, $index, 'hour8')">
+                                 <b data-ng-if="attendance.attendanceCorrection.status=='PENDING'" class="has-error">ACR</b>
+                                 <b data-ng-if="attendance.attendanceCorrection.status!='PENDING'" ng-init="!attendance.hour8 ? attendance.hour8='PRESENT' : null" data-ng-style="attendance.hour8=='PRESENT' && {'color': 'teal'} || attendance.hour8=='ABSENT' && {'color': '#f44336'} || attendance.hour8=='OD' && {'color': '#4caf50'} || attendance.hour8=='LEAVE' && {'color': '#ff9800'}">{{attendance.hour8 | limitTo:1}}</b>
+                                 </label>
+                              </td>
+                              <td class="text-left" data-ng-if="userInfo.roles[0].id!=2 && attendanceCtrl.instituteType == 'College'">
+                                 <button data-ng-if="attendance.attendanceCorrection.status!='ACCEPTED'" data-ng-disabled="attendanceCtrl.saveAttendanceBtn || attendance.attendanceCorrection.status=='PENDING'" template-url="/app/attendance/views/createAttendanceCorrection.html" form-modal m-title="Attendance Correction" m-scope="attendanceCtrl.mScope" init-data="attendanceCtrl.initData" data-ng-click="attendanceCtrl.getAttendanceDetail(attendance)" data-form-submit="attendanceCtrl.saveOrUpdateAttendanceCorrection(mForm)" data-ok-button-text="SUBMIT">
+                                    <icon class="fa fa-paper-plane" aria-hidden="true"></icon>
+                                    <md-tooltip>Attendance Correction Request</md-tooltip>
+                                 </button>
+                                 <button data-ng-if="attendance.attendanceCorrection.status=='ACCEPTED'" data-ng-click="attendanceCtrl.updatedAttendance(attendance)">Update Attendance</button>
+                              </td>
+                           </tr>
+                           <tr class="tableRow" data-ng-if="!attendanceCtrl.attendanceList.length">
+                              <td colspan="3" class="text-center">
+                                 <p class="no-records">No data found</p>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <div class="form-group" data-ng-if="attendanceCtrl.attendanceList.length">
+                        <div class="offset-sm-4 col-sm-7 offset-xs-2">
+                           <button type="hidden" data-ng-if="attendanceCtrl.role !='ROLE_ADMIN' && attendanceCtrl.instituteType == 'College'" data-ng-click="attendanceCtrl.getWorkplanAndPendingPlan(attendanceCtrl.form)" class="btn btn-primary btn-sm waves-effect waves-effect bgm-teal" style="margin:5px;">Work Plan</button>
+                           &nbsp;&nbsp;
+                           <button data-ng-if="attendanceCtrl.saveAttendanceBtn" data-ng-click="attendanceCtrl.saveOrUpdateAttendance(attendanceCtrl.form)" class="btn btn-primary btn-sm waves-effect waves-effect bgm-teal">Save Attendance</button>
+                           <button data-ng-if="(userInfo.roles[0].id==2 || userInfo.roles[0].id==3) && !attendanceCtrl.saveAttendanceBtn" data-ng-click="attendanceCtrl.saveOrUpdateAttendance(attendanceCtrl.form)" class="btn btn-primary btn-sm waves-effect waves-effect bgm-teal">Update Attendance</button>
+                        </div>
+                     </div>
+                  </div>
+                  <div id="myModal" class="modalImageBackground">
+                     <span class="closeModel">&times;</span>
+                     <img class="modal-Image-Content" id="img01">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+</div>
+<style>
+   #myImg {
+   border-radius: 10px;
+   cursor: pointer;
+   transition: 0.3s;
+   }
+   .modal-Image-Content, #caption {    
+   -webkit-animation-name: zoom;
+   -webkit-animation-duration: 0.6s;
+   animation-name: zoom;
+   animation-duration: 0.6s;
+   }
+   @-webkit-keyframes zoom {
+   from {-webkit-transform:scale(0)} 
+   to {-webkit-transform:scale(1)}
+   }
+   @keyframes zoom {
+   from {transform:scale(0)} 
+   to {transform:scale(1)}
+   }
+   .closeModel:hover,
+   .closeModel:focus {
+   color: #bbb;
+   text-decoration: none;
+   cursor: pointer;
+   }
+   .sidenav {
+   width: 0;
+   position: fixed;
+   z-index: 1;
+   top: 124;
+   left: 0;
+   background-color: white;
+   overflow-x: hidden;
+   transition: 0.5s;
+   margin-left: 10px;
+   }
+   .sidenav .closebtn {
+   top: 0;
+   font-size: 20px;
+   margin-left: 215px;
+   color:black;
+   }
+   td {
+   text-overflow: inherit;
+   }
+   .table-responsive {
+   border: 0;
+   }
+   .table-responsive {
+   border: 0;
+   }
+   #enterAttendance {
+   font-size: 12px;
+   line-height: 1.42857143;
+   }
+   .table {
+   table-layout: fixed;
+   }
+   .table-bordered {
+   border-bottom: 0;
+   border-left: 0;
+   border-right: 0;
+   }
+   .table-bordered {
+   border: 1px solid #f0f0f0;
+   }
+   .form-width{
+   width:100%;
+   height:100%;
+   }
+   .table {
+   width: 100%; 
+   max-width: 100%;
+   }
+   .table>thead>tr>th {
+   background-color: #fff;
+   vertical-align: middle;
+   font-weight: 500;
+   color: #333;
+   border-width: 1px;
+   text-transform: uppercase;
+   }
+   .table-bordered>thead>tr>th {
+   border: 1px solid #f0f0f0;
+   }
+   .table>thead>tr>th {
+   padding: 13px;
+   line-height: 1.42857143;
+   }
+   .table>tbody>tr>td {
+   padding: 10px;
+   }
+   .table-bordered>tbody>tr>td {
+   border: 1px solid #f0f0f0;
+   }
+   .table>tbody>tr>td {
+   line-height: 1.42857143;
+   vertical-align: top;
+   }
+   .checkbox-inline,
+   .radio-inline {
+   vertical-align: top;
+   margin-top: 0;
+   }
+   .m-r-20 {
+   margin-right: 20px !important;
+   }
+   .attendance-table{
+   over-flow-x:auto !important;}
+   .checkbox-inline {
+   position: relative;
+   display: inline-block;
+   padding-left: 20px;
+   margin-bottom: 0;
+   vertical-align: middle;
+   font-weight: 400;
+   cursor: pointer;
+   }
+   .table>tbody>tr>td {
+   line-height: 1.42857143;
+   }
+   .checkbox input[type="checkbox"],
+   .checkbox-inline input[type="checkbox"] {
+   position: absolute;
+   }
+   .checkbox input,
+   .radio input {
+   top: 0;
+   left: 0;
+   margin-left: 0 !important;
+   z-index: 1;
+   cursor: pointer;
+   opacity: 0;
+   filter: alpha(opacity 0);
+   margin-top: 0;
+   }
+   b,
+   strong {
+   font-weight: 700;
+   }
+   .has-error,
+   .has-error .checkbox-inline {
+   color: #f44336;
+   }
+   .has-success .checkbox,
+   .has-success .checkbox-inline {
+   color: #4caf50;
+   }
+   .has-warning .checkbox,
+   .has-warning .checkbox-inline {
+   color: #ff9800;
+   }
+   th {
+   text-align: left;
+   }
+   md-input-container.align-center {
+    padding-bottom: 5px;
+   }
+</style>

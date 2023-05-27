@@ -1,0 +1,37 @@
+<div class="card-header" data-ng-init="smsGatewayCtrl.init()" id="smtpDiv">
+   <div class="row">
+      <div class="col-sm-6">
+         <div>
+            <h2>
+               SMS Gateway
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">SMS Gateway Config Details</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-sm-5 col-xs-9">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="searchValue" >
+         </md-input-container>
+      </div>
+      <div class="col-sm-1 col-xs-3">
+         <md-button class="md-fab md-mini md-primary" aria-label="add" id="create-smsgateway" template-url="/app/smsGateway/views/create.html" form-modal
+                    m-title="SMS Gateway" m-scope="smsGatewayCtrl.mScope" form-submit="smsGatewayCtrl.saveOrUpdateSmsGateway(mForm)" init-data="smsGatewayCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add SMS Gateway</md-tooltip>
+         </md-button>
+         <md-button class="md-fab md-mini md-primary" hide-footer="true" id="smsgateway-statistics-report" ng-hide="true" aria-label="view" template-url="/app/smsGateway/views/smsStatisticsReport.html" form-modal
+                    m-title="SMS Gateway statistics report" m-scope="smsGatewayCtrl.mScope">
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content" style="height:calc(100% - 92px);overflow-y:auto!important">
+   <table id="smsGatewayDataTable" class="display table" cellspacing="0" width="100%">
+   </table>
+</div>
+
+
+

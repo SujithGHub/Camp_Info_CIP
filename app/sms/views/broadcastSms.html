@@ -1,0 +1,90 @@
+<div class="card-header ch-al" data-ng-init="smsCtrl.broadCastSmsInit()">
+   <div class="row">
+         <h2>BroadCast SMS</h2>
+      </div>
+</div>
+<div class="card-body content" style="height: calc(100% - 10%);">
+   <form class="form-horizontal pad-top" role="form" name="smsForm" novalidate>
+      <div class="form-group row" style="margin-bottom: 0px">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+        <label>BroadCast SMS</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="choose" data-ng-model="smsCtrl.form.broadcastType" data-ng-required="true">
+                  <md-option value="choose">Choose and BroadCast</md-option> 
+                  <md-option value="all">All</md-option>
+               </md-select>
+               <div data-ng-messages="smsForm.choose.$error" data-ng-if="smsForm.$submitted">
+                     <div data-ng-message="required"><small>SMS option is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+      <div class="form-group row" style="margin-bottom: 0px" data-ng-if="smsCtrl.form.broadcastType=='choose' && smsCtrl.instituteType=='College'">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+        <label>Department</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+        	<md-input-container class="align-center">
+               <md-select name="department" ng-model="smsCtrl.form.department"  data-ng-change="smsCtrl.getClassByDepartmentId(smsCtrl.form.department.id)" data-ng-required="true">
+               	<md-option ng-value="department" data-ng-repeat="department in smsCtrl.departmentsList">{{::department.name}}</md-option>
+               </md-select>
+                <div data-ng-messages="smsForm.department.$error" data-ng-if="smsForm.$submitted">
+                     <div data-ng-message="required"><small>Department is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+       <div class="form-group row" style="margin-bottom: 0px" data-ng-if="smsCtrl.form.broadcastType=='choose'">
+        <div data-ng-class="smsCtrl.instituteType=='School' ? 'col-xs-4 col-sm-3 col-md-3 control-label required-mark' :' col-xs-4 col-sm-3 col-md-3 control-label'">
+       <label data-ng-if="smsCtrl.instituteType=='College'">Year</label>
+       <label data-ng-if="smsCtrl.instituteType=='School'">Standard</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="class" data-ng-model="smsCtrl.form.classYear" 
+               data-ng-change="smsCtrl.getSectionByStandard(smsCtrl.form)" data-ng-required="smsCtrl.instituteType=='School'">
+              <md-option ng-value="standard" data-ng-repeat="standard in smsCtrl.standardList">{{::standard.name}}</md-option>
+               </md-select>
+               <div data-ng-messages="smsForm.class.$error" data-ng-if="smsForm.$submitted">
+                     <div data-ng-message="required" data-ng-if="smsCtrl.instituteType=='School'"><small>Standard is required !</small></div>
+                     <div data-ng-message="required" data-ng-if="smsCtrl.instituteType=='College'"><small>Year is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+       <div class="form-group row" style="margin-bottom: 0px" data-ng-if="smsCtrl.form.broadcastType=='choose'">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label">
+        <label>Section</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="section" data-ng-model="smsCtrl.form.section" >
+                  <md-option ng-value="section" data-ng-repeat="section in smsCtrl.sectionList">{{::section.sectionName}}</md-option>
+               </md-select>
+                <div data-ng-messages="smsForm.section.$error" data-ng-if="smsForm.$submitted">
+                     <div data-ng-message="required"><small>Section is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+       <div class="form-group row required-mark">
+          <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+         <label>Message</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <textarea class="input-sm form-control" 
+               data-ng-model="smsCtrl.form.textMessage" id="textMessage" rows="5" data-ng-minlength="3" data-ng-maxlength="160"
+               name="message" placeholder="Type the message here...." required></textarea>
+               <div id="count"></div>
+                 <div data-ng-messages="smsForm.message.$error" data-ng-show="smsForm.message.$touched || smsForm.$submitted">
+                     <div data-ng-message="required"><small style="color: rgb(213,0,0);" >Message is required !</small></div>
+                    <div data-ng-message="minlength"><small style="color: rgb(213,0,0);" >Message is too short.</small></div>
+                    <div data-ng-message="maxlength"><small style="color: rgb(213,0,0);">Message is too long.</small></div>
+                  </div>
+         </div>
+      </div>
+      <div class="form-group row">
+      <div class="col-xs-4 col-sm-3 col-md-3"></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <button type="submit" class="btn btn-danger" data-ng-click="smsForm.$valid ? smsCtrl.sendBroadcastSMS(smsCtrl.form): null">SEND<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i></button>
+         </div>
+      </div>
+   </form>
+</div>

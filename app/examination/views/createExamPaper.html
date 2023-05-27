@@ -1,0 +1,55 @@
+<md-dialog-content>
+   <div class="md-dialog-content">
+       <md-input-container class="align-center">
+           <label>Subject</label>
+           <md-select ng-model="mScope.mForm.subject.id" data-ng-required="true" name="subjectName"
+               data-ng-change="mScope.getElectiveSubjectBySubjectId(mScope.mForm.subject.id)">
+               <md-option ng-value="subject.id" ng-repeat="subject in mScope.subjectList">
+               {{::subject.subjectName}}
+               </md-option>
+           </md-select>
+           <div data-ng-messages="modelForm.subjectName.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required">
+                   <small>Subject Name is Required !</small>
+               </div>
+           </div>
+       </md-input-container>
+       <md-input-container class="align-center" data-ng-if="mScope.subjectElectiveList.length">
+           <label>Subject Elective</label>
+           <md-select ng-model="mScope.mForm.subjectElective.id" name="subjectElectiveName" data-ng-required="true">
+               <md-option ng-value="subjectElective.id" ng-repeat="subjectElective in mScope.subjectElectiveList">
+               {{::subjectElective.electiveSubjectName}}
+               </md-option>
+           </md-select>
+           <div data-ng-messages="modelForm.subjectElectiveName.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required">
+                   <small>Subject Elective Name is Required !</small>
+               </div>
+           </div>
+       </md-input-container>
+       <md-input-container flex> <label>Max Mark</label>
+           <input class="md-input" data-ng-model="mScope.mForm.maxMark" name="maxMark" data-ng-required="true">
+           <div data-ng-messages="modelForm.maxMark.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required">
+                   <small>Max Mark is Required !</small>
+               </div>
+           </div>
+       </md-input-container>
+       <md-input-container flex> <label>Pass Mark</label>
+           <input class="md-input" data-ng-model="mScope.mForm.passMark" name="passMark" data-ng-required="true">
+           <div data-ng-messages="modelForm.passMark.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required">
+                   <small>Pass Mark is Required !</small>
+               </div>
+           </div>
+       </md-input-container>
+       <md-input-container flex> <label>Exam Date</label>
+           <input class="md-input" data-datepicker data-ng-model="mScope.mForm.date" name="date" data-ng-required="true">
+           <div data-ng-messages="modelForm.date.$error" data-ng-if="modelForm.$submitted" class="has-error">
+               <div data-ng-message="required">
+                   <small>Exam Date is Required !</small>
+               </div>
+           </div>
+       </md-input-container>
+   </div>
+</md-dialog-content>

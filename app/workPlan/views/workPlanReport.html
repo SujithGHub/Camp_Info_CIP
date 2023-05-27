@@ -1,0 +1,94 @@
+<div class="card-header ch-al pb-1-25 pt-1-25">
+    <div class="row">
+        <h2>WorkPlan Report</h2>
+    </div>
+</div>
+<div class="card-body" data-ng-init="workPlanCtrl.init()">
+    <form class="form-horizontal pad-top" novalidate name="workPlanReportForm">
+        <div class="row" style="margin: 0px !important">
+            <div class="col-md-3 col-sm-4 col-xs-4 pl-0">
+                <div class="card allSides content">
+                    <div style="padding: 20px;">
+                        
+                        <md-input-container class="align-center">
+                             <label>Academic Year</label>
+                            <md-select data-ng-model="workPlanCtrl.form.academic" name="academicYear" required>
+                                <md-option ng-value="academic.id" data-ng-repeat="academic in workPlanCtrl.mScope.academicList">{{::academic.academicYear}}</md-option>
+                            </md-select>
+
+                            <div data-ng-messages="workPlanReportForm.academicYear.$error" data-ng-if="workPlanReportForm.$submitted" class="has-error">
+                                <div data-ng-message="required" class="help-block">
+                                    <small>Academic year is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        
+                        <md-input-container class="align-center">
+                            <label>Department</label>
+                            <md-select data-ng-model="workPlanCtrl.form.departmentId" name="dept" data-ng-change="workPlanCtrl.mScope.getClassByDepartmentId(workPlanCtrl.form.departmentId)" required>
+                                <md-option ng-repeat="dept in workPlanCtrl.mScope.departments" ng-value="dept.id">{{dept.name}}</md-option>
+                            </md-select>
+
+                            <div data-ng-messages="workPlanReportForm.dept.$error" data-ng-if="workPlanReportForm.$submitted" class="has-error">
+                                <div data-ng-message="required" class="help-block">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        
+                        <md-input-container class="align-center">
+                            <label data-ng-if="workPlanCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="workPlanCtrl.instituteType == 'School'">Standard</label>
+                            <md-select data-ng-model="workPlanCtrl.form.classYearId" data-ng-change="workPlanCtrl.mScope.getSectionByStandardId(workPlanCtrl.form.classYearId);workPlanCtrl.mScope.getSemesterByClassYear(workPlanCtrl.form.classYearId); " name="class" required="">
+                                <md-option ng-repeat="class in workPlanCtrl.mScope.yearAndStandardList" ng-value="class.id">{{class.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="workPlanReportForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="workPlanReportForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-show="workPlanCtrl.instituteType == 'School'">Standard
+								is required !</small> <small ng-show="workPlanCtrl.instituteType != 'School'">Year is
+								required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        
+                        
+                        <md-input-container class="align-center">
+                           <label>Semester</label>
+                            <md-select name="semester" data-ng-model="workPlanCtrl.form.semester" required>
+                                <md-option ng-value="semester" data-ng-repeat="semester in workPlanCtrl.mScope.semestersLists">{{::semester}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="workPlanReportForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="workPlanReportForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        
+                        
+                        <md-input-container class="align-center">
+                           <label>Section</label>
+                            <md-select data-ng-model="workPlanCtrl.form.section" name="section" required="" data-ng-change="workPlanCtrl.mScope.getAllottedSubjectbyStaff(workPlanCtrl.form.semester, workPlanCtrl.form.section)" >
+                                <md-option ng-repeat="section in workPlanCtrl.mScope.sections" ng-value="section.id">{{section.sectionName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="workPlanReportForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="workPlanReportForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+		              
+                        <button type="submit" style="margin: 0 auto" data-ng-click="workPlanCtrl.getWorkPlanReport(workPlanCtrl.form);" class="btn btn-danger">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+    </form>
+    <div class="col-md-9 p-0" id="chart_card" >
+        <div class="card allSides">
+            <div class="card-body card-padding chart-content" style="height: 72vh; style="padding-left: 2px !important">
+                <div id="container" class="" style="min-width: 310px; margin-top: 45px"></div>
+            </div>
+        </div>
+    </div>
+     </div>
+ </div>
+

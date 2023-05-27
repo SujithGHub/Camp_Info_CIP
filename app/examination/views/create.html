@@ -1,0 +1,218 @@
+<md-dialog-content>
+   <div class="md-dialog-content" data-ng-init="mScope.mForm.id? '':mScope.mForm.isExam=true;">
+      <div class="row fluid" style="padding-left: initial; margin-left: -15px;">
+         <md-radio-group ng-model="mScope.mForm.isExam">
+            <!--<label class="radio radio-inline m-r-20" data-ng-if="mScope.instituteType =='School'">Exam
+            </label>-->
+            <div data-ng-if="mScope.instituteType =='College'">
+               <label class="radio radio-inline m-r-20">
+                  <md-radio-button data-ng-value="true">Exam</md-radio-button>
+               </label>
+               <label class="radio radio-inline m-r-20">
+                  <md-radio-button data-ng-value="false">Assignment</md-radio-button>
+               </label>
+            </div>
+         </md-radio-group>
+      </div>
+      <!-- <md-input-container class="align-center required-mark"
+         data-ng-if="mScope.instituteType == 'College' && mScope.role == 'ROLE_STAFF_HOD'" id="department">
+         <label>Department
+         Name</label> 
+         <md-select ng-model="mScope.mForm.department.id" disabled name="departmentName" data-ng-required="true"
+            data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+            <md-option ng-value="department.id"
+               data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+         </md-select>
+         <div data-ng-messages="modelForm.departmentName.$error" data-ng-if="modelForm.$submitted" class="has-error">
+            <div data-ng-message="required">
+               <small>Department Name is Required !</small>
+            </div>
+         </div>
+      </md-input-container>-->
+      <!--data-ng-if="mScope.instituteType == 'College' && mScope.role != 'ROLE_STAFF_HOD'"-->
+      <md-input-container data-ng-if="mScope.instituteType == 'College'"  class="align-center required-mark"
+          id="department">
+         <label>Department
+         Name</label> 
+         <md-select ng-model="mScope.mForm.department.id" name="departmentName" data-ng-required="true"
+            data-ng-change="mScope.getClassYearsByDepartmentAndStaff(mScope.mForm.department.id)">
+            <md-option ng-value="department.id"
+               data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+         </md-select>
+         <div data-ng-messages="modelForm.departmentName.$error" data-ng-if="modelForm.$submitted" class="has-error">
+            <div data-ng-message="required">
+               <small>Department Name is Required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      <md-input-container class="align-center required-mark">
+         <label
+            data-ng-if="mScope.instituteType=='College'">Year</label> <label
+            data-ng-if="mScope.instituteType=='School'">Standard</label> 
+         <md-select aria-label="classyear" ng-model="mScope.mForm.classYear.id" name="class" data-ng-required="true" data-ng-change="mScope.getSubjectByClassId(mScope.mForm.classYear.id);
+            mScope.instituteType != 'College' ? null : mScope.getSemesterByClassYear(mScope.mForm.classYear.id); mScope.getSectionByStandardId(mScope.mForm.classYear.id, mScope.mForm.department.id);">
+            <md-option
+               ng-value="standard.id"
+               ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}</md-option>
+         </md-select>
+         <div data-ng-messages="modelForm.class.$error" data-ng-if="modelForm.$submitted" class="has-error">
+            <div data-ng-message="required">
+               <small data-ng-if="mScope.instituteType=='College'">Year is Required !</small>
+               <small data-ng-if="mScope.instituteType=='School'">Standard is Required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      <md-input-container class="align-center required-mark"
+         data-ng-if="mScope.instituteType == 'College'">
+         <label>Semester</label> 
+         <md-select ng-model="mScope.mForm.semester" name="semester" data-ng-required="true"
+            data-ng-change="mScope.getSubjectBySemesterId(mScope.mForm.department.id, mScope.mForm.semester)">
+            <md-option ng-value="semester"
+               data-ng-repeat="semester in mScope.semestersLists">{{::semester}}</md-option>
+         </md-select>
+         <div data-ng-messages="modelForm.semester.$error" data-ng-if="modelForm.$submitted">
+            <div data-ng-message="required">
+               <small>Semester is Required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      <md-input-container class="align-center">
+         <label>Section</label>
+         <md-select ng-model="mScope.mForm.section.id" name="section">
+            <md-option ng-value="section.id"
+               data-ng-repeat="section in mScope.sectionList">{{section.sectionName}}</md-option>
+         </md-select>
+         <!--<div data-ng-messages="modelForm.section.$error" data-ng-if="modelForm.$submitted">
+            <div data-ng-message="required">
+               <small>Section is Required !</small>
+            </div>
+         </div>-->
+      </md-input-container>
+      <md-input-container flex class="required-mark">
+         <label data-ng-if="mScope.mForm.isExam">Examination Name</label>
+         <label data-ng-if="!mScope.mForm.isExam">Assignment Name</label>
+         <input class="md-input" data-ng-model="mScope.mForm.examName" name="examName" data-ng-required="true" autocomplete="off">
+         <div data-ng-messages="modelForm.examName.$error" data-ng-show="modelForm.$submitted">
+            <div data-ng-message="required"><small>Examination Name is Required !</small></div>
+         </div>
+      </md-input-container>
+      <div id="examPaperDiv" data-ng-if="!mScope.mForm.id">
+         <div layout style="font-size: small;">
+            <div class = "col-sm-2 col-xs-2"> <label>Subject Name</label></div>
+            <div data-ng-hide="mScope.instituteType =='School'" class = "col-sm-2 col-xs-2" style="width: 18%"> <label> Elective Subject</label></div>
+            <div class = "col-sm-2 col-xs-2"> <label>Max Mark</label> </div>
+            <div class = "col-sm-2 col-xs-2"> <label>Pass Mark</label> </div>
+            <div class = "col-sm-2 col-xs-2"> <label>Exam Date</label> </div>
+            <div class = "col-sm-2 col-xs-2"> <label></label> </div>
+         </div>
+         <div layout style="margin-bottom:0px!important;">
+            <md-input-container class = "col-sm-2 col-xs-2">
+               <md-select aria-label="subject name" name="subjects" ng-model="mScope.mForm.examPaper[0].subject">
+                  <md-option ng-repeat="subject in mScope.subjectList" ng-value="subject">{{subject.subjectName}}</md-option>
+               </md-select>
+            </md-input-container>
+            <md-input-container data-ng-hide="mScope.instituteType =='School'" class = "col-sm-2 col-xs-2" style="width: 18%">
+               <md-select aria-label="elective subject name" name="subjectElective" ng-model="mScope.mForm.examPaper[0].subjectElective" data-ng-disabled="mScope.mForm.examPaper[0].subject.subjectElectives.length == 0">
+                  <md-option ng-repeat="subjectElective in mScope.mForm.examPaper[0].subject.subjectElectives" ng-value="subjectElective">{{subjectElective.electiveSubjectName}}</md-option>
+               </md-select>
+            </md-input-container>
+            <md-input-container class = "col-sm-2 col-xs-2">
+               <input aria-label="max mark" class="md-input" type="number" data-ng-model="mScope.mForm.examPaper[0].maxMark"
+                  name="maxiMark" data-ng-max="200" data-ng-min="10">
+               <div data-ng-messages="modelForm.maxiMark.$error" class="has-error">
+                  <div data-ng-if="modelForm.maxiMark.$error.max" class="help-block">
+                     <small style="color: rgb(213,0,0);">Max Mark shouldn't exceed 200</small>
+                  </div>
+                  <div data-ng-if="modelForm.maxiMark.$error.ngMin" class="help-block">
+                     <small style="color: rgb(213,0,0);">Max Mark shouldn't less than 10</small>
+                  </div>
+               </div>
+            </md-input-container>
+            <md-input-container class = "col-sm-2 col-xs-2">
+               <input aria-label="pass mark" class="md-input" type="number" data-ng-model="mScope.mForm.examPaper[0].passMark" 
+                  name="passsMark" data-ng-max="mScope.mForm.examPaper[0].maxMark" data-ng-min="0">
+               <div data-ng-messages="modelForm.passsMark.$error" class="has-error">
+                  <div data-ng-if="modelForm.passsMark.$error.max" class="help-block">
+                     <small style="color: rgb(213,0,0);">Pass Mark shouldn't exceed Max Mark</small>
+                  </div>
+                  <div data-ng-if="modelForm.passsMark.$error.ngMin" class="help-block">
+                     <small style="color: rgb(213,0,0);">Pass Mark shouldn't less than 0</small>
+                  </div>
+               </div>
+            </md-input-container>
+            <md-input-container class = "col-sm-2 col-xs-2">
+               <input aria-label="date" data-ng-model="mScope.mForm.examPaper[0].date" class="md-input" datepicker>
+            </md-input-container>
+            <md-input-container class = "col-sm-2 col-xs-2">
+               <div class="col-md-2">
+                  <button class="btn bgm-teal btn-xs" data-ng-click="mScope.examPapers.push({})">
+                  <i class="zmdi zmdi-plus"></i>
+                  </button>
+               </div>
+            </md-input-container>
+         </div>
+      </div>
+      <div layout ng-if="!mScope.mForm.id" data-ng-repeat="examPaper in mScope.examPapers" style="margin-bottom:0px!important;">
+         <md-input-container class = "col-sm-2 col-xs-2">
+            <md-select name="subjects" ng-model="mScope.mForm.examPaper[$index+1].subject">
+               <md-option ng-repeat="subject in mScope.subjectList" ng-value="subject">{{subject.subjectName}}</md-option>
+            </md-select>
+         </md-input-container>
+         <md-input-container data-ng-hide="mScope.instituteType =='School'" class = "col-sm-2 col-xs-2" style="width: 18%">
+            <md-select name="subjectElective"  ng-model="mScope.mForm.examPaper[$index+1].subjectElective" data-ng-disabled="mScope.mForm.examPaper[$index+1].subject.subjectElectives.length == 0">
+               <md-option ng-repeat="subjectElective in mScope.mForm.examPaper[$index+1].subject.subjectElectives" ng-value="subjectElective">{{subjectElective.electiveSubjectName}}</md-option>
+            </md-select>
+         </md-input-container>
+         <md-input-container class = "col-sm-2 col-xs-2">
+            <input class="md-input" type="number" data-ng-model="mScope.mForm.examPaper[$index+1].maxMark" 
+               name="maxMark" data-ng-max="200" data-ng-min="10">
+            <div data-ng-messages="modelForm.maxMark.$error" class="has-error">
+               <div data-ng-if="modelForm.maxMark.$error.max" class="help-block">
+                  <small style="color: rgb(213,0,0);">Max Mark shouldn't exceed 200</small>
+               </div>
+               <div data-ng-if="modelForm.maxMark.$error.ngMin" class="help-block">
+                  <small style="color: rgb(213,0,0);">Max Mark shouldn't less than 10</small>
+               </div>
+            </div>
+         </md-input-container>
+         <md-input-container class = "col-sm-2 col-xs-2">
+            <input class="md-input" type="number" data-ng-model="mScope.mForm.examPaper[$index+1].passMark" 
+               name="passMark" data-ng-max="mScope.mForm.examPaper[$index+1].maxMark" data-ng-min="0">
+            <div data-ng-messages="modelForm.passMark.$error" class="has-error">
+               <div data-ng-if="modelForm.passMark.$error.max" class="help-block">
+                  <small style="color: rgb(213,0,0);">Pass Mark shouldn't exceed Max Mark</small>
+               </div>
+               <div data-ng-if="modelForm.passMark.$error.ngMin" class="help-block">
+                  <small style="color: rgb(213,0,0);">Pass Mark shouldn't less than 0</small>
+               </div>
+            </div>
+         </md-input-container>
+         <md-input-container class = "col-sm-2 col-xs-2">
+            <input data-ng-model="mScope.mForm.examPaper[$index+1].date" class="md-input" datepicker>
+         </md-input-container>
+         <md-input-container class = "col-sm-2 col-xs-2">
+            <div class="col-sm-1 col-xs-1">
+               <button class="btn bgm-teal btn-xs" data-ng-click="mScope.examPapers.push({})">
+               <i class="zmdi zmdi-plus"></i>
+               </button>
+            </div>
+            <div class="col-sm-1 col-xs-1">
+               <button class="btn btn-primary btn-xs btn btn-delete" data-ng-click="mScope.removeRow($index);">
+               <i class="zmdi zmdi-minus"></i>
+               </button>
+            </div>
+         </md-input-container>
+      </div>
+      <div class="row form-group">
+         <label class="radio radio-inline" style="padding-left:4px">Status</label>
+         <md-radio-group ng-model="mScope.mForm.status">
+            <label class="radio radio-inline ">
+               <md-radio-button value="ACTIVE">Active</md-radio-button>
+            </label>
+            <label class="radio radio-inline">
+               <md-radio-button value="INACTIVE">InActive</md-radio-button>
+            </label>
+         </md-radio-group>
+      </div>
+   </div>
+</md-dialog-content>

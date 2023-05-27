@@ -1,0 +1,39 @@
+<div class="card-header" data-ng-init="classifiedCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+       <div data-ng-if="classifiedCtrl.userRole=='ROLE_ADMIN'">
+            <h2>
+               All Classifieds
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Displays your classifieds</div>
+               </small>
+            </h2>
+         </div>
+         <div data-ng-if="classifiedCtrl.userRole=='ROLE_USER'">
+            <h2>
+              My Classifieds
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Displays your classifieds</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+           <input type="search" id="search" data-ng-model="search" data-ng-change="classifiedCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" 
+            template-url="/app/classifieds/views/create.html" form-modal
+            m-title="Classifieds" m-scope="classifiedCtrl.mScope" form-submit="classifiedCtrl.saveOrUpdateClassified(mForm)" init-data="classifiedCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Classifieds</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="classifiedDataTable" class="display table" cellspacing="0" width="100%"></table>
+</div>

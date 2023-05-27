@@ -1,0 +1,31 @@
+<div class="card-header" data-ng-init="PaymentGatewayCtrl.init()" id="smtpDiv">
+   <div class="row">
+      <div class="col-sm-6">
+         <div>
+            <h2>
+               Payment Gateway
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Payment Gateway Config Details</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-sm-5 col-xs-10">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="searchValue" >
+         </md-input-container>
+      </div>
+      <div class="col-sm-1 col-xs-2">
+         <md-button class="md-fab md-mini md-primary" aria-label="add" template-url="/app/paymentGateway/views/create.html" form-modal
+            m-title="SMTP" m-scope="PaymentGatewayCtrl.mScope" form-submit="PaymentGatewayCtrl.saveOrUpdatePaymentGateway(mForm)" init-data="PaymentGatewayCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Payment Gateway</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="paymentGatewayDataTable" class="display table" cellspacing="0">
+   </table>
+</div>

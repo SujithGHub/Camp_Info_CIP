@@ -1,0 +1,108 @@
+<!--<div class="card-header ch-al p-0-75" data-ng-init="eventsCtrl.initViewEvent()" style="height:100%;overflow-y: scroll;overflow-x: hidden;">
+   <div class="row">
+      <div class="col-sm-8 col-xs-5" id="search">
+          <h2>View Events</h2><br/>
+      </div>
+      <div class="col-sm-4 col-xs-7 text-right">
+			<a class="btn btn-danger" id="backButton" data-ng-click="eventsCtrl.hideViewEvent()">BACK</a>
+		</div>
+   </div>
+
+&lt;!&ndash;<div id="table-responsive" class="table-responsive content" style="height: calc(100% - 57px); overflow-y: auto !important">
+   <table id="viewEventDataTable" class="display table" cellspacing="0"
+      width="100%"></table>
+</div>&ndash;&gt;
+    <div class="row" >
+        <div class="col-md-4" data-ng-repeat="events in eventsCtrl.eventList">
+            <div class="eventCard">
+                <img class="eventCard-img-top" style="width:100%; height:200px; max-width: 620px;" src="{{events.image[0].path}}" alt={{events.name}}>
+            <div class="eventCard-body">
+                <h5 class="eventCard-title">{{events.name | uppercase}}</h5>
+                <p class="eventCard-text" style="font-size: smaller"> {{events.description | limitTo: 40 }} {{events.description.length > 40 ? '...' : ' '}}</p>
+            </div>
+
+                <div class="eventCard-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            <button type="button" class="btn" style="background-color: white !important;color:black !important;border-color:rgba(128, 128, 128, 0.62) !important;" data-ng-click=eventsCtrl.viewEvent(events)>view</button>
+                        </div>
+                        <div class="col-6 text-right "><strong class="eventCard-text-success" ng-class="{'eventCard-text-danger': (eventsCtrl.getDateFormat(events.eventDate) <= eventsCtrl.currentDate)}"
+                                                               title="{{::events.eventDate}}">
+                            <i class="fa fa-calendar" aria-hidden="true"></i> {{eventsCtrl.getDateFormat(events.eventDate)|date:'dd-MM-yyyy'}}</strong></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="no-record-found" data-ng-if="eventsCtrl.events.entityList.length === 0">
+        <div class="alert alert-warning text-left">
+            <strong>No events found !</strong>
+        </div>
+    </div>
+
+    <div class="row">
+        <span  class="col-md-4 " style="font-size: small">(Showing {{eventsCtrl.noOfRecords}} Records of {{eventsCtrl.totalCount}} entries) </span>
+        <div class="col-md-4 text-center">
+            <button class='btn bgm-teal ' style="width:100px; height: 23px;padding-right:0px;"  data-ng-if="eventsCtrl.noOfRecords != eventsCtrl.totalCount" data-ng-click=eventsCtrl.viewMore()> view more<img  src="assets/images/scroll-down-ani.gif" style="float: right; width: 23px;margin-top: -7px" class="img-responsive"></button>
+        </div>
+    </div>
+</div>-->
+  <!--  <div class="card-body content" style="height: calc(100% - 11%);padding: 23px 0px;">
+	    <div id="imageList"></div>
+    </div>-->
+
+
+<div class="card-header no-bg" data-ng-init="eventsCtrl.initViewEvent()">
+    <div class="row">
+        <div class="col-sm-8 col-xs-5" id="search">
+            <h4>Events</h4>
+        </div>
+    </div>
+</div>
+<div class="form-group col-12 mt-2" style="overflow-y: scroll;overflow-x:hidden;height: 66vh;">
+    <div class="row">
+        <div class="col-4 px-1" ng-repeat="events in eventsCtrl.eventList track by events.id">
+            <div class="eventCard mb-2" style="box-shadow: #CCC 1px 1px 2px;border: 1px solid rgba(0, 0, 0, 0.34);">
+                <a data-fancybox="gallery" href="{{events.image[0].path}}">
+                    <img class="eventCard-img-top w-100" style="height: 230px;width: 100% !important;max-width: 100%;" ng-src="{{events.image[0].path}}">
+                </a>
+                <div class="eventCard-body p-3">
+                    <h4 class="eventCard-title" title="{{::events.name}}">{{::events.name | limitTo : 33}}{{events.name.length >
+                        33 ? '...' : ''}}</h4>
+                    <p class="eventCard-text" title="{{::events.description}}">{{::events.description | limitTo:
+                        100}}{{events.description.length > 100 ? '...' : ''}}</p>
+                    <hr class="my-2">
+                    <div class="row">
+                        <div class="col-6">
+                            <!--<button type="button" class="btn btn-outline-secondary btn-sm btn-no-bg" data-toggle="modal" data-target="#viewEvent"
+                                    ng-click="eventsCtrl.viewEventDetial(events)">View</button>-->
+                            <button type="button" class="btn" style="background-color: white !important;margin-left:12px;color:black !important;border-color:rgba(128, 128, 128, 0.62) !important;" data-ng-click=eventsCtrl.viewEvent(events)>view</button>
+                        </div>
+                        <div class= "col-6">
+                            <div class="eventCard-text-success text-center"
+                                        ng-class="{'eventCard-text-danger': (eventsCtrl.getDateFormat(events.eventDate) <= eventsCtrl.currentDate)}"
+                                        title="{{::events.eventDate}}"><i class="fa fa-calendar" aria-hidden="true"></i> {{eventsCtrl.getDateFormat(events.eventDate) |
+                                    date:'dd-MM-yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="no-record-found" data-ng-if="eventsCtrl.events.entityList.length === 0">
+        <div class="alert alert-warning text-left">
+            <strong>No events found !</strong>
+        </div>
+    </div>
+
+    <div class="row">
+        <span  class="col-md-4 " style="font-size: small">(Showing {{eventsCtrl.noOfRecords}} Records of {{eventsCtrl.totalCount}} entries) </span>
+        <div class="col-md-4 text-center">
+            <button class='btn bgm-teal ' style="width:100px; height: 23px;padding-right:0px;"  data-ng-if="eventsCtrl.noOfRecords != eventsCtrl.totalCount" data-ng-click=eventsCtrl.viewMore()> view more<img  src="assets/images/scroll-down-ani.gif" style="float: right; width: 23px;margin-top: -7px" class="img-responsive"></button>
+        </div>
+    </div>
+</div>
+
+
+

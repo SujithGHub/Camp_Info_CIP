@@ -1,0 +1,33 @@
+<div class="card-header" data-ng-init="featureCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2>Feature's<small class="hidden-xs">
+                  <div class="grid-ellipsis ">All Institute Feature's</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="featureCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <!-- 
+      <div class="col-md-1 col-sm-2">
+         <md-button id="form" class="md-fab md-mini md-primary m-0" aria-label="add"
+            template-url="/app/feature/views/create.html" form-modal
+            m-title="Feature" m-Scope="featureCtrl.mScope" form-submit="featureCtrl.saveOrUpdateFeature(mForm)" init-data="featureCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Feature</md-tooltip>
+         </md-button>
+      </div>
+       -->
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="featureDataTable" class="display table" cellspacing="0">
+       
+   </table>
+</div>

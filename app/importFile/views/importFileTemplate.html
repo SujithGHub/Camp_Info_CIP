@@ -1,0 +1,78 @@
+<md-dialog-content class="card-header">
+    <div class="md-dialog-content">
+        <div class="row">
+            <label class="col-sm-4 col-xs-4 control-label">Export File</label>
+            <div class="col-sm-7 col-xs-8">
+                <md-input-container class="align-center">
+                    <md-select name="name" ng-model="mScope.mForm.name" required>
+                        <md-option value="Department" data-ng-if="mScope.instituteType=='College'">Department</md-option>
+                        <md-option value="Standard" data-ng-if="mScope.instituteType=='School'">Standard</md-option>
+                        <md-option value="Class" data-ng-if="mScope.instituteType=='College'">Year</md-option>
+                        <md-option value="Section">Section</md-option>
+                        <md-option value="Subject">Subject</md-option>
+                        <md-option value="Staff">Staff</md-option>
+                        <md-option value="Holiday">Holiday</md-option>
+                        <md-option value="Student">Student</md-option>
+                        <md-option value="Examination">Examination</md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.name.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="modelForm.$submitted" class="help-block">
+                            <small>This field is required !</small>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row" data-ng-if="mScope.instituteType=='College' && mScope.mForm.name == 'Examination'">
+            <div class="col-sm-4 col-xs-4 control-label required-mark">
+            <label>Department</label></div>
+            <div class="col-sm-7 col-xs-8">
+                <md-input-container class="align-center">
+                    <md-select ng-model="mScope.mForm.department.id" name="department" data-ng-required="mScope.instituteType=='College' && mScope.mForm.name == 'Examination' || mScope.mForm.name == 'Staff'" data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+                        <md-option ng-value="department.id" data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.department.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="modelForm.$submitted" class="help-block">
+                            <small>Department is required !</small>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row" data-ng-if="mScope.mForm.name=='Examination'">
+            <div class="col-sm-4 col-xs-4 control-label required-mark">
+            <label data-ng-if="mScope.instituteType=='School'">Standard</label>
+            <label data-ng-if="mScope.instituteType=='College'">Year</label></div>
+            <div class="col-sm-7 col-xs-8">
+                <md-input-container class="align-center">
+                    <md-select name="class" ng-model="mScope.mForm.classYear.id" data-ng-required="mScope.mForm.name=='Examination'" data-ng-change="mScope.instituteType == 'College' ? mScope.getSemesterByClassYear(mScope.mForm.classYear.id):null;">
+                        <md-option ng-value="standard.id" data-ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}
+                        </md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.class.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="modelForm.$submitted" class="help-block">
+                            <small data-ng-if="mScope.instituteType=='College'">Year is required !</small>
+                            <small data-ng-if="mScope.instituteType=='School'">Standard is required !</small>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="row" data-ng-if="mScope.instituteType=='College' && mScope.mForm.name == 'Examination'">
+            <div class="col-sm-4 col-xs-4 control-label required-mark">
+            <label>Semester</label></div>
+            <div class="col-sm-7 col-xs-8">
+                <md-input-container class="align-center">
+                    <md-select name="semester" ng-model="mScope.mForm.semester" data-ng-required="mScope.instituteType=='College' && mScope.mForm.name == 'Examination'">
+                        <md-option ng-value="semester" data-ng-repeat="semester in mScope.semestersLists">{{::semester}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="modelForm.semester.$error" class="has-error">
+                        <div data-ng-message="required" data-ng-if="modelForm.$submitted" class="help-block">
+                            <small>Semester is required !</small>
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div>
+    </div>
+</md-dialog-content>

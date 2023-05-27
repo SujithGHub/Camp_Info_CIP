@@ -1,0 +1,52 @@
+<div class="card-header ch-al">
+   <div class="row">
+      <div class="col-sm-9">
+         <h2>Bulk SMS</h2>
+      </div>
+      <div class="col-sm-3">
+         <button class="btn btn-danger" data-ng-click="smsCtrl.csvFileDownload()">DOWNLOAD TEMPLATE</button>
+      </div>
+   </div>
+</div>
+<div class="card-body card-padding content" style="height: calc(100% - 10%);">
+   <form class="form-horizontal pad-top" role="form" name="smsForm" novalidate>
+       <div class="form-group row">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark" style="padding-top: 0px;">
+         <label>File</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+				   <div class="fileUpload btn btn-danger">
+               <span data-ng-if="!fileName">BROWSE FILE</span><span data-ng-if="fileName">CHANGE</span> <input type="file" id="fileInput" name="filedata"  data-ng-required="!fileName"
+               onchange="angular.element(this).scope().readFile(this)" class="upload" data-ng-model="smsCtrl.form.file" accept=".csv"/>
+            </div>
+            <span style="font-size:small">{{fileName}}&nbsp&nbsp<a href="" class="close-file" data-ng-click="smsCtrl.clearFile()" data-ng-if="fileName">&times;</a><br><strong> </strong></span>
+				<div data-ng-messages="smsForm.filedata.$error">
+					<div data-ng-message="required" data-ng-if="smsForm.$submitted || smsForm.filedata.$touched" class="help-block">
+						<small style="color: rgb(213,0,0)!important;">Please select file to import!</small>
+					</div>
+				</div>
+         </div>
+      </div>
+    
+      <div class="form-group row required-mark">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+         <label>Message</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+                <textarea class="input-sm form-control" 
+               data-ng-model="smsCtrl.form.textMessage" id="textMessage" rows="5" data-ng-minlength="3" data-ng-maxlength="160"
+               name="message" placeholder="Type the message here...." data-ng-required="true"></textarea>
+               <div id="count"></div>
+               <div data-ng-messages="smsForm.message.$error" data-ng-show="smsForm.$submitted">
+                     <div data-ng-message="required"><small style="color: rgb(213,0,0);">Message is required !</small></div>
+                    <div data-ng-message="minlength"><small style="color: rgb(213,0,0);">Message is too short.</small></div>
+                    <div data-ng-message="maxlength"><small style="color: rgb(213,0,0);">Message is too long.</small></div>
+                  </div>
+         </div>
+      </div>
+     <div class="form-group row">
+     <div class="col-xs-4 col-sm-3 col-md-3"></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <button type="submit" class="btn btn-danger" data-ng-click="smsForm.$valid ? smsCtrl.sendBulkSMS(smsCtrl.form) : null">SEND<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i></button>
+         </div>
+      </div>
+   </form>
+</div>

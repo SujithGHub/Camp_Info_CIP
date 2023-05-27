@@ -1,0 +1,122 @@
+<div class="card-header" data-ng-init="workPlanCtrl.init()">
+    <div class="row">
+        <div class="col-sm-5 col-xs-4"> <h2>
+					Daily plan Details<small class="hidden-xs">
+						<div class="grid-ellipsis ">Daily plan Details</div>
+					</small>
+				</h2>
+        </div>
+        <div class="col-sm-5 col-xs-5">
+            <md-input-container>
+                <label>Search here</label>
+                <input type="search" id="search" data-ng-model="search" data-ng-change="workPlanCtrl.getDailyPlanListByStaff(workPlanCtrl.form)"> </md-input-container>
+        </div>
+        <div class="col-sm-2 col-xs-2">
+            <button class="btn btn-danger ng-scope" data-ng-click="workPlanCtrl.downloadWorkPlanExcel()" data-ng-if="workPlanCtrl.showExportBtn">Export</button>
+            <md-button class="md-fab md-mini md-primary" aria-label="add" data-ng-hide="true" template-url="/app/workPlan/views/viewDailyPlan.html" form-modal m-title="WorkPlan" m-scope="workPlanCtrl.mScope" form-submit="workPlanCtrl.UpdateDailyWorkPlan(mForm)" init-data="workPlanCtrl.initData" ok-button-text="SUBMIT">
+            </md-button>
+        </div>
+    </div>
+</div>
+<div class="card-body" style="padding:0px;">
+    <form class="form-horizontal pad-top" name="dailyPlanDetailForm" novalidate>
+        <div id="htmlContent" style="display:none;"></div>
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-xs-6">
+                <div class="card allSides content align-height">
+                    <div style="padding: 10px;">
+                        <md-input-container class="align-center-plan required-mark">
+                            <label>Academic Year
+                            </label>
+                            <md-select data-ng-model="workPlanCtrl.form.academic" name="academicYear" required>
+                                <md-option ng-value="academic.id" data-ng-repeat="academic in workPlanCtrl.mScope.academicList">{{::academic.academicYear}}</md-option>
+                            </md-select>
+
+                            <div data-ng-messages="dailyPlanDetailForm.academicYear.$error" data-ng-if="dailyPlanDetailForm.$submitted" class="has-error">
+                                <div data-ng-message="required" class="help-block">
+                                    <small>Academic year is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center-plan required-mark">
+                            <label>Department</label>
+                            <md-select data-ng-model="workPlanCtrl.form.department" name="dept" data-ng-change="workPlanCtrl.mScope.getClassByDepartmentId(workPlanCtrl.form.department)" required>
+                                <md-option ng-repeat="dept in workPlanCtrl.mScope.departmentList" ng-value="dept.id">{{dept.name}}</md-option>
+                            </md-select>
+
+                            <div data-ng-messages="dailyPlanDetailForm.dept.$error" data-ng-if="dailyPlanDetailForm.$submitted" class="has-error">
+                                <div data-ng-message="required" class="help-block">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center-plan required-mark">
+                            <label data-ng-if="workPlanCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="workPlanCtrl.instituteType == 'School'">Standard</label>
+                            <md-select data-ng-model="workPlanCtrl.form.classYear" data-ng-change="workPlanCtrl.mScope.getsectionByClassYearIdIsRestrict(workPlanCtrl.form.classYear);workPlanCtrl.mScope.getSemesterByClassYear(workPlanCtrl.form.classYear); " name="class" required="">
+                                <md-option ng-repeat="class in workPlanCtrl.mScope.yearAndStandardList" ng-value="class.id">{{class.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="dailyPlanDetailForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="dailyPlanDetailForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-show="workPlanCtrl.instituteType == 'School'">Standard
+								is required !</small> <small ng-show="workPlanCtrl.instituteType != 'School'">Year is
+								required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center-plan required-mark">
+                            <label>Semester</label>
+                            <md-select name="semester" data-ng-model="workPlanCtrl.form.semester" required>
+                                <md-option ng-value="semester" data-ng-repeat="semester in workPlanCtrl.mScope.semestersLists">{{::semester}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="dailyPlanDetailForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="dailyPlanDetailForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center-plan required-mark">
+                            <label>Section</label>
+                            <md-select data-ng-model="workPlanCtrl.form.section" name="section" required="" data-ng-change="workPlanCtrl.mScope.getAllottedSubjectbyStaff(workPlanCtrl.form.semester, workPlanCtrl.form.section)" >
+                                <md-option ng-repeat="section in workPlanCtrl.mScope.sectionList" ng-value="section.id">{{section.sectionName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="dailyPlanDetailForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="dailyPlanDetailForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center-plan required-mark">
+                            <label>Subject</label>
+                            <md-select data-ng-model="workPlanCtrl.form.subject" data-ng-change="workPlanCtrl.mScope.getSubjectElectiveBySubjectId(workPlanCtrl.form.subject);" name="subject" required>
+                                <md-option ng-repeat="subject in workPlanCtrl.mScope.subjectList" ng-value="subject.subject.id">{{subject.subject.subjectName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="dailyPlanDetailForm.subject.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="dailyPlanDetailForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Subject is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center-plan required-mark" data-ng-if="workPlanCtrl.mScope.isElective">
+                            <label>ElectiveSubject</label>
+                            <md-select name="electiveSubject" data-ng-model="workPlanCtrl.form.electiveSubject" required>
+                                <md-option ng-value="electiveSubject.id" data-ng-repeat="electiveSubject in workPlanCtrl.mScope.subjectElectives">{{electiveSubject.electiveSubjectName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="dailyPlanDetailForm.electiveSubject.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="dailyPlanDetailForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>ElectiveSubject is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <button type="submit" style="margin: 0 auto" data-ng-click="workPlanCtrl.getDailyPlanListByStaff(workPlanCtrl.form);" class="btn btn-danger">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+            <div class="allSides upgrade-gride align-height">
+                <div id="table-responsive" class="table-responsive content">
+                    <table id="dailyPlanDetailDataTable" class="display table" cellspacing="0"></table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

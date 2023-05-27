@@ -1,0 +1,31 @@
+<md-dialog-content class="card-header" ng-init="mScope.mForm.id?mScope.mForm.vehicleRouteStops?'':mScope.mForm.vehicleRouteStops=[]:mScope.mForm.vehicleRouteStops=[];mScope.mForm.status='ACTIVE'">
+    <div class="md-dialog-content modal-lg">
+    <div class="layout-sm-column layout-row">
+            <md-input-container class="align-center">
+                <label>Route Name</label> 
+                <input type="text" class="md-input" data-ng-model="mScope.mForm.name" name="routeName"
+                       data-ng-required="true" data-ng-minlength="1"/>
+                       <div data-ng-messages="modelForm.routeName.$error"
+                     data-ng-if="modelForm.routeName.$touched || modelForm.$submitted"
+                     class="has-error">
+                    <p data-ng-message="required" class="help-block">
+                        <small>Route Name is required !</small>
+                    </p>
+                    <p data-ng-message="minlength" class="help-block">
+                        <small>Route Name is too short.</small>
+                    </p>
+                </div>
+            </md-input-container>
+            <md-radio-group  data-ng-model="mScope.mForm.status" style="width: 100%; display: inline-block; position: relative; padding: 2px; margin: 18px 0px; vertical-align: middle;">
+            <label class="radio radio-inline">Status</label>
+                <label class="radio radio-inline">
+                    <md-radio-button value="ACTIVE">Active</md-radio-button>
+                </label>
+                <label class="radio radio-inline">
+                    <md-radio-button value="INACTIVE">Inactive</md-radio-button>
+                </label>
+            </md-radio-group>
+        </div>
+    </div>
+</md-dialog-content>
+

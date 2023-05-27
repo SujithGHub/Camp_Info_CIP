@@ -1,0 +1,20 @@
+<div class="sidebar-inner content">
+   <ul class="main-menu">
+      <li ng-repeat="mainMenu in systemCtrl.menuJson | orderBy:'id'" class="sub-menu toggled" data-ui-sref-active="active" 
+         data-ng-class="{'material-plus': mainMenu.subMenu.length}">
+         <a ng-if="!mainMenu.menuUrl.length" data-toggle-submenu data-ng-click="mainMenu.subMenu.length ? null : systemCtrl.toggleState()"><i class="zmdi {{mainMenu.menuIcon}}"></i>{{mainMenu.featureKey}}</a>
+        <a ng-if="mainMenu.menuUrl.length" ui-sref="{{mainMenu.menuUrl}}" data-toggle-submenu data-ng-click="mainMenu.subMenu.length ? null : systemCtrl.toggleState()"><i class="zmdi {{mainMenu.menuIcon}}"></i>{{mainMenu.featureKey}}</a>
+         <ul class="main-menu">
+            <li ng-repeat="sideMenu in mainMenu.subMenu" data-ui-sref-active="active" class="sub-menu" ng-class="{'material-plus': sideMenu.childMenu.length}">
+               <a data-ui-sref="{{sideMenu.menuUrl ? sideMenu.menuUrl : false}}" data-ng-if="systemCtrl.role=='ROLE_USER'" data-toggle-submenu data-ng-click="systemCtrl.toggleState()" data-ng-bind="sideMenu.featureKey == 'Schedule Assignment' ? 'View Assignment':sideMenu.featureKey=='Schedule Home Work'?'View Home Work':sideMenu.featureKey"></a>
+               <a data-ui-sref="{{sideMenu.menuUrl ? sideMenu.menuUrl : false}}" data-ng-if="systemCtrl.role!='ROLE_USER'" data-toggle-submenu data-ng-click="systemCtrl.toggleState()" data-ng-bind="sideMenu.featureKey"></a>
+                <ul style="display: block;">
+                   <li ng-repeat="subItem in sideMenu.childMenu" data-ui-sref-active="active">
+                      <a data-ui-sref="{{subItem.url}}" id="closeMenu" data-ng-bind="subItem.menu"></a>
+                   </li>
+                </ul>
+            </li>
+         </ul>
+      </li>
+   </ul>
+</div>

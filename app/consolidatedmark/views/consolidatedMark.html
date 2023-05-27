@@ -1,0 +1,248 @@
+<div class="card-header ch-al p-0-75">
+    <div class="row">
+        <div class="col-xl-11 col-sm-10 col-xs-9">
+            <h2>Student Consolidated Mark</h2>
+        </div>
+        <div class="col-xl-1 col-sm-2 col-xs-3">
+            <button class="btn btn-danger" data-ng-if="ConsolidatedMarkCtrl.consolidatedMarkList.length" data-ng-click="ConsolidatedMarkCtrl.exportStudentConsolidatedMark()">Export</button>
+        </div>
+    </div>
+</div>
+<div class="album-container" data-ng-init='ConsolidatedMarkCtrl.init()'>
+    <div class="row">
+        <div class="col-lg-2 col-md-3 col-sm-3 col-xs-4 pr-0">
+            <form class="form-horizontal pad-top" role="form" name="consolidatedForm" novalidate>
+                <div class="container-right-card content">
+                    <div style="padding: 10px;">
+                        <md-input-container class="align-center required-mark">
+                            <label>Academic</label>
+                            <md-select data-ng-model="ConsolidatedMarkCtrl.form.academicId" name="academic" required>
+                                <md-option data-ng-repeat="academic in ConsolidatedMarkCtrl.academic" data-ng-value="academic.id">{{academic.academicYear}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="consolidatedForm.academic.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="consolidatedForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Academic year is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <div ng-if="ConsolidatedMarkCtrl.role == 'ROLE_STAFF_HOD'">
+                        <md-input-container class="align-center required-mark" ng-if="ConsolidatedMarkCtrl.instituteType == 'College'">
+                            <label>Department</label>
+                            <md-select data-ng-model="ConsolidatedMarkCtrl.form.departmentId" disabled name="dept"
+                                       data-ng-required="ConsolidatedMarkCtrl.instituteType == 'College'" data-ng-change="ConsolidatedMarkCtrl.getClassByDepartmentId(ConsolidatedMarkCtrl.form.departmentId)">
+                                <md-option ng-repeat="department in ConsolidatedMarkCtrl.departmentList" ng-value="department.id">{{department.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="consolidatedForm.dept.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="consolidatedForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        </div>
+                        <md-input-container class="align-center required-mark" ng-show="ConsolidatedMarkCtrl.instituteType == 'College' && ConsolidatedMarkCtrl.role != 'ROLE_STAFF_HOD'">
+                            <label>Department</label>
+                            <md-select data-ng-model="ConsolidatedMarkCtrl.form.departmentId" name="dept" data-ng-required="ConsolidatedMarkCtrl.instituteType == 'College'" data-ng-change="ConsolidatedMarkCtrl.getClassByDepartmentId(ConsolidatedMarkCtrl.form.departmentId)">
+                                <md-option ng-repeat="department in ConsolidatedMarkCtrl.departmentList" ng-value="department.id">{{department.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="consolidatedForm.dept.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="consolidatedForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label data-ng-if="ConsolidatedMarkCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="ConsolidatedMarkCtrl.instituteType == 'School'">Standard</label>
+                            <md-select aria-label="classType" data-ng-model="ConsolidatedMarkCtrl.form.classYearId" data-ng-change="ConsolidatedMarkCtrl.getSection(ConsolidatedMarkCtrl.form.classYearId.id, ConsolidatedMarkCtrl.form.departmentId); ConsolidatedMarkCtrl.getSemesterByClassYear(ConsolidatedMarkCtrl.form.classYearId.id)" name="class" required="">
+                                <md-option ng-repeat="class in ConsolidatedMarkCtrl.classList" ng-value="class">{{class.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="consolidatedForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="consolidatedForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-show="ConsolidatedMarkCtrl.instituteType == 'School'">Standard
+                                    is required !</small> <small ng-show="ConsolidatedMarkCtrl.instituteType != 'School'">Year
+                                    is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark" ng-show="ConsolidatedMarkCtrl.instituteType == 'College'">
+                            <label>Semester</label>
+                            <md-select name="semester" data-ng-model="ConsolidatedMarkCtrl.form.semester" data-ng-required="ConsolidatedMarkCtrl.instituteType == 'College'" data-ng-change="ConsolidatedMarkCtrl.getSubjectListByClassIdAndSemester(ConsolidatedMarkCtrl.form.classYearId.id, ConsolidatedMarkCtrl.form.semester)">
+                                <md-option ng-value="semester" data-ng-repeat="semester in ConsolidatedMarkCtrl.semestersLists">{{::semester}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="consolidatedForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="consolidatedForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Section</label>
+                            <md-select data-ng-model="ConsolidatedMarkCtrl.form.sectionId" name="section" required="">
+                                <md-option ng-repeat="section in ConsolidatedMarkCtrl.sectionList" ng-value="section">{{section.sectionName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="consolidatedForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="consolidatedForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Subject</label>
+                            <md-select data-ng-model="ConsolidatedMarkCtrl.form.subject" name="subject" data-ng-change="ConsolidatedMarkCtrl.form.subject.isElective ? ConsolidatedMarkCtrl.getElectiveSubjectBySubjectId(ConsolidatedMarkCtrl.form.subject.id) : null">
+                                <md-option value="">All Subjects</md-option>
+                                <md-option ng-repeat="subject in ConsolidatedMarkCtrl.subjectList" ng-value="subject">{{subject.subjectName}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark" data-ng-if="ConsolidatedMarkCtrl.form.subject.isElective">
+                            <label>Elective Subject</label>
+                            <md-select data-ng-model="ConsolidatedMarkCtrl.form.electiveSubjectId" name="electiveSubject">
+                                <md-option ng-repeat="electiveSubject in ConsolidatedMarkCtrl.subjectElectiveList" ng-value="electiveSubject.id">{{electiveSubject.electiveSubjectName}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                        <button type="submit" style="margin: 0 auto" data-ng-click="consolidatedForm.$valid ? ConsolidatedMarkCtrl.getConsolidatedMark(ConsolidatedMarkCtrl.form) : null;ConsolidatedMarkCtrl.getCurrentDate();" class="btn btn-danger">SUBMIT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-lg-10 col-md-9 col-sm-9 col-xs-8 pl-2">
+        <div class="container-card" id="table">
+            <div class="consolidated-grid content">
+            <div class="no-records" data-ng-if="!ConsolidatedMarkCtrl.consolidatedMarkList.length">No records Found</div>
+                <div data-ng-hide="true">
+                    <div class="marksheet"><b>K.S.Rangasamy College of Arts and Science (Autonomous), Tiruchengode 637 215</b>
+                    </div>
+                    <div class="marksheet"><b>Consolidated Continuous Assessment Marks - {{ConsolidatedMarkCtrl.consolidatedYear.month}}, {{ConsolidatedMarkCtrl.consolidatedYear.year}}.</b>
+                    </div>
+                </div>
+                <br>
+                <table cellpadding="0" cellspacing="0" border="0" align="center">
+                    <thead>
+                        <div data-ng-hide="true">
+                            <div class="year">Year : {{ConsolidatedMarkCtrl.form.classYearId.name}} - {{ConsolidatedMarkCtrl.form.departmentId.name}} - {{ConsolidatedMarkCtrl.form.sectionId.sectionName}} </div>
+                        </div>
+                        <tr data-ng-if="ConsolidatedMarkCtrl.consolidatedMarkList.length">
+                            <th>S.No</th>
+                            <th>Reg No</th>
+                            <th>Student Name</th>
+                            <th data-ng-repeat="header in ConsolidatedMarkCtrl.consolidatedMarkList[0].examMarks" data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{header.name}}</th>
+                            <th data-ng-repeat="header in ConsolidatedMarkCtrl.consolidatedMarkList[0].subjectMarks" data-ng-if="!ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{header.subject}}</th>
+                            <th data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">Exam Avg</th>
+                            <th data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">Assignment Avg
+                            </th>
+                            <th data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">Attendance Avg
+                            </th>
+                            <th data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">Total</th>
+                            <th data-ng-hide="true">Student Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-ng-repeat="student in ConsolidatedMarkCtrl.consolidatedMarkList" ng-class="{'even': $index%2==0}">
+                            <td>{{$index+1}}</td>
+                            <td>{{student.student.rollNumber}}</td>
+                            <td style="text-align:left">{{student.student.firstName}} {{student.student.lastName}}</td>
+                            <td data-ng-repeat="result in ConsolidatedMarkCtrl.consolidatedMarkList[$index].examMarks" data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{result.mark}}</td>
+                            <td data-ng-repeat="result in ConsolidatedMarkCtrl.consolidatedMarkList[$index].subjectMarks" data-ng-if="!ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{result.total}}</td>
+                            <td data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{student.examConolidatedAvg}}</td>
+                            <td data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{student.assignmentConolidatedAvg}}</td>
+                            <td data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{student.attendanceConolidatedAvg}}</td>
+                            <td data-ng-if="ConsolidatedMarkCtrl.subjectWiseConsolidatedMark">{{student.total}}</td>
+                            <td data-ng-hide="true"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<style>
+    .marksheet {
+        text-align: center;
+        font-family: initial;
+        font-size: 20px;
+    }
+    .year {
+        font-size: 15px;
+        font-weight: bold;
+        font-family: serif;
+    }
+    .advisor {
+        margin-left: 3%;
+    }
+    .hod {
+        margin-left: 50%;
+        margin-top: -2%;
+    }
+    .principal {
+        margin-left: 90%;
+        margin-top: -2%;
+    }
+    .upgrade-rightalign {
+        width: 15%;
+        margin-left: 1%;
+        float: left;
+    }
+    .upgrade-gride {
+        width: 81%;
+        float: left;
+    }
+    .upgrade-table-responsive {
+        margin-bottom: 10px;
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+    .no-records {
+        height: 8%;
+        margin: 15%;
+        text-align: center;
+        font-size: 15px;
+        border: 1px solid rgba(0, 0, 0, 0.24);
+        background-color: rgba(224, 224, 224, 0.9);
+        color: rgba(0, 0, 0, 0.95);
+        border-radius: 5px;
+        padding-bottom: 0.5rem;
+        padding-top: 0.5rem;
+        line-height: 1;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16), 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+    h1 {
+        font-size: 30px;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 300;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    table {
+        width: 100%;
+        table-layout: fixed;
+    }
+    .tbl-header {
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+    th {
+        padding: 10px;
+        text-align: left;
+        font-weight: 500;
+        font-size: 12px;
+        text-transform: uppercase;
+        word-wrap: break-word;
+        line-height: 15px;
+        font-weight: 900;
+    }
+    td {
+        padding: 15px;
+        text-align: left;
+        vertical-align: middle;
+        font-weight: 300;
+        font-size: 12px;
+        color: black;
+    }
+    tr {
+        line-height: 10px;
+    }
+    tr.even {
+        background-color: #f4f4f4;
+    }
+</style>

@@ -1,0 +1,311 @@
+<div class="card-header ch-al p-sm-3 p-xs-3" data-ng-if="(resultCtrl.roles == 'ROLE_SUPER_ADMIN' && resultCtrl.studentsResult == '0') ||
+    (resultCtrl.roles == 'ROLE_ADMIN' && resultCtrl.studentsResult == '0') || 
+    (resultCtrl.roles == 'ROLE_STAFF' && resultCtrl.studentsResult == '0') ||
+    (resultCtrl.roles == 'ROLE_STAFF_HOD' && resultCtrl.studentsResult == '0')">
+    <h2>Result Search</h2>
+</div>
+<div class="card-body content" data-ng-init="resultCtrl.init();"
+     data-ng-if="(resultCtrl.roles == 'ROLE_SUPER_ADMIN' && resultCtrl.studentsResult == '0') || (resultCtrl.roles == 'ROLE_ADMIN' && resultCtrl.studentsResult == '0') || (resultCtrl.roles == 'ROLE_STAFF' && resultCtrl.studentsResult == '0') || (resultCtrl.roles == 'ROLE_STAFF_HOD' && resultCtrl.studentsResult == '0')"
+     style="height:calc(90vh - 40px); overflow-y: auto">
+    <form name="viewResultForm" class="form-horizontal pad-top" role="form" novalidate id="viewResultBySubject">
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>View Result By</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select data-ng-model="resultCtrl.form.searchType" name="name" required="true"
+                                   data-ng-change="resultCtrl.changeHeight()">
+                            <md-option value="Subject">Subject</md-option>
+                            <md-option value="rollNo">Roll No</md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.name.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>This field is required !</small>
+                            </div>
+                        </div>
+                </div>
+                </md-input-container>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Academic Year</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="academic" data-ng-required="form.searchType =='Subject'"
+                                   data-ng-model="resultCtrl.form.academic.id">
+                            <md-option class="select-options" data-ng-repeat="acad in resultCtrl.mScope.academicList"
+                                       data-ng-value="acad.id">{{acad.academicYear}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.academic.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Academic year is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType == 'College'"
+             data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Department</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="department" data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-model="resultCtrl.form.department"
+                                   data-ng-change="resultCtrl.mScope.getClassByDepartmentId(resultCtrl.form.department.id);">
+                            <md-option data-ng-repeat="dept in resultCtrl.mScope.departmentList" data-ng-value="dept">
+                                {{dept.name}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.department.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Department is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType == 'College'"
+             data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Year</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="class" data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-model="resultCtrl.form.classYear"
+                                   data-ng-change="resultCtrl.mScope.getSectionByClassId(resultCtrl.form.classYear.id, true); resultCtrl.mScope.getSemesterByClassYear(resultCtrl.form.classYear.id); ">
+                            <md-option data-ng-repeat="class in resultCtrl.mScope.yearAndStandardList"
+                                       data-ng-value="class">{{class.name}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.class.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small> Year is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType == 'School'"
+             data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Standard</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="class" data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-change="resultCtrl.mScope.getSectionByClassId(resultCtrl.form.classYear.id);"
+                                   data-ng-model="resultCtrl.form.classYear">
+                            <md-content class="content"
+                                        style="padding-top:0px!important;padding-bottom:0px!important;overflow-y:auto!important">
+                                <md-option data-ng-repeat="class in resultCtrl.mScope.yearAndStandardList"
+                                           data-ng-value="class">
+                                    {{class.name}}
+                                </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.class.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small> Standard is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType=='College'"
+             data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Semester</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="semester" data-ng-model="resultCtrl.form.semester"
+                                   data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-change="resultCtrl.mScope.getSectionByClassId(resultCtrl.form.classYear.id);"
+                                   required>
+                            <md-option ng-value="semester"
+                                       data-ng-repeat="semester in resultCtrl.mScope.semestersLists">{{::semester}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.semester.$error" data-ng-if="viewResultForm.$submitted"
+                             class="has-error">
+                            <div data-ng-message="required" class="help-block">
+                                <small>Semester is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Section</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="section" data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-model="resultCtrl.form.section"
+                                   data-ng-change="resultCtrl.mScope.instituteType=='College' ? resultCtrl.mScope.getExamByClassAndAcademicId(resultCtrl.form.classYear.id, resultCtrl.form.academic.id, resultCtrl.form.section.id,resultCtrl.form.semester) : resultCtrl.mScope.getExamByClassAndAcademicId(resultCtrl.form.classYear.id, resultCtrl.form.academic.id,resultCtrl.form.section.id)">
+                            <md-option data-ng-repeat="sect in resultCtrl.mScope.sectionList" data-ng-value="sect">
+                                {{sect.sectionName}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.section.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Section is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Examination</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select name="examination" data-ng-model="resultCtrl.form.examination"
+                                   data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-change="resultCtrl.mScope.getSubjectByExamId(resultCtrl.form.examination.id)">
+                            <md-option data-ng-repeat="exam in resultCtrl.mScope.examinationList" data-ng-value="exam">
+                                {{exam.examName}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.examination.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Examination is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-show="resultCtrl.form.searchType =='Subject'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Subject</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-model="resultCtrl.form.subject" name="subject"
+                                   data-ng-change="resultCtrl.mScope.getElectiveSubjectBySubjectId(resultCtrl.form.subject.id, resultCtrl.form.examination.id, 'NonModelForm')">
+                            <md-option data-ng-repeat="subject in resultCtrl.mScope.subjectsList"
+                                       data-ng-value="subject.subject">
+                                {{subject.subject.subjectName}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.subject.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Subject is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0"
+             data-ng-if="resultCtrl.form.searchType =='Subject' && resultCtrl.mScope.subjectElectiveList.length">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Elective Subject</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container class="align-center">
+                        <md-select data-ng-required="resultCtrl.form.searchType =='Subject'"
+                                   data-ng-model="resultCtrl.form.subjectElective" name="electiveSubject">
+                            <md-option data-ng-repeat="subjectElective in resultCtrl.mScope.subjectElectiveList"
+                                       data-ng-value="subjectElective.subjectElective">
+                                {{subjectElective.subjectElective.electiveSubjectName}}
+                            </md-option>
+                        </md-select>
+                        <div data-ng-messages="viewResultForm.electiveSubject.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Elective Subject is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" data-ng-if="resultCtrl.form.searchType =='rollNo'">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5 control-label required-mark">
+                    <label>Roll Number</label></div>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container flex>
+                        <input class="md-input" data-ng-model="resultCtrl.form.rollNo" name="rollNo"
+                               data-ng-minlength="3" data-ng-maxlength="40"
+                               data-ng-required="resultCtrl.form.searchType =='rollNo'">
+                        <div data-ng-messages="viewResultForm.rollNo.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="viewResultForm.$submitted" class="help-block">
+                                <small>Roll Number is required !</small>
+                            </div>
+                            <div data-ng-message="minlength" class="help-block">
+                                <small>Roll Number is too short.</small>
+                            </div>
+                            <div data-ng-message="maxlength" class="help-block">
+                                <small>Roll Number is too long.</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group mb-0" style="margin-top: 0px">
+            <div class="row">
+                <div class="col-sm-3 col-xs-5"></div>
+                <div class="col-sm-6 col-xs-6">
+                    <button type="submit" class="btn btn-danger"
+                            data-ng-click="viewResultForm.$valid ? ( resultCtrl.form.searchType =='Subject' ? resultCtrl.setResult(resultCtrl.form) : resultCtrl.checkCondition(resultCtrl.form, 1) ) : null">
+                        SHOW
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div data-ng-init="resultCtrl.studentsResult == '0' ? resultCtrl.getExaminationByStudent() : resultCtrl.getExamByRollNo() "
+     data-ng-if="resultCtrl.roles == 'ROLE_USER' || (resultCtrl.roles == 'ROLE_SUPER_ADMIN' && resultCtrl.studentsResult == '1') || (resultCtrl.roles == 'ROLE_ADMIN' && resultCtrl.studentsResult == '1') || (resultCtrl.roles == 'ROLE_STAFF' && resultCtrl.studentsResult == '1')
+    || (resultCtrl.roles == 'ROLE_STAFF_HOD' && resultCtrl.studentsResult == '1')">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6 col-sm-6">
+                <h2>Result
+                    <small class="hidden-xs">
+                        <div class="grid-ellipsis ">Results of students performance in the Examinations</div>
+                    </small>
+                </h2>
+            </div>
+            <div class="col-md-5 col-sm-4">
+                <md-input-container class="md-dark-teal-theme">
+                    <input type="text" class="md-input" id="search" placeholder="Search here"
+                           data-ng-change="resultCtrl.getExamByRollNo()" data-ng-model="search" autocomplete="off">
+                </md-input-container>
+            </div>
+            <div class="col-md-1 col-sm-2 my-3">
+                <button class="btn bgm-teal btn-xs" data-ng-if="reportStatus == 0" data-tooltip-placement="bottom"
+                        data-tooltip="Back" data-ng-click="resultCtrl.checkCondition({rollNo:resultCtrl.form}, 0)">Back
+                </button>
+                <button class="btn bgm-teal btn-xs" data-ng-if="reportStatus == 1" data-ui-sref="report"
+                        data-tooltip-placement="bottom" data-tooltip="Back">Report
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="table-responsive" class="table-responsive content" style="height: 453px; overflow-y: auto !important;">
+        <table id="examDataTable" class="display table" cellspacing="0" width="100%">
+        </table>
+    </div>
+</div>
+<div data-ng-init="resultCtrl.studentsResultValue(0)"></div>

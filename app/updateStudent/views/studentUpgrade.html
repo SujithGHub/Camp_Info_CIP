@@ -1,0 +1,326 @@
+<div class="card-header ch-al pb-1-25 pt-1-25 ">
+    <div class="row">
+        <h2 data-ng-if="studentUpgradeCtrl.instituteType == 'College'">Students Semester Upgrade</h2>
+        <h2 data-ng-if="studentUpgradeCtrl.instituteType == 'School'">Students Annual Upgrade</h2>
+    </div>
+</div>
+<div class="card-body" data-ng-init='studentUpgradeCtrl.init()'>
+    <div class="row">
+        <div class="upgrade-rightalign">
+            <form class="form-horizontal pad-top" role="form" name="fromForm" novalidate>
+                <div class="card allSides content">
+                    <div style="padding: 10px;">
+                        <h4 class="card-title" style="margin-top: 0px; padding-top: 10px; font-family: roboto !important; text-align: center; font-weight: 400;">
+		                     Students From
+		                  </h4>
+		                  <md-input-container class="align-center required-mark">
+                            <label>Academic</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.form.academicId" name="academic" data-ng-required="true">
+                                <md-option ng-repeat="academic in studentUpgradeCtrl.academicList" ng-value="academic.id">{{academic.academicYear}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="fromForm.academic.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Academic is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark" ng-if="studentUpgradeCtrl.instituteType == 'College'">
+                            <label>Department</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.form.departmentId" name="department" data-ng-required="studentUpgradeCtrl.instituteType == 'College'" data-ng-change="studentUpgradeCtrl.getClassYearByDeptId(studentUpgradeCtrl.form.departmentId, 'moveFrom')">
+                                <md-option ng-repeat="department in studentUpgradeCtrl.departments" ng-value="department.id">{{department.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="fromForm.department.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label data-ng-if="studentUpgradeCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="studentUpgradeCtrl.instituteType == 'School'">Standard</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.form.classYearId" data-ng-change="studentUpgradeCtrl.getSectionByClassYearId(studentUpgradeCtrl.form.classYearId, 'moveFrom');studentUpgradeCtrl.instituteType != 'School'? studentUpgradeCtrl.getSemesterByClassYear(studentUpgradeCtrl.form.classYearId, 'moveFrom'):null;" name="class" required="">
+                                <md-option ng-repeat="classYear in studentUpgradeCtrl.moveFromClassYear" ng-value="classYear.id">{{classYear.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="fromForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-show="studentUpgradeCtrl.instituteType == 'School'">Standard is required !</small>
+                                    <small ng-show="studentUpgradeCtrl.instituteType != 'School'">Year is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark" ng-show="studentUpgradeCtrl.instituteType == 'College'">
+                            <label>Semester</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.form.semester" name="semester" data-ng-required="studentUpgradeCtrl.instituteType == 'College'">
+                                <md-option ng-repeat="semester in studentUpgradeCtrl.moveFromsemesterList" data-ng-value="semester">{{semester}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="fromForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Section</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.form.sectionId" name="section" required="">
+                                <md-option ng-repeat="section in studentUpgradeCtrl.moveFromSectionList" ng-value="section.id">{{section.sectionName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="fromForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <button type="submit" style="margin: 0 auto" data-ng-click="fromForm.$valid ? studentUpgradeCtrl.getStudentList() : null;" class="btn btn-danger">
+                            SUBMIT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="upgrade-rightalign">
+            <form class="form-horizontal pad-top" role="form" name="toForm" novalidate>
+                <div class="card allSides content">
+                    <div style="padding: 10px;">
+                        <h4 class="card-title" style="margin-top: 0px; padding-top: 10px; font-family: roboto !important; text-align: center; font-weight: 400;">
+		                     Students To
+		                  </h4>
+                        <md-input-container class="align-center required-mark">
+                            <label>Academic</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.toAcademic.academic.id" name="academic" data-ng-required="true">
+                                <md-option ng-repeat="academic in studentUpgradeCtrl.academicList" ng-value="academic.id">{{academic.academicYear}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="toForm.academic.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="toForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Academic is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark" ng-show="studentUpgradeCtrl.instituteType == 'College'">
+                            <label>Department</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.toAcademic.department.id" name="department" data-ng-required="studentUpgradeCtrl.instituteType == 'College'" data-ng-change="studentUpgradeCtrl.getClassYearByDeptId(studentUpgradeCtrl.toAcademic.department.id)">
+                                <md-option ng-repeat="department in studentUpgradeCtrl.departments" ng-value="department.id">{{department.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="toForm.department.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="toForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label data-ng-if="studentUpgradeCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="studentUpgradeCtrl.instituteType == 'School'">Standard</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.toAcademic.classYear.id" data-ng-change="studentUpgradeCtrl.getSectionByClassYearId(studentUpgradeCtrl.toAcademic.classYear.id);studentUpgradeCtrl.instituteType != 'School'? studentUpgradeCtrl.getSemesterByClassYear(studentUpgradeCtrl.toAcademic.classYear.id):null;" name="class" required="">
+                                <md-option data-ng-repeat="classYear in studentUpgradeCtrl.moveToClassYear" data-ng-value="classYear.id">{{classYear.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="toForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="toForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-if="studentUpgradeCtrl.instituteType == 'School'">Standard is required !</small>
+                                    <small ng-if="studentUpgradeCtrl.instituteType != 'School'">Year is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                         <md-input-container class="align-center required-mark" data-ng-show="studentUpgradeCtrl.instituteType == 'College'">
+                            <label>Semester</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.toAcademic.semester" name="semester"
+                            	data-ng-required="studentUpgradeCtrl.instituteType == 'College'">
+                                <md-option ng-repeat="semester in studentUpgradeCtrl.moveTosemesterList" ng-value="semester">{{semester}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="toForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="toForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Section</label>
+                            <md-select data-ng-model="studentUpgradeCtrl.toAcademic.section.id" name="section" required="">
+                                <md-option ng-repeat="section in studentUpgradeCtrl.moveToSectionList" ng-value="section.id">{{section.sectionName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="toForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="toForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <button data-ng-disabled="!studentUpgradeCtrl.count > 0 || studentUpgradeCtrl.isCheckPassout" type="submit" style="margin: 0 auto" data-ng-click="toForm.$valid ? studentUpgradeCtrl.updateStudentDetails(studentUpgradeCtrl.toAcademic) : null;" class="btn btn-danger">
+                            Update</button>
+                       <md-input-container class="align-center">
+                       <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="studentUpgradeCtrl.isCheckPassout" class="md-primary" data-ng-disabled="!studentUpgradeCtrl.count > 0">click</md-checkbox><br><br>
+            		<button data-ng-disabled="!studentUpgradeCtrl.count > 0 || !studentUpgradeCtrl.isCheckPassout" type="button" data-ng-click="studentUpgradeCtrl.updatePassoutStudentDetails()" style="margin: 0 auto" class="btn btn-danger">
+                       Pass Out</button>
+                       </md-input-container>
+                    </div>
+                </div>
+            </form>
+        </div>
+            <div class="allSides upgrade-gride">
+               <div class="upgrade-table-responsive content" id="table" style="height: 62vh !important;">
+                   <table class="table table-bordered ng-scope" style="table-layout:fixed;">
+                       <thead>
+                           <tr>
+                               <th style="width:60px;margin-left: 15px;">
+                                   <md-checkbox md-no-ink aria-label="Checkbox No Ink" ng-model="studentUpgradeCtrl.isCheckAll" class="md-primary" data-ng-click="studentUpgradeCtrl.checkAll('checkAll')" data-ng-disabled="!studentUpgradeCtrl.studentList.length"></md-checkbox>
+                               </th>
+	                            <th style="width:50px">S.No</th>
+	                            <th style="width:120px">Roll Number</th>
+	                            <th style="width:180px;text-align: center;">Student Name</th>
+	                            <th style="width:100px">Academic Year</th>
+                           </tr>
+                       </thead>
+                       <tbody>
+                           <tr class="tableRow" style="border-bottom:1px solid #f0f0f0;" data-ng-repeat="student in studentUpgradeCtrl.studentList">
+                               <td>
+                                   <md-checkbox md-no-ink aria-label="Checkbox No Ink" data-ng-model="studentUpgradeCtrl.studentList[$index].isUpdate" data-ng-change="studentUpgradeCtrl.checkAll()" class="md-primary"></md-checkbox>
+                               </td>
+                               <td style="text-align:center;padding-left:13px!important">{{$index+1}}</td>
+                               <td style="padding-left:13px!important">{{student.rollNumber}}</td>
+                               <td style="word-break: break-word;padding-left:13px!important;">{{student.firstName}} {{student.lastName}}</td>
+                               <td style="padding-left:13px!important">{{student.academic.academicYear}}</td>
+                           </tr>
+                            <tr class="tableRow" data-ng-if="!studentUpgradeCtrl.studentList.length">
+                            	<td colspan="5"><p class="no-records">No data found</p></td>
+                           </tr>
+                       </tbody>
+                   </table>
+               </div>
+        </div>
+    </div> 
+</div>
+
+<style>
+ 
+  .upgrade-rightalign {
+      width: 20%;
+      margin-left: 1%;
+      float: left;
+  }
+  
+  .upgrade-gride {
+  	  width: 57%;
+      margin-left: 1%;
+      float: left;
+  }
+  
+  .upgrade-table-responsive{
+  	margin-top: 10px;
+  	margin-bottom: 10px;
+  	margin-right: 10px;
+  	margin-left: 6px;
+  }
+  
+	.no-records{
+		color: red;
+    	font-size: 14px;
+    	height: 27px;
+    	line-height: 24px;
+    	min-width: 95%;
+    	padding: 2px 0px;
+    	text-align: center;
+    	width: 50%; 
+    	}
+    	
+    md-checkbox .md-icon {
+        width: 16px;
+        height: 16px;
+    }
+    md-checkbox {
+        margin-bottom: 0px;
+    }
+    md-checkbox.md-checked .md-icon:after {
+        left: 5.66667px;
+        top: 1.22222px;
+        width: 5.66667px;
+        height: 12.33333px;
+    }
+    md-checkbox .md-container {
+        width: 17px;
+        height: 17px;
+    }
+    td {
+        text-overflow: inherit;
+    }
+    .table-responsive {
+        border: 0;
+    }
+    .table-responsive {
+        border: 0;
+    }
+    .table {
+        table-layout: fixed;
+    }
+    .table-bordered {
+        border-bottom: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+    .table-bordered {
+        border: 1px solid #f0f0f0;
+    }
+    .table {
+        width: 100%;
+        max-width: 100%;
+        font-size:smaller;
+    }
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    .table>thead>tr>th {
+        background-color: #fff;
+        vertical-align: middle;
+        font-weight: 500;
+        color: #333;
+        border-width: 1px;
+        text-transform: uppercase;
+    }
+    .table-bordered>thead>tr>th {
+        border: 1px solid #f0f0f0;
+    }
+    .table>thead>tr>th {
+        padding: 13px;
+        line-height: 1.42857143;
+    }
+    .table>tbody>tr>td {
+        padding: 12px;
+    }
+    .table-bordered>tbody>tr>td {
+        border: 1px solid #f0f0f0;
+    }
+    .table>tbody>tr>td {
+        line-height: 1.42857143;
+        vertical-align: top;
+    }
+    .table>tbody>tr>td {
+        line-height: 1.42857143;
+    }
+    .checkbox input[type="checkbox"],
+    .checkbox-inline input[type="checkbox"] {
+        position: absolute;
+    }
+    .checkbox input,
+    .radio input {
+        top: 0;
+        left: 0;
+        margin-left: 0 !important;
+        z-index: 1;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity 0);
+        margin-top: 0;
+    }
+    b,
+    strong {
+        font-weight: 700;
+    }
+    .has-error .checkbox{
+        color: #f44336
+    }
+    .has-success .checkbox{
+        color: #4caf50;
+    }
+    .has-warning .checkbox{
+        color: #ff9800;
+    }
+    th {
+        text-align: left;
+    }
+</style>

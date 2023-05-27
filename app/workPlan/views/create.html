@@ -1,0 +1,158 @@
+<md-dialog-content class="card-header"
+	data-ng-init="mScope.mForm.workPlanDetail.length? '':mScope.mForm.workPlanDetail=[{}];">
+<div class="md-dialog-content">
+	<div class="layout-sm-column layout-row">
+		<md-input-container class="flex required-mark"> <label>Academic
+			Year</label> <md-select data-ng-model="mScope.mForm.academic.id"
+			name="academicYear" required> <md-option ng-value="academic.id"
+			data-ng-repeat="academic in mScope.academicList">{{::academic.academicYear}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.academicYear.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Academic year is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="flex required-mark"> <label>Department
+			Name</label> <md-select ng-model="mScope.mForm.department.id"
+			name="department" required
+			ng-init="(mScope.mForm.department.id == null)? '' : mScope.getClassByDepartmentId(mScope.mForm.department.id)"
+			data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+		<md-option ng-value="department.id"
+			data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.department.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Department name is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+	<div class="layout-sm-column layout-row required-mark">
+		<md-input-container class="flex"> <label>Year</label>
+		<md-select aria-label="classYear"
+			data-ng-model="mScope.mForm.classYear.id" name="class" required
+			data-ng-change="mScope.getsectionByClassYearIdIsRestrict(mScope.mForm.classYear.id);mScope.getSemesterByClassYear(mScope.mForm.classYear.id);  ">
+
+		<md-option ng-value="standard.id"
+			data-ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.class.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small data-ng-if="mScope.instituteType =='College'">Year is
+					required !</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="flex required-mark"> <label>Semester</label>
+		<md-select name="semester" data-ng-model="mScope.mForm.semester"
+			required
+			>
+		<md-option ng-value="semester"
+			data-ng-repeat="semester in mScope.semestersLists">{{::semester}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.semester.$error" class="has-error">
+			<div data-ng-message="required" data-ng-if="modelForm.$submitted"
+				class="help-block">
+				<small>Semester is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+
+	<div class="layout-sm-column layout-row">
+		<md-input-container class="flex required-mark"> <label>Section
+			Name </label> <md-select name="section"
+			data-ng-model="mScope.mForm.section.id" required="true"
+			data-ng-change="mScope.getAllottedSubjectbyStaff(mScope.mForm.semester, mScope.mForm.section.id)">
+		<md-option ng-value="section.id"
+			data-ng-repeat="section in mScope.sectionList">{{::section.sectionName}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.section.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Section name is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="flex required-mark"> <label>Subject</label>
+		<md-select data-ng-model="mScope.mForm.subject.id" name="subject"
+			required
+			data-ng-change="mScope.getSubjectElectiveBySubjectId(mScope.mForm.subject.id);">
+		<md-option ng-value="subject.subject.id"
+			data-ng-repeat="subject in mScope.subjectList">{{::subject.subject.subjectName}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.subject.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Subject is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+	<div class="layout-sm-column layout-row">
+	<div class="alignment">
+		<md-input-container class="required-mark" data-ng-if="mScope.isElective"> <label>Elective
+			Subject</label> <md-select name="electiveSubject"
+			data-ng-model="mScope.mForm.subjectElective.id"> <md-option
+			ng-value="electiveSubject.id"
+			data-ng-repeat="electiveSubject in mScope.subjectElectives">{{::electiveSubject.electiveSubjectName}}</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.electiveSubject.$error"
+			class="has-error">
+			<div data-ng-message="required" data-ng-if="modelForm.$submitted"
+				class="help-block">
+				<small>Elective Subject is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+	</div>
+	<div class="layout-sm-column layout-row">
+		<label style="font-weight: 500;margin: 2px;">Plan details</label>
+	</div>
+	<div >
+	<div class="layout-sm-column layout-row" style="margin: 3px;display: inline-block;"
+		data-ng-repeat="workPlan in mScope.mForm.workPlanDetail">
+	
+		<div class="col-sm-4" style="padding-left: 0px; margin-top: -10px;">
+		<md-input-container class="mt-2rem required-mark"> <label>Date</label>
+		<input type="text"  datepicker data-ng-disabled="mScope.mForm.id"
+			data-ng-model="mScope.mForm.workPlanDetail[$index].expectedDate" name="dob" 
+			required>
+		<div data-ng-messages="modelForm.dob.$error"
+			data-ng-if="modelForm.$submitted && !mScope.mForm.workPlanDetail[$index].expectedDate" 
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Date is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+		</div>
+		<div class="col-sm-5 zero-padding">
+			<textarea rows="3" cols="40" maxlength="255"
+				data-ng-model="mScope.mForm.workPlanDetail[$index].planNotes"> </textarea>
+		</div>
+		<md-input-container class="plusminus">
+		<div class="col-sm-1">
+			<button class="btn bgm-teal btn-xs"
+				data-ng-click="mScope.mForm.id ? mScope.mForm.workPlanDetail.push({expectedDate : mScope.mForm.workPlanDetail[0].expectedDate}) : mScope.mForm.workPlanDetail.push({})">
+				<i class="zmdi zmdi-plus"></i>
+			</button>
+		</div>
+		
+		<div class="col-sm-1">
+			<button class="btn btn-primary btn-xs btn btn-delete"
+				data-ng-click="mScope.removeWorkPlanDetail($index);">
+				<i class="zmdi zmdi-minus"></i>
+			</button>
+		</div>
+		
+		</md-input-container>
+	</div>
+</div>
+</div>
+</md-dialog-content>

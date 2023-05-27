@@ -1,0 +1,179 @@
+/*
+ * Table styles
+ */
+table.dataTable {
+  width: 100%;
+  margin: 0 auto;
+  clear: both;
+  border-collapse: separate;
+  border-spacing: 0;
+  /*
+   * Header and footer styles
+   */
+  /*
+   * Body styles
+   */
+}
+table.dataTable, .paginate_button, .current, .radio-inline{
+  font-size : smaller!important;
+}
+.dataTables_wrapper {
+    position: relative;
+    clear: both;
+    zoom: 1;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate, table.dataTable thead th {
+    color: #333;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_info {
+    float: left;
+    padding-left: 20px;
+    font-size: 14px;
+}
+table.dataTable, table.dataTable th, table.dataTable td {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+table.dataTable thead .sorting_asc {
+   background-image: url("../images/sort_asc.png");
+}
+table.dataTable thead .sorting {
+  background-image: url("../images/sort_both.png");
+}
+table.dataTable thead .sorting_desc {
+  background-image: url("../images/sort_desc.png");
+}
+table.dataTable thead .sorting_asc_disabled {
+  background-image: url("../images/sort_asc_disabled.png");
+}
+table.dataTable thead .sorting_desc_disabled {
+  background-image: url("../images/sort_desc_disabled.png");
+}
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc, table.dataTable thead .sorting_asc_disabled, table.dataTable thead .sorting_desc_disabled {
+    background-repeat: no-repeat;
+    background-position: center right;
+}
+table.dataTable thead .sorting, table.dataTable thead .sorting_asc, table.dataTable thead .sorting_desc {
+    cursor: pointer;
+}
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 16px!important;
+}
+table.dataTable thead th {
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: left;
+}
+table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+    background-color: #f4f4f4;
+}
+table.dataTable tbody tr {
+    background-color: #ffffff;
+}
+table.dataTable.row-border tbody tr:first-child th, table.dataTable.row-border tbody tr:first-child td, table.dataTable.display tbody tr:first-child th, table.dataTable.display tbody tr:first-child td {
+    border-top: none;
+}
+table.dataTable tbody th, table.dataTable tbody td {
+    padding: 10px 16px;
+}
+.dataTables_wrapper .dataTables_info {
+    clear: both;
+    padding-top: 1em;
+}
+.dataTables_wrapper .dataTables_paginate {
+    float: center;
+    text-align: center;
+    padding-top: 0.25em;
+    padding-right: 11em;
+    margin-bottom: 0.25rem
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    cursor: default;
+    color: #666 !important;
+    border-color: #fff;
+    background-color: #e2e2e2;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: #fff !important;
+    border: 1px solid #fff;
+    border-color: #00bcd4;
+    background-color: white;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fff), color-stop(100%, #dcdcdc));
+    background: -webkit-linear-gradient(top, #00bcd4 0%, #00bcd4 100%);
+    background: -moz-linear-gradient(top, #00bcd4 0%, #00bcd4 100%);
+    background: -ms-linear-gradient(top, #00bcd4 0%, #00bcd4 100%);
+    background: -o-linear-gradient(top, #00bcd4 0%, #00bcd4 100%);
+    background: linear-gradient(to bottom, #00bcd4 0%, #00bcd4 100%);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	width: 33px;
+	outline: none;
+    height: 33px;
+	background-color: #e2e2e2;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.5em;
+    padding: 0.5em;
+    margin-left: 2px;
+    text-decoration: none !important;
+    cursor: pointer;
+    color: #333 !important;
+    border-radius: 50%;
+}
+.dataTables_wrapper:after {
+    visibility: hidden;
+    display: block;
+    content: "";
+    clear: both;
+    height: 0;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+  outline: none;
+  background-color: #ECF9FF;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ECF9FF), color-stop(100%, #ECF9FF));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #ECF9FF 0%, #ECF9FF 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -moz-linear-gradient(top, #ECF9FF 0%, #ECF9FF 100%);
+  /* FF3.6+ */
+  background: -ms-linear-gradient(top, #ECF9FF 0%, #ECF9FF 100%);
+ /*  IE10+ */
+  background: -o-linear-gradient(top, #ECF9FF 0%, #ECF9FF 100%);
+  /* Opera 11.10+ */
+  background: linear-gradient(to bottom, #ECF9FF 0%, #ECF9FF 100%);
+  box-shadow: inset 0 0 3px #111;
+}
+@media screen and (max-width: 767px) {
+  .dataTables_wrapper .dataTables_info,
+  .dataTables_wrapper .dataTables_paginate {
+    float: none;
+    text-align: center;
+  }
+  .dataTables_wrapper .dataTables_paginate {
+    margin-top: 0.5em;
+  }
+}
+@media screen and (max-width: 640px) {
+  .dataTables_wrapper .dataTables_length,
+  .dataTables_wrapper .dataTables_filter {
+    float: none;
+    text-align: center;
+  }
+  .dataTables_wrapper .dataTables_filter {
+    margin-top: 0.5em;
+  }
+}
+table.dataTable > thead > tr, table.dataTable > tbody > tr {
+  height: 40px!important;
+}
+.dataTables_scrollHead {
+	display : none!important;
+}
+.dataTables_sizing {
+	height: initial!important;
+}
+.dataTables_scrollBody {
+	overflow:hidden!important;
+}

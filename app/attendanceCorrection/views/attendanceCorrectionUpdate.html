@@ -1,0 +1,40 @@
+<md-dialog-content>
+<div style="padding-left: 180px;padding-top: 10px;padding-bottom: 10px;">
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>REG NO</label></div>:
+		<div class=" column-contain label-value-align">{{::mScope.mForm.student.rollNumber}}</div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>STUDENT NAME</label></div>:
+		<div class=" column-contain label-value-align">{{::mScope.mForm.student.firstName}}</div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>YEAR</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.student.classYear.name"></div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>SEMESTER</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.student.semester"></div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>ATTENDANCE DATE</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.attendanceDate"></div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>ATTENDANCE HOUR</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.hour"></div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>REQUEST FROM</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.from.firstName"></div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align "><label>REASON</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.reason"></div>
+	</div>
+	<div class="content-flex">
+		<div class="column-lable label-align"><label>STATUS</label></div>:
+		<div class=" column-contain label-value-align" data-ng-bind="mScope.mForm.status"></div>
+	</div>
+</div>
+</md-dialog-content>

@@ -1,0 +1,256 @@
+<md-dialog-content class="card-header"
+	data-ng-init="mScope.mForm.id? '':mScope.mForm.emailAccess=true;">
+<div class="md-dialog-content">
+	<div class="layout-sm-column layout-row">
+		<md-input-container class="flex required-mark"> <label>Institute
+			Name</label> <input type="text" name="instituteName" class="md-input"
+			data-ng-model="mScope.mForm.instituteName" required
+			data-ng-minlength="4" data-ng-maxlength="60">
+		<div data-ng-messages="modelForm.instituteName.$error"
+			data-ng-if="modelForm.instituteName.$touched || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+			<div data-ng-message="minlength" class="help-block">
+				<small>This field is too short.</small>
+			</div>
+			<div data-ng-message="maxlength" class="help-block">
+				<small>This field is too long.</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="flex required-mark"> <label>Prefix</label>
+		<input type="text" name="prefix" class="md-input"
+			data-ng-model="mScope.mForm.prefix" style="text-transform: uppercase"
+			required data-ng-minlength="3" data-ng-maxlength="10"
+			data-ng-disabled="mScope.mForm.id">
+		<div data-ng-messages="modelForm.prefix.$error"
+			data-ng-if="modelForm.prefix.$touched || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required"
+				data-ng-if="modelForm.prefix.$touched || modelForm.$submitted"
+				class="help-block">
+				<small>This field is required !</small>
+			</div>
+			<div data-ng-message="minlength" class="help-block">
+				<small>This field is too short.</small>
+			</div>
+			<div data-ng-message="maxlength" class="help-block">
+				<small>This field is too long.</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+	<div data-layout-sm="column" class="layout-sm-column layout-row">
+		<md-input-container class="align-center required-mark" style="width: 50%;!important">
+		<label>Institute Type</label> <md-select
+			data-ng-model="mScope.mForm.instituteType" name="instituteType"
+			required> <md-option value="School">School</md-option> <md-option
+			value="College">College</md-option> </md-select>
+		<div data-ng-messages="modelForm.instituteType.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="flex required-mark" style="width: 50%;!important">
+		<label>Phone Number</label> <input type="text" class="md-input"
+			name="phoneNumber" data-ng-model="mScope.mForm.phoneNumber"
+			data-ng-pattern="/^\+?\d{10}/" required data-ng-maxlength="15">
+		<div data-ng-messages="modelForm.phoneNumber.$error"
+			data-ng-if="modelForm.phoneNumber.$touched || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+			<div data-ng-message="pattern" class="help-block">
+				<small>Not valid Number!</small>
+			</div>
+			<div data-ng-message="maxlength" class="help-block">
+				<small>This field is too long</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+	<md-input-container class="required-mark" flex style="margin: 0px auto!important">
+	<label>Address</label> <input class="md-input"
+		data-ng-model="mScope.mForm.address" name="address" required
+		data-ng-minlength="4" data-ng-maxlength="150">
+	<div data-ng-messages="modelForm.address.$error"
+		data-ng-if="modelForm.address.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small>This field is required !</small>
+		</div>
+		<div data-ng-message="minlength" class="help-block">
+			<small>This field is too short.</small>
+		</div>
+		<div data-ng-message="maxlength" class="help-block">
+			<small>This field is too long.</small>
+		</div>
+	</div>
+	</md-input-container>
+	<div class="layout-sm-column layout-row">
+		<md-input-container class="flex required-mark"> <label>Website</label>
+		<input type="url" name="website" class="md-input"
+			data-ng-model="mScope.mForm.website" required pattern="https?://.+">
+		<div data-ng-messages="modelForm.website.$error"
+			data-ng-if="modelForm.website.$touched  || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+			<div data-ng-message="url" class="help-block">
+				<small>Not valid website! </small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="flex required-mark"> <label>E-Mail</label>
+		<input type="email" class="md-input"
+			data-ng-model="mScope.mForm.emailId" name="email" required>
+		<div data-ng-messages="modelForm.email.$error"
+			data-ng-if="modelForm.email.$touched  || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+			<div data-ng-message="email" class="help-block">
+				<small>Not valid email! </small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+	<div class="layout-sm-column layout-row">
+		<md-input-container class="align-center required-mark"> <label>Attendance
+			Type</label> <md-select data-ng-model="mScope.mForm.attendanceType"
+			name="attendanceType" required> <md-option value="hours">Hours</md-option>
+		<md-option value="session">Session</md-option> <md-option value="day">Day</md-option>
+		</md-select>
+		<div data-ng-messages="modelForm.attendanceType.$error"
+			data-ng-if="modelForm.attendanceType.$touched  || modelForm.$submitted"
+			class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+		<md-input-container class="align-center required-mark"> <label>Hours
+			per day</label> <md-select ng-model="mScope.mForm.hoursCount" name="hourType"
+			required> <md-option value="4">4 Hours</md-option> <md-option
+			value="5">5 Hours</md-option> <md-option value="6">6
+		Hours</md-option> <md-option value="7">7 Hours</md-option> <md-option value="8">8
+		Hours</md-option> </md-select>
+		<div data-ng-messages="modelForm.hourType.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>This field is required !</small>
+			</div>
+		</div>
+		</md-input-container>
+	</div>
+
+	<div layout layout-sm="column">
+		<md-input-container flex> <label>Licence
+			Key</label> <input type="text" name="licenceKey"
+			data-ng-model="mScope.mForm.licenceKey" class="md-input" /> </md-input-container>
+	</div>
+
+	<div class="row fluid mx-0"
+		data-ng-init="mScope.mForm.id? '':mScope.mForm.smsAccess=true;">
+
+		<div class="col-6">
+			<div class="row fluid">
+				<div class="col-5">
+					<label style="font-weight: 600;" class="radio radio-inline">Email Access</label>
+				</div>
+				<div class="col-7">
+					<md-radio-group data-ng-model="mScope.mForm.emailAccess">
+					<label class="radio radio-inline "> <md-radio-button
+							data-ng-value="true">Yes</md-radio-button>
+					</label> <label class="radio radio-inline"> <md-radio-button
+							data-ng-value="false">No</md-radio-button>
+					</label> </md-radio-group>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-6">
+			<div class="row fluid">
+				<div class="col-4">
+					<label style="font-weight: 600;" class="radio radio-inline">Sms Access</label>
+				</div>
+				<div class="col-8">
+					<md-radio-group data-ng-model="mScope.mForm.smsAccess"">
+					<label class="radio radio-inline "> <md-radio-button
+							data-ng-value="true">Yes</md-radio-button>
+					</label> <label class="radio radio-inline"> <md-radio-button
+							data-ng-value="false">No</md-radio-button>
+					</label> </md-radio-group>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row fluid mx-0"
+		data-ng-init="mScope.mForm.id? '':mScope.mForm.restrictedAttendance = false;">
+
+		<div class="col-6">
+			<div class="row fluid">
+				<div class="col-5">
+					<label style="font-weight: 600;" class="radio radio-inline">Restricted Attendance</label>
+				</div>
+				<div class="col-7">
+					<md-radio-group data-ng-model="mScope.mForm.restrictedAttendance">
+					<label class="radio radio-inline "> <md-radio-button
+							data-ng-value="true">Yes</md-radio-button>
+					</label> <label class="radio radio-inline"> <md-radio-button
+							data-ng-value="false">No</md-radio-button>
+					</label> </md-radio-group>
+				</div>
+			</div>
+		</div>
+		<div class="col-6">
+			<div class="row fluid">
+				<div class="col-4">
+					<label style="font-weight: 600;" class="radio radio-inline">Status</label>
+				</div>
+				<div class="col-8">
+					<md-radio-group data-ng-model="mScope.mForm.status">
+					<label class="radio radio-inline "> <md-radio-button
+							value="ACTIVE">Active</md-radio-button>
+					</label> <label class="radio radio-inline"> <md-radio-button
+							value="INACTIVE">InActive</md-radio-button>
+					</label> </md-radio-group>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row fluid mx-0"
+		 data-ng-init="mScope.mForm.id? '':mScope.mForm.restrictedAttendance = false;">
+
+		<div class="col-6">
+			<div class="row fluid">
+				<div class="col-5">
+					<label style="font-weight: 600;" class="radio radio-inline">Chat Access</label>
+				</div>
+				<div class="col-7">
+					<md-radio-group data-ng-model="mScope.mForm.chatIsEnabled">
+						<label class="radio radio-inline ">
+							<md-radio-button
+									data-ng-value="true">Yes
+							</md-radio-button>
+						</label> <label class="radio radio-inline">
+						<md-radio-button
+								data-ng-value="false">No
+						</md-radio-button>
+					</label></md-radio-group>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+</md-dialog-content>

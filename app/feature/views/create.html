@@ -1,0 +1,65 @@
+<md-dialog ng-cloak style="width: 50%;">
+   <form role="form" novalidate name="featureForm">
+      <md-toolbar>
+         <div class="md-toolbar-tools">
+            <h2>Feature</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="featureCtrl.cancel()">
+               <i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i>
+            </md-button>
+         </div>
+      </md-toolbar>
+      <md-dialog-content>
+         <div class="md-dialog-content">
+		<md-input-container class="align-center">
+		<label>Select Role</label> <md-select data-ng-change="featureCtrl.getFeaturesByRole(featureCtrl.form.role,featureCtrl.form.id)"
+			ng-model="featureCtrl.form.role" name="role" required>
+		<md-option ng-value="role"
+			data-ng-repeat="role in featureCtrl.form.roleList">{{role.name}}</md-option>
+		</md-select>
+	<!-- 	<div data-ng-messages="modelForm.department.$error"
+			data-ng-if="modelForm.$submitted" class="has-error">
+			<div data-ng-message="required" class="help-block">
+				<small>Department Name is Required !</small>
+			</div>
+		</div> -->
+		</md-input-container>
+	
+		<div class="" style="margin-left: -9px;">
+		<label for="slot" class="control-label col-lg-2" style="text-align:left;padding-top:0px;">Features</label>
+		<div class="col-lg-4">
+			<select multiple="multiple" id="features" name="features" style="height: auto;"
+				data-ng-model="featureCtrl.form.features" class="form-control" required
+				ng-options="feature.featureKey for feature in featureCtrl.form.featureList track by feature.id"
+				size="8">
+			</select>
+			<div ng-show="modelForm.$submitted">
+				<small class="field-error" style="color: rgb(213,0,0);"
+					ng-show="modelForm.features.$error.required">Feature is
+					required!</small>
+			</div>
+		</div>
+	</div>
+		<!-- <label style="font-size:small">content</label>
+            <div class="form-group">
+               <md-input-container class="" id="editor">
+                  <textarea data-ckeditor="blogEditorOptions"
+                     class="form-control input-sm" rows="3" name="content" data-ng-required="true" data-ng-minlength="3"
+                     data-ng-model="blogCtrl.blogScope.content"></textarea>
+                       <div data-ng-messages="blogForm.content.$error" data-ng-show="blogForm.$submitted">
+          			<div data-ng-message="required"><small>Content is required !</small></div>
+          			<div data-ng-message="minlength"><small>Content is too short.</small></div>
+         	</div>
+               </md-input-container>
+            </div> -->
+         </div>
+      </md-dialog-content>
+      <md-dialog-actions layout="row">
+         <span flex></span>
+         <button type="submit" ng-click="featureForm.$valid ? featureCtrl.saveOrUpdateFeature(featureCtrl.form) : null;" class="btn btn-danger">UPDATE</button>
+         &nbsp
+         <button type="button" class="btn btn-cancel" ng-click="featureCtrl.cancel()">
+         <span>CANCEL</span></button>
+      </md-dialog-actions>
+   </form>
+</md-dialog>

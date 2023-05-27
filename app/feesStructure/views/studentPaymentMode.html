@@ -1,0 +1,155 @@
+<div class="card-header ch-al pb-1-25 pt-1-25" ng-init="feesCtrl.init()">
+    <div class="row">
+        <div class="col-md-9 col-sm-9">
+                <h2> Students Fee Mode </h2>
+        </div>
+        <div class="col-md-3 col-sm-3 text-right">
+            <button class="btn bgm-teal btn-xs" ui-sref="feesStructure"><span>BACK TO FEE STRUCTURE</span></button>
+        </div>
+    </div>
+</div>
+<div class="card-body">
+    <div class="row">
+        <div class="col-sm-3 pr-1">
+                <form class="form-horizontal pad-top" role="form" name="fromForm" novalidate>
+                    <div class="card allSides content">
+                        <div style="padding: 10px;">
+                            <h4 class="card-title m-3 text-center"
+                                style="font-family: roboto !important;font-weight: 400;">
+                                Students Details
+                            </h4>
+                            <md-input-container class="align-center required-mark"
+                                                ng-if="feesCtrl.mScope.instituteType == 'College'">
+                                <label>Department</label>
+                                <md-select data-ng-model="feesCtrl.form.department.id" name="department"
+                                           data-ng-required="feesCtrl.mScope.instituteType == 'College'"
+                                           data-ng-change="feesCtrl.mScope.getClassByDepartmentId(feesCtrl.form.department.id)">
+                                    <md-option ng-repeat="department in feesCtrl.mScope.departmentList"
+                                               ng-value="department.id">{{department.name}}
+                                    </md-option>
+                                </md-select>
+                                <div data-ng-messages="fromForm.department.$error" class="has-error">
+                                    <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block"
+                                         style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                        <small>Department is required !</small>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="align-center required-mark">
+                                <label data-ng-if="feesCtrl.mScope.instituteType != 'School'">Year</label>
+                                <label data-ng-if="feesCtrl.mScope.instituteType == 'School'">Standard</label>
+                                <md-select aria-label="classyear" data-ng-model="feesCtrl.form.classYear.id"
+                                           data-ng-change="feesCtrl.getSectionByClassYearId(feesCtrl.form.classYear.id);"
+                                           name="class" required>
+                                    <md-option ng-repeat="classYear in feesCtrl.mScope.yearAndStandardList"
+                                               ng-value="classYear.id">{{classYear.name}}
+                                    </md-option>
+                                </md-select>
+                                <div data-ng-messages="fromForm.class.$error" class="has-error">
+                                    <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block"
+                                         style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                        <small ng-show="feesCtrl.mScope.instituteType == 'School'">Standard is
+                                            required !
+                                        </small>
+                                        <small ng-show="feesCtrl.mScope.instituteType != 'School'">Year is required
+                                            !
+                                        </small>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="align-center required-mark">
+                                <label>Section</label>
+                                <md-select data-ng-model="feesCtrl.form.section.id" name="section" required>
+                                    <md-option ng-repeat="section in feesCtrl.mScope.sections"
+                                               ng-value="section.id">{{section.sectionName}}
+                                    </md-option>
+                                </md-select>
+                                <div data-ng-messages="fromForm.section.$error" class="has-error">
+                                    <div data-ng-message="required" data-ng-if="fromForm.$submitted" class="help-block"
+                                         style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                        <small>Section is required !</small>
+                                    </div>
+                                </div>
+                            </md-input-container>
+                            <button type="submit" style="margin: 0 auto"
+                                    data-ng-click="fromForm.$valid ? feesCtrl.getFeeModeStudents(feesCtrl.form.classYear.id, feesCtrl.form.section.id) : null;"
+                                    class="btn btn-danger">
+                                SUBMIT
+                            </button>
+                        </div>
+
+                        <form class="form-horizontal pad-top" role="form" name="paymentModeForm" novalidate >
+                            <div class="card allSides content">
+                                <div style="padding: 10px;">
+                                    <h4 class="card-title m-3 text-center"
+                                        style="font-family: roboto !important;font-weight: 400;">
+                                        Payment Mode
+                                    </h4>
+                                    <md-input-container class="align-center required-mark">
+                                        <label>Payment Mode</label>
+                                        <md-select aria-label="paymentMode" name="paymentMode" data-ng-model="feesCtrl.paymentMode"  ng-disabled="!feesCtrl.studentsPaymentMode.length">
+                                            <md-option ng-value="key"
+                                                       data-ng-repeat="(key,value) in feesCtrl.mScope.paymentModeList">{{::value}}
+                                            </md-option>
+                                        </md-select>
+                                        <div data-ng-messages="paymentModeForm.paymentMode.$error" class="has-error">
+                                            <div data-ng-message="required" data-ng-if="paymentModeForm.$submitted" class="help-block"
+                                                 style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                                <small>Payment mode is required !</small>
+                                            </div>
+                                        </div>
+                                    </md-input-container>
+                                    <button type="submit" style="margin: 0 auto" ng-disabled="!feesCtrl.paymentMode || feesCtrl.selectAllCount===0"
+                                            data-ng-click="feesCtrl.updateStudentPaymentMode(feesCtrl.paymentMode)"
+                                            class="btn btn-danger">
+                                        Save Payment mode
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </form>
+        </div>
+        <div class="col-sm-9 pl-0">
+            <section class="w-100">
+                <div class="table-container w-100" style="height:100%;max-height:460px;font-size: smaller">
+                    <table width="100%" align="center">
+                        <thead>
+                            <tr class="header">
+                                <th width="5%">
+                                    <div>
+                                        <input type="checkbox"
+                                                           ng-click="feesCtrl.selectAllStudent(feesCtrl.selectAll)"
+                                                           ng-model="feesCtrl.selectAll" ng-true-value="'ALL'"
+                                                           ng-false-value="'NONE'" ng-checked="feesCtrl.selectAll"
+                                                           ng-disabled="!feesCtrl.studentsPaymentMode.length"/>
+                                    </div>
+                                </th>
+                                <th width="5%">S.No <div>S.No</div> </th>
+                                <th width="20%">Roll Number <div>Roll Number</div></th>
+                                <th width="25%">Student Name<div>Student Name</div></th>
+                                <th width="20%">Parent Number<div>Parent Number</div></th>
+                                <th width="20%">Payment Mode<div>Payment Mode</div></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <tr data-ng-repeat="studentPaymentMode in feesCtrl.studentsPaymentMode track by studentPaymentMode.student.id">
+                            <td><input type="checkbox" ng-checked="studentPaymentMode.isSelected" ng-click="feesCtrl.selectStudent($index, studentPaymentMode.isSelected === true ? 'SELECT' : 'UNSELECT')"
+                                       ng-model="studentPaymentMode.isSelected"></td>
+                            <td>{{$index + 1}}</td>
+                            <td class="text-left">{{::studentPaymentMode.student.rollNumber}}</td>
+                            <td class="text-left">{{::studentPaymentMode.student.firstName}} {{::studentPaymentMode.student.lastName}}</td>
+                            <td class="text-left">{{::studentPaymentMode.student.fatherNumber}}</td>
+                            <td class="text-left" ng-if="studentPaymentMode.paymentMode" ng-bind="studentPaymentMode.paymentMode"></td>
+                            <td class="text-left" ng-if="!studentPaymentMode.paymentMode">-</td>
+                        </tr>
+                        <tr data-ng-if="!feesCtrl.studentsPaymentMode.length">
+                            <td colspan="5" align="center">No matching records found</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

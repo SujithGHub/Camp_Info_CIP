@@ -1,0 +1,38 @@
+<md-dialog-content>
+   <div class="md-dialog-content">
+      <md-input-container flex>
+         <label>Student Name
+         </label> <input class="md-input" type="text" name="firstName" 
+            data-ng-required="true" data-ng-model="mScope.mForm.student.firstName" disabled="disabled">
+         <div data-ng-messages="modelForm.firstName.$error"
+            data-ng-if="modelForm.firstName.$touched || modelForm.$submitted"
+            class="has-error">
+            <div data-ng-message="required" class="help-block">
+               <small>Student Name is required !</small>
+            </div>
+         </div>
+      </md-input-container>
+       <md-input-container flex>
+         <label>Subject Name
+         </label> <input class="md-input" type="text" name="subjectName" 
+            data-ng-required="true" data-ng-model="mScope.mForm.subject.subjectName" disabled="disabled">
+         <div data-ng-messages="modelForm.subjectName.$error"
+            data-ng-if="modelForm.subjectName.$touched || modelForm.$submitted"
+            class="has-error">
+            <div data-ng-message="required" class="help-block">
+               <small>Subject Name is required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      <md-input-container flex>
+         <label>Mark Obtained</label><input
+            class="md-input"  type="text" data-ng-model="mScope.mForm.mark"
+            data-ng-required="true" name="mark">
+         <div data-ng-messages="modelForm.mark.$error" data-ng-if="modelForm.mark.$touched || modelForm.$submitted" class="has-error">
+            <div data-ng-message="required" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+               <small>Mark is required !</small>
+            </div>
+         </div>
+      </md-input-container>
+   </div>
+</md-dialog-content>

@@ -1,0 +1,80 @@
+<div class="card-header ch-al">
+   <div class="row">
+      <div class="col-sm-9">
+         <h2>Bulk Email</h2>
+      </div>
+      <div class="col-sm-3">
+         <button class="btn btn-danger" data-ng-click="emailCtrl.csvFileDownload()">DOWNLOAD TEMPLATE</button>
+      </div>
+   </div>
+</div>
+<div class="card-body content_scroll" style="height: calc(80% - 10%);">
+   <form role="form" novalidate name="bulkMailForm">
+       <div class="form-group row required-mark" style="padding-top: 20px;">
+         <label class="col-sm-2 control-label" style="padding-top: 15px;">File</label>
+         <div class="col-sm-6">
+           
+        		   <div class="fileUpload btn btn-danger">
+               <span data-ng-if="!fileName">BROWSE FILE</span><span data-ng-if="fileName">CHANGE</span> <input type="file" id="fileInput" name="filedata"  data-ng-required="!fileName"
+               onchange="angular.element(this).scope().readFile(this)" class="upload" data-ng-model="emailCtrl.form.file" accept=".csv"/>
+            </div>
+            <span style="font-size:small">{{fileName}}&nbsp&nbsp<a href="" class="close-file" data-ng-click="emailCtrl.clearFile()" data-ng-if="fileName">&times;</a><br><strong> </strong></span>
+				<div data-ng-messages="bulkMailForm.filedata.$error">
+					<div data-ng-message="required" data-ng-if="bulkMailForm.$submitted || bulkMailForm.filedata.$touched" class="help-block">
+						<small style="color: rgb(213,0,0)!important;">Please select file to import!</small>
+					</div>
+				</div>
+        
+         </div>
+      </div>
+        <div class="form-group row required-mark" style="margin-bottom: 0px">
+         <label class="col-sm-2 control-label">Subject</label>
+         <div class="col-sm-6">
+                <md-input-container md-no-float="" class="md-block">
+                  <input data-ng-model="emailCtrl.form.subject" name="subject" data-ng-required="true" placeholder="Subject" data-ng-minlength="3" data-ng-maxlength="150">
+                  <div data-ng-messages="bulkMailForm.subject.$error" data-ng-show="bulkMailForm.subject.$touched || bulkMailForm.$submitted">
+                     <div data-ng-message="required"><small>Subject is required !</small></div>
+          			<div data-ng-message="minlength"><small>Subject is too short.</small></div>
+          			<div data-ng-message="maxlength"><small>Subject is too long.</small></div>
+                  </div>
+               </md-input-container>
+         </div>
+      </div>
+    <div id="htmlContent" style="display:none"></div>
+     <div class="form-group required-mark">
+         <label class="col-sm-2 control-label">Body</label>
+         <md-input-container class="col-sm-10">
+            <textarea class="form-control input-sm" rows="3" data-ckeditor="editorOptions"
+            name="body" data-ng-model="emailCtrl.form.body" required data-ng-required="true" data-ng-minlength="3"></textarea>
+             <div data-ng-messages="bulkMailForm.body.$error" data-ng-show="bulkMailForm.body.$touched || bulkMailForm.$submitted" class="has-error">
+          			<div data-ng-message="required"><small>Email content is	required !</small></div>
+          			<div data-ng-message="minlength"><small>Email content is too short.</small></div>
+         	</div>
+         </md-input-container>
+      </div>
+     <div class="form-group">
+         <div class="offset-sm-2 col-sm-10"  style="padding-bottom:20px">
+            <button type="submit" class="btn btn-danger" data-ng-click="bulkMailForm.$valid ? emailCtrl.sendMail(emailCtrl.form, 'bulkEmail') : null">SEND<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i></button>
+         </div>
+      </div>
+   </form>
+</div>
+<script type="text/javascript">
+/* CKEDITOR.replace('textEditor', {
+	resize_enabled:false,
+	removePlugins:'elementspath', height:'30vh',
+	toolbar: [
+              { name: 'document', items: [ 'Source', '-', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+              { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+              { name: 'editing', items: [ ] },
+              '/',
+              { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+              { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+              { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+              { name: 'insert', items: ['Smiley', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak'] },
+              { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+              { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+              ]
+});  */
+$(".content_scroll").mCustomScrollbar({theme:"dark-3", axis:"y"});
+</script>

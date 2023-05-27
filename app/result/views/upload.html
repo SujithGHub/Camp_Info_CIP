@@ -1,0 +1,113 @@
+<md-dialog-content>
+    <div class="md-dialog-content">
+        <div class="form-group row ">
+            <div class="col-sm-12 col-xs-12 pb-2">
+                <label style="font-weight: 500;">Remarks</label>
+            </div>
+            <div class="col-sm-12 col-xs-12">
+            <textarea class="input-sm"
+                      data-ng-model="mScope.form.remarks" rows="5" data-ng-minlength="3" data-ng-maxlength="500"
+                      name="remarks" placeholder="Type the description here...."></textarea>
+                <div data-ng-messages="modelForm.remarks.$error"
+                     data-ng-show="modelForm.remarks.$touched ||modelForm.$submitted">
+                    <div data-ng-message="minlength">
+                        <small style="color: rgb(213,0,0);">Description is too short.</small>
+                    </div>
+                    <div data-ng-message="maxlength">
+                        <small style="color: rgb(213,0,0);">Description is too long.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <md-content class="md-padding">
+            <div class="form-group row ">
+                <div class="col-sm-12 col-xs-12" style="margin-bottom: -40px !important;margin-left: -20px">
+                    <label style="font-weight: 500;">Result Files</label>
+                </div>
+                <div class="form-group row" data-ng-if="!mScope.imageList.length">
+                    <div class="form-group my-0">
+                        <div class="col-sm-12" style="padding-top: 0px; font-size: smaller">
+                            <div style="float: left;" class="p-2"
+                                 data-ng-repeat="resultFile in mScope.imageList">
+                                <div class="img-container">
+                                    <img alt="nice" class="custom-close-btn"
+                                         src="../../assets/images/close_btn.png"
+                                         ng-click="mScope.removeImage(resultFile)">
+                                    <a class="fancybox" target="_blank" title="Click to view"
+                                       href="{{resultFile.path}}" rel="gallery" download="{{resultFile.name}}"
+                                       style="margin-right: 5px;"> <img
+                                            class="fancy homeWorkPicture"
+                                            data-ng-src="{{resultFile.path}}" data-image-on-error/></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <md-input-container flex id="editor">
+                <div data-ng-if="mScope.upload.fileLength">
+                    <div class="col-sm-6 col-xs-9" style="padding-bottom: 16px;">
+						<span style="font-size: small">{{mScope.upload.fileName |
+							limitTo : 10}}&nbsp;&nbsp;<a href="" class="close-file" display
+                                                         ng-style="{'top' : (mScope.imageList.length) ? '4px': '4px'}"
+                                                         data-ng-click="mScope.clearFile()"
+                                                         data-ng-if="mScope.upload.fileName">&times;</a><br>
+						</span>
+                    </div>
+                    <span style="font-size: small"
+                          data-ng-if="mScope.upload.fileLength > 1"><strong>{{mScope.upload.fileLength-
+					1}} more files</strong></span>
+                    <div class="col-sm-4"></div>
+                </div>
+                <div class="dropzone dropbox" id="dropzone"
+                     accept-format="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/vnd.ms-powerpoint"
+                     data-file-drag-and-drop
+                     on-drop="mScope.dropFile(el)">Drag and drop files here or click
+                    here to upload files
+                </div>
+                <input type="file" id="upload"
+                       accept="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/vnd.ms-powerpoint"
+                       data-ng-model="file" style="display: none;" multiple
+                       custom-on-change="mScope.readFile"/>
+            </md-input-container>
+            <div class="form-group row pl-0 m-0">
+                <div class="col-sm-12 col-xs-12">
+                    <label style="font-weight: 500;">Submitted Results</label>
+                </div>
+                <div class="form-group row" data-ng-if="mScope.imageList.length">
+                    <div class="form-group my-0" data-ng-if="mScope.imageList.length">
+                        <div class="col-sm-12" style="padding-top: 0px; font-size: smaller">
+                            <div style="float: left;" class="p-2"
+                                 data-ng-repeat="resultFile in mScope.imageList">
+                                <div class="img-container">
+                                    <img alt="nice" class="custom-close-btn"
+                                         src="../../assets/images/close_btn.png"
+                                         ng-click="mScope.removeImage(resultFile)">
+                                    <a class="fancybox" target="_blank" title="Click to view"
+                                       href="{{resultFile.path}}" rel="gallery" download="{{resultFile.name}}"
+                                       style="margin-right: 5px;"> <img
+                                            class="fancy homeWorkPicture"
+                                            data-ng-src="{{resultFile.path}}" data-image-on-error/></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </md-content>
+        <div class="row" style="float: right;padding-bottom: 20px;padding-right: 35px;">
+            <button type='submit'
+                    data-ng-click='mScope.upload.fileName != null || mScope.form.remarks? mScope.imageUpload():mScope.erMessage()'
+                    class='btn btn-danger'>
+                submit
+            </button>
+            <button aria-label="..." class="btn btn-cancel ml-2" type="button"
+                    data-ng-click="mScope.cancel()">Cancel
+            </button>
+
+        </div>
+
+    </div>
+</md-dialog-content>
+

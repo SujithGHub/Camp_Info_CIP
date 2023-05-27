@@ -1,0 +1,87 @@
+<md-dialog aria-label="Notification" ng-cloak style="width: 50%;">
+<md-toolbar>
+<div class="md-toolbar-tools" style="height: 50px">
+	<h2 style="font-size: 17px">Payment</h2><span flex></span>
+	<md-button class="md-icon-button" ng-click="paymentCtrl.cancel()">
+	<i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i>
+	</md-button>
+</div>
+</md-toolbar>
+<md-dialog-content>
+<div class="md-inline-form">
+    <md-tabs md-dynamic-height="" md-border-bottom="">
+    <md-tab label="Import Payment">
+    	 <form name="uploadForm" class="form-horizontal pad-top" role="form" novalidate>
+    	 <md-content layout-padding>
+    	 	<div class="row" style="float: right;">
+    	 	<div class="col-sm-6 col-xs-6 text-center">
+                <button class="btn btn-danger" type="button" data-ng-click="paymentCtrl.downloadTemplate()"
+                        aria-label="DOWNLOAD SAMPLE TEMPLATE" style="background-color: slategray !important;">DOWNLOAD TEMPLATE</button>
+            </div>
+            </div>
+            <div class="form-group row pl-0 pb-2 m-0">
+			<div class="col-sm-6 col-xs-9">
+				<span style="font-size: small">{{paymentCtrl.upload.fileName}}&nbsp;&nbsp;<a href="" class="close-file"
+					data-ng-click="paymentCtrl.clearFile()"
+					data-ng-if="paymentCtrl.upload.fileName">&times;</a><br>
+				</span>
+			</div>
+			</div>
+            <div class="dropzone dropbox" id="dropzone"
+                 accept-format="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                 data-file-drag-and-drop style="font-size: medium;min-height: 150px;"
+                 on-drop="paymentCtrl.dropFile(el)">Drag and drop files here or Click
+                here to upload files</div>
+            <input type="file" id="upload" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-ng-required="true"
+                   data-ng-model="paymentCtrl.file" style="display: none;"
+                   custom-on-change="paymentCtrl.readFile"/>
+    	     <div data-ng-messages="uploadForm.file.$error" data-ng-if="uploadForm.file.$touched ||uploadForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block" class="message">
+                        <small style="color: rgb(213,0,0)">File is required !</small>
+                    </div>
+                </div>
+    	 <div layout-gt-sm="row" style="float: right;">
+         <button type="submit" class="btn btn-danger" data-ng-click="uploadForm.$valid ? paymentCtrl.uploadPayment(): null" data-tooltip-placement="bottom" data-tooltip="Import">
+           Import
+         </button>
+      </div>
+    	 </md-content>
+    	 </form>
+    </md-tab>
+    <md-tab label="Export Payment">
+    <form name="modelForm" class="form-horizontal pad-top" role="form" novalidate>
+    <md-content layout-padding>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block required-mark" flex-gt-sm>
+                <label>From date</label>
+                <input datepicker class="md-input" type="text" name="fromDate" data-ng-required="true" data-ng-model="paymentCtrl.mForm.fromDate">
+                <div data-ng-messages="modelForm.fromDate.$error" data-ng-if="modelForm.fromDate.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block">
+                        <small>From Date is required !</small>
+                    </div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block required-mark" flex-gt-sm>
+                <label>To date</label>
+                <input class="md-input" datepicker type="text" data-ng-model="paymentCtrl.mForm.toDate"  data-ng-required="true" name="toDate">
+                <div data-ng-messages="modelForm.toDate.$error" data-ng-if="modelForm.toDate.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block" class="message">
+                        <small>To Date is required !</small>
+                    </div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row" style="float: right;">
+         <button type="submit" class="btn btn-danger" data-ng-click="modelForm.$valid ? paymentCtrl.fileExportAndImport(paymentCtrl.mForm): null" data-tooltip-placement="bottom" data-tooltip="Export">
+           Export
+         </button>
+      </div>
+    </md-content>
+    </form>
+    </md-tab>
+    </md-tabs>
+</div>
+</md-dialog-content>
+</md-dialog>

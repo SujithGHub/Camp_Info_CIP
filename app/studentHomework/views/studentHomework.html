@@ -1,0 +1,274 @@
+<div class="card-header pt-1-25">
+   <div class="row">
+    <div class="col-md-6 col-sm-7">
+      <h2 data-ng-if="studentHomeworkCtrl.instituteType == 'School'">
+         <span style="font-size: 20px; cursor: pointer; color: red"
+            ng-click="studentHomeworkCtrl.openNav()">&#9776;</span>&nbsp;
+         Student Homework
+      </h2>
+      <h2 data-ng-if="studentHomeworkCtrl.instituteType == 'College'">
+         <span style="font-size: 20px; cursor: pointer; color: red"
+            ng-click="studentHomeworkCtrl.openNav()">&#9776;</span>&nbsp;
+         Student Assignment
+      </h2>
+      </div>
+      <div class="col-md-5 col-sm-4">
+          <md-input-container class="m-0">
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="studentHomeworkCtrl.getSubmittedHomeworkByClassAndSubject()" autocomplete="off">
+         </md-input-container>
+          <md-button id="studentHomeWorkBtn" class="md-fab md-mini md-primary m-0" aria-label="add" ng-show="false" init-data="studentHomeworkCtrl.initData"
+                     template-url="/app/studentHomework/views/viewStudentHomework.html" form-modal form-submit="studentHomeworkCtrl.saveOrUpdateSubmittedHomeWork(mForm)" ok-button-text="SUBMIT"
+                     m-title="Home Work" m-Scope="studentHomeworkCtrl.mScope">
+          </md-button>
+          <md-button id="studentAssignmentBtn" class="md-fab md-mini md-primary m-0" aria-label="add" ng-show="false" m-scope="studentHomeworkCtrl.mScope" init-data="studentHomeworkCtrl.initData"
+                     template-url="/app/studentHomework/views/viewStudentHomework.html" form-modal form-submit="studentHomeworkCtrl.saveOrUpdateSubmittedHomeWork(mForm)" ok-button-text="SUBMIT"
+                     m-title="Assignment" m-Scope="studentHomeworkCtrl.mScope">
+          </md-button>
+      </div>
+   </div>
+</div>
+<div class="album-container" data-ng-init="studentHomeworkCtrl.init()">
+   <form class="form-horizontal pad-top" role="form" novalidate
+      name="studenthomework">
+      <div style="margin: 0px !important">
+         <div id="mySidenav" class="sidenav allSides" style="height: 71vh !important;">
+            <div>
+                  <a class="closebtn" ng-click="studentHomeworkCtrl.closeNav()">&times;</a>
+                  <div class="content">
+                     <div style="padding: 20px;">
+                        <md-input-container class="align-center required-mark"
+                           data-ng-if='studentHomeworkCtrl.instituteType=="College"'>
+                           <label>Department</label> 
+                           <md-select name="dept"
+                              data-ng-model="studentHomeworkCtrl.form.department" required
+                              data-ng-change="studentHomeworkCtrl.getClassYearsByDepartmentAndStaff(studentHomeworkCtrl.form.department)">
+                              <md-option ng-repeat="dept in studentHomeworkCtrl.departments"
+                                 ng-value="dept.id">{{dept.name}}</md-option>
+                           </md-select>
+                           <div data-ng-messages="studenthomework.dept.$error"
+                              class="has-error">
+                              <div data-ng-message="required"
+                                 data-ng-if="studenthomework.$submitted" class="help-block"
+                                 style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                 <small>Department is required !</small>
+                              </div>
+                           </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"
+                           data-ng-if="studentHomeworkCtrl.role != 'ROLE_USER'">
+                           <label
+                              data-ng-if="studentHomeworkCtrl.instituteType != 'School'">Year</label>
+                           <label
+                              data-ng-if="studentHomeworkCtrl.instituteType == 'School'">Standard</label>
+                           <md-select name="class"
+                              data-ng-model="studentHomeworkCtrl.form.classYear" required
+                              data-ng-change="studentHomeworkCtrl.getSection();">
+                              <md-option ng-repeat="class in studentHomeworkCtrl.classYear"
+                                 ng-value="class.id">{{class.name}}</md-option>
+                           </md-select>
+                           <div data-ng-messages="studenthomework.class.$error"
+                              class="has-error required-mark">
+                              <div data-ng-message="required"
+                                 data-ng-if="studenthomework.$submitted" class="help-block"
+                                 style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                 <small ng-show="studentHomeworkCtrl.instituteType == 'School'">Standard
+                                 is required !</small> <small
+                                    ng-show="studentHomeworkCtrl.instituteType != 'School'">Year
+                                 is required !</small>
+                              </div>
+                           </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"
+                           data-ng-if="studentHomeworkCtrl.role != 'ROLE_USER'">
+                           <label>Section</label> 
+                           <md-select name="section"
+                              data-ng-model="studentHomeworkCtrl.form.section"
+                              data-ng-change="studentHomeworkCtrl.getSubjectByClassId(studentHomeworkCtrl.form.classYear,studentHomeworkCtrl.form.section);" required>
+                              <md-option
+                                 ng-repeat="section in studentHomeworkCtrl.sectionList"
+                                 ng-value="section.id">{{section.sectionName}}</md-option>
+                           </md-select>
+                           <div data-ng-messages="studenthomework.section.$error"
+                              class="has-error">
+                              <div data-ng-message="required"
+                                 data-ng-if="studenthomework.$submitted" class="help-block"
+                                 style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                 <small>Section is required !</small>
+                              </div>
+                           </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                           <label>Subject Name</label> 
+                           <md-select ng-model="studentHomeworkCtrl.form.subject"
+                              name="subjectName" data-ng-required="true"
+                              data-ng-change="studentHomeworkCtrl.getElectiveSubject(studentHomeworkCtrl.form.subject)">
+                              <md-option ng-value="subject.id"
+                                 data-ng-repeat="subject in studentHomeworkCtrl.subjectList">{{subject.subjectName}}</md-option>
+                           </md-select>
+                           <div data-ng-messages="studenthomework.subjectName.$error"
+                              data-ng-show="studenthomework.$submitted"
+                              class="has-error">
+                              <div data-ng-message="required">
+                                 <small>Subject name is required !</small>
+                              </div>
+                           </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"
+                           data-ng-if="studentHomeworkCtrl.electiveSubjectList.length > 0">
+                           <label>Elective Subject</label> 
+                           <md-select
+                              data-ng-model="studentHomeworkCtrl.form.subjectElective"
+                              name="electiveSubject"
+                              data-ng-required="studentHomeworkCtrl.electiveSubjectList.length">
+                              <md-option data-ng-value="electiveSubject.id"
+                                 data-ng-repeat="electiveSubject in studentHomeworkCtrl.electiveSubjectList">{{electiveSubject.electiveSubjectName}}</md-option>
+                           </md-select>
+                           <div data-ng-messages="studenthomework.electiveSubject.$error"
+                              data-ng-show="studenthomework.$submitted"
+                              class="has-error">
+                              <div data-ng-message="required">
+                                 <small>Elective Subject is required !</small>
+                              </div>
+                           </div>
+                        </md-input-container>
+                        <button type="submit" style="margin: 0 auto"
+                           data-ng-click="studenthomework.$valid ?studentHomeworkCtrl.getSubmittedHomeworkByClassAndSubject(): ''"
+                           class="btn btn-danger">SUBMIT</button>
+                     </div>
+                  </div>
+            </div>
+         </div>
+      </div>
+   </form>
+   
+  
+                
+   <div id="main" class="col-md-12 col-sm-12 col-xs-12 p-0 card-body table-content">
+    	<table class="studentHomeworktable" style="width: 100%;" cellpadding="0" cellspacing="0" border="0" align="center" data-ng-if="studentHomeworkCtrl.showTable">
+               <thead>
+                     <tr>
+                            <th style="width:50px">S.No</th>
+                            <th style="width:100px"  data-ng-if="studentHomeworkCtrl.instituteType != 'School'">Department</th>
+                            <th style="width:100px" data-ng-if="studentHomeworkCtrl.instituteType != 'School'">Year</th>
+                            <th style="width:100px" data-ng-if="studentHomeworkCtrl.instituteType == 'School'">Standard</th>
+                            <th style="width:100px">Subject</th>
+                            <th style="width:100px">Title</th>
+                            <th style="width:100px">STUDENT NAME</th>
+                            <th style="width:100px">ROLL NUMBER</th>
+                            <th style="width:100px">View</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="odd">
+                         	<td colspan="8" style="font-size: 13px;" class="text-center dataTables_empty" data-ng-if="studentHomeworkCtrl.instituteType != 'School'">
+                                 No data found
+                             </td>
+                             <td colspan="7" style="width: 100%;font-size: 13px;" class="text-center dataTables_empty" data-ng-if="studentHomeworkCtrl.instituteType == 'School'">
+                                 No data found
+                             </td>
+                        </tr>
+                    </tbody>
+                </table>
+   		<div id="table-responsive" class="content table-responsive">
+  			 <table id="StudentHomeWorkTable" class="display table" cellspacing="0"></table>
+       </div>
+      
+   </div>
+</div>
+
+<link rel="stylesheet" href="\assets\css\ngTable.css">
+<style>
+md-autocomplete {
+	min-width: inherit;
+}
+
+.sidenav {
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 124;
+	left: 0;
+	overflow-x: hidden;
+	transition: 0.5s;
+	margin-left: 10px;
+}
+
+.sidenav .closebtn {
+	top: 0;
+	font-size: 20px;
+	margin-left: 215px;
+	color: black;
+}
+.table-responsive{
+    height:100% important;
+}
+#student {
+	font-family: roboto;
+	font-size: 12px;
+	line-height: 1.42857143;
+	color: #5e5e5e;
+}
+
+md-autocomplete[md-floating-label] md-input-container {
+	padding-bottom: 0px !important;
+}
+ .container-card {
+ 	margin-top: 5px;
+ }
+ .homwork-table-responsive {
+    padding-top: 10px;
+  	padding-bottom: 10px;
+  	padding-right: 10px;
+  	padding-left: 6px;
+ }
+
+ td {
+   text-overflow: inherit;
+   }
+   .table-responsive {
+   border: 0;
+   }
+   .table-responsive {
+   border: 0;
+   }
+   .table-content{
+       height: calc(100% + 10px);
+   }
+   #enterAttendance {
+   font-size: 12px;
+   line-height: 1.42857143;
+   }
+   .table {
+   table-layout: fixed;
+   }
+   .table-bordered {
+   border-bottom: 0;
+   border-left: 0;
+   border-right: 0;
+   }
+   .table {
+   width: 100%; 
+   max-width: 100%;
+   }
+   tr.odd {
+    background-color: #f4f4f4;
+	}
+   .studentHomeworktable>thead>tr>th {
+   background-color: #fff;
+   vertical-align: middle;
+   font-weight: 500;
+   color: #333;
+   border-width: 1px;
+   text-transform: uppercase;
+   }
+   .studentHomeworktable>thead>tr>th {
+   padding: 13px;
+   line-height: 1.42857143;
+   }
+   .studentHomeworktable>tbody>tr>td {
+   padding: 10px;
+   }
+ 
+   
+</style>

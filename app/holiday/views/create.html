@@ -1,0 +1,70 @@
+<md-dialog-content>
+   <div class="md-dialog-content">
+      <md-input-container class="align-center required-mark">
+         <label>Academic Year</label>
+         <md-select name="academic" ng-model="mScope.mForm.academic.id" data-ng-required="true">
+            <md-option ng-value="academic.id" data-ng-repeat="academic in mScope.academicList">{{::academic.academicYear}}</md-option>
+         </md-select>
+          <div data-ng-messages="modelForm.academic.$error" data-ng-show="modelForm.academic.$touched || modelForm.$submitted" class="has-error">
+            <div data-ng-message="required">
+               <small>Academic Year is Required !</small>
+            </div>
+         </div>
+      </md-input-container>
+      <md-input-container flex class="required-mark">
+         <label>From Date</label><input class="md-input" name="fromDate" id="fromDate" data-ng-required="true" data-ng-model="mScope.mForm.fromDate" data-ng-change="mScope.validateDate('FROMDATE')"  datepicker>
+          <div data-ng-messages="modelForm.fromDate.$error"
+            data-ng-show="modelForm.fromDate.$touched || modelForm.$submitted"
+            class="has-error">
+            <div data-ng-message="required"><small>From Date is required !</small></div>
+         </div>
+      </md-input-container>
+      <md-input-container flex class="required-mark">
+         <label>To Date</label><input class="md-input" name="toDate" id="toDate" data-ng-required="true" data-ng-model="mScope.mForm.toDate" data-ng-change="mScope.validateDate('TODATE')"  datepicker >
+         <div data-ng-messages="modelForm.toDate.$error" data-ng-show="modelForm.toDate.$touched || modelForm.$submitted"
+            class="has-error">
+            <div data-ng-message="required">
+               <small>To Date is required !</small>
+            </div> 
+            <div  data-ng-if="mScope.invalidDate">
+               <small class="help-block" style="color:red;">To Date is must be greater than From Date !</small>
+            </div> 
+         </div>
+      </md-input-container>
+      <md-input-container flex class="required-mark">
+         <label>Holiday Name</label><input class="md-input" name="holidayName" data-ng-minlength="3" data-ng-maxlength="30" data-ng-required="true" data-ng-model="mScope.mForm.holidayName">
+           <div data-ng-messages="modelForm.holidayName.$error" data-ng-show="modelForm.holidayName.$touched || modelForm.$submitted"
+            class="has-error">
+            <div data-ng-message="required"> <small>Holiday Name is Required !</small> </div>
+            <div data-ng-message="minlength"><small>Holiday Name is too short.</small></div>
+			<div data-ng-message="maxlength"><small>Holiday Name is too long.</small></div>
+         </div>
+      </md-input-container>
+
+      <div class="layout-sm-column layout-row required-mark">
+         <div class="col-sm-12 col-xs-12 pl-0">
+            <label>Description</label>
+            <textarea class="form-control" rows="2"
+                      data-ng-model="mScope.mForm.description"
+                      data-ng-minlength="3" data-ng-required="true" name="description"
+                      placeholder="Description"></textarea>
+             <div data-ng-messages="modelForm.description.$error" data-ng-show="modelForm.description.$touched || modelForm.$submitted"
+                  class="has-error">
+                 <div data-ng-message="required"><small>Description is Required !</small> </div>
+                 <div data-ng-message="minlength"><small>Description is too short.</small></div>
+             </div>
+         </div>
+      </div>
+      <div class="layout-sm-column layout-row mt-5">
+         <label class="radio">Status</label>
+         <md-radio-group ng-model="mScope.mForm.status">
+            <label class="radio radio-inline ">
+               <md-radio-button value= "ACTIVE">Active</md-radio-button>
+            </label>
+            <label class="radio radio-inline">
+               <md-radio-button value="INACTIVE">InActive</md-radio-button>
+            </label>
+         </md-radio-group>
+      </div>
+   </div>
+</md-dialog-content>

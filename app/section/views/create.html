@@ -1,0 +1,60 @@
+<md-dialog-content class="card-header">
+   <div class="md-dialog-content">
+    <md-input-container class="align-center required-mark" data-ng-if="mScope.instituteType == 'College'">
+         <label>Department Name</label>
+         <md-select ng-model="mScope.mForm.department.id" name="department" required
+         ng-init="(mScope.mForm.department.id == null)? '' : mScope.getClassByDepartmentId(mScope.mForm.department.id)"
+         data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+            <md-option ng-value="department.id" data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+         </md-select>
+	<div data-ng-messages="modelForm.department.$error"
+		data-ng-if="modelForm.$submitted" class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small>Department name is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+      <md-input-container class="align-center required-mark">
+         <label data-ng-if="mScope.instituteType=='College'">Year</label>
+         <label data-ng-if="mScope.instituteType=='School'">Standard</label>
+         <md-select ng-model="mScope.mForm.classYear.id" name="classYear"  required>
+         <md-option ng-value="standard.id" ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}</md-option>
+         </md-select>
+	<div data-ng-messages="modelForm.classYear.$error"
+		data-ng-if="modelForm.$submitted" class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small  data-ng-if="mScope.instituteType=='College'">Year is required !</small>
+			<small data-ng-if="mScope.instituteType=='School'">Standard is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+      <md-input-container flex class="required-mark">
+         <label>Section Name</label><input class="md-input" data-ng-model="mScope.mForm.sectionName" data-ng-maxlength="15" data-ng-minlength="1" name="sectionName" 
+          style="text-transform:uppercase" required="true">
+	<div data-ng-messages="modelForm.sectionName.$error"
+		data-ng-if="modelForm.sectionName.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small>Section name is required !</small>
+		</div>
+		<div data-ng-message="minlength" class="help-block">
+			<small>Section name is too short.</small>
+		</div>
+		<div data-ng-message="maxlength" class="help-block">
+			<small>Section name is too long.</small>
+		</div>
+	</div>
+	</md-input-container>
+      <div class="row fluid" style="padding-left: initial;margin-left: -15px;">
+         <label class="radio radio-inline m-r-20">Status</label> 
+         <md-radio-group ng-model="mScope.mForm.status">
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value= "ACTIVE">Active</md-radio-button>
+            </label>
+            <label class="radio radio-inline m-r-20">
+               <md-radio-button value="INACTIVE">InActive</md-radio-button>
+            </label>
+         </md-radio-group>
+      </div>
+   </div>
+</md-dialog-content>

@@ -1,0 +1,170 @@
+<md-dialog-content class="card-header" data-ng-init="mScope.mForm.id? '':mScope.mForm.isElective=false;mScope.mForm.id? '':mScope.mForm.subjectElectives=[{}];">
+    <div class="md-dialog-content" style="max-height: 200px">
+        <div data-ng-if="mScope.instituteType == 'College'" class="row fluid" style="padding-left: initial; margin-left: -15px;">
+            <label class="radio radio-inline m-r-20">Elective Subject</label>
+            <md-radio-group ng-model="mScope.mForm.isElective">
+                <label class="radio radio-inline m-r-20">
+                    <md-radio-button data-ng-value="true">Yes</md-radio-button>
+                </label>
+                <label class="radio radio-inline m-r-20">
+                    <md-radio-button data-ng-value="false">No</md-radio-button>
+                </label>
+            </md-radio-group>
+        </div>
+        <md-input-container class="align-center required-mark" data-ng-if="mScope.instituteType == 'College'">
+            <label>Department Name
+            </label>
+            <md-select name="department" ng-model="mScope.mForm.department.id" required ng-init="(mScope.mForm.department.id == null)? '' : mScope.getClassByDepartmentId(mScope.mForm.department.id)" data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id);mScope.mForm.classYear.id=''">
+                <md-option ng-value="department.id" data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.department.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Department name is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="align-center required-mark">
+            <label data-ng-if="mScope.instituteType == 'School'">Standard</label>
+            <label data-ng-if="mScope.instituteType == 'College'">Year</label>
+            <md-select name="classYear" ng-model="mScope.mForm.classYear.id" required aria-label="classYear"
+            data-ng-change="mScope.instituteType != 'College' ? null:mScope.getSemesterByClassYear(mScope.mForm.classYear.id);">
+                <md-option ng-value="standard.id" ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}</md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.classYear.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small data-ng-if="mScope.instituteType == 'College'"> Year
+				is required !</small> <small data-ng-if="mScope.instituteType == 'School'">
+				Standard is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container class="align-center required-mark" data-ng-if="mScope.instituteType == 'College'">
+            <label>Semester</label>
+            <md-select name="semester" ng-model="mScope.mForm.semester" required>
+                <md-option ng-value="semester" data-ng-repeat="semester in mScope.semestersLists">{{::semester}}</md-option>
+            </md-select>
+            <div data-ng-messages="modelForm.semester.$error" data-ng-if="modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Semester is required !</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container flex data-ng-if="!mScope.mForm.isElective" class="required-mark">
+            <label>Subject Code</label>
+            <input class="md-input" name="code" data-ng-model="mScope.mForm.code" data-ng-minlength="4" data-ng-maxlength="20" required autocomplete="off">
+            <div data-ng-messages="modelForm.code.$error" data-ng-if="modelForm.code.$touched || modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Subject code is required !</small>
+                </div>
+                <div data-ng-message="minlength" class="help-block">
+                    <small>Subject code is too short.</small>
+                </div>
+                <div data-ng-message="maxlength" class="help-block">
+                    <small>Subject code is too long.</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container flex class="required-mark">
+            <label>Subject Name
+            </label>
+            <input name="subjectName" class="md-input" required data-ng-model="mScope.mForm.subjectName" data-ng-minlength="2" data-ng-maxlength="100" autocomplete="off">
+            <div data-ng-messages="modelForm.subjectName.$error" data-ng-if="modelForm.subjectName.$touched || modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Subject name is required !</small>
+                </div>
+                <div data-ng-message="minlength" class="help-block">
+                    <small>Subject name is too short.</small>
+                </div>
+                <div data-ng-message="maxlength" class="help-block">
+                    <small>Subject name is too long.</small>
+                </div>
+            </div>
+        </md-input-container>
+        <md-input-container flex class="required-mark">
+            <label>Subject Display Name</label>
+            <input name="subjectDisplayName" class="md-input" required data-ng-model="mScope.mForm.displayName" data-ng-minlength="1" data-ng-maxlength="11" autocomplete="off">
+            <div data-ng-messages="modelForm.subjectDisplayName.$error" data-ng-if="modelForm.subjectDisplayName.$touched || modelForm.$submitted" class="has-error">
+                <div data-ng-message="required" class="help-block">
+                    <small>Subject display name is required !</small>
+                </div>
+                <div data-ng-message="minlength" class="help-block">
+                    <small>Subject display name is too short.</small>
+                </div>
+                <div data-ng-message="maxlength" class="help-block">
+                    <small>Subject display name is too long.</small>
+                </div>
+            </div>
+        </md-input-container>
+        <div id="examPaperDiv" data-ng-if="mScope.mForm.isElective && !mScope.mForm.id">
+            <div layout layout-sm="row" style="font-size: small;">
+                <div class="col-sm-3 col-xs-3">
+                    <label>Elective Subject Code</label>
+                </div>
+                <div class="col-sm-3 col-xs-3">
+                    <label>Elective Subject Name</label>
+                </div>
+                <div class="col-sm-3 col-xs-3">
+                    <label>Display Name</label>
+                </div>
+                <div class="col-sm-3 col-xs-3">
+                    <label></label>
+                </div>
+            </div>
+        </div>
+        <div layout data-ng-if="mScope.mForm.isElective && !mScope.mForm.id" data-ng-repeat="subjectElective in mScope.mForm.subjectElectives" style="margin-bottom: 0px !important;">
+            <md-input-container class="col-sm-3 col-xs-3">
+                <input name="electiveSubjectCode" aria-label="elective subject code" class="md-input" data-ng-model="mScope.mForm.subjectElectives[$index].electiveSubjectCode" autocomplete="off">
+            </md-input-container>
+            <md-input-container class="col-sm-3 col-xs-3">
+                <input name="electiveSubjectName" aria-label="elective subject name" class="md-input" data-ng-model="mScope.mForm.subjectElectives[$index].electiveSubjectName" autocomplete="off">
+            </md-input-container>
+            <md-input-container class="col-sm-3 col-xs-3">
+                <input name="electiveDisplayName" aria-label="elective subject display name" class="md-input" data-ng-model="mScope.mForm.subjectElectives[$index].electiveDisplayName" maxlength="6" autocomplete="off">
+            </md-input-container>
+            <md-input-container class="col-sm-3 col-xs-3">
+                <div class="col-sm-1">
+                    <button class="btn bgm-teal btn-xs" data-ng-click="mScope.mForm.subjectElectives.push({})">
+                        <i class="zmdi zmdi-plus"></i>
+                    </button>
+                </div>
+                <div class="col-sm-1">
+                    <button class="btn btn-primary btn-xs btn btn-delete" data-ng-if="mScope.mForm.subjectElectives.length > 1" data-ng-click="mScope.removeRow($index);">
+                        <i class="zmdi zmdi-minus"></i>
+                    </button>
+                </div>
+            </md-input-container>
+        </div>
+        <div data-ng-if="mScope.instituteType != 'School'"><label style="font-size: 15px;font-family: inherit;padding-bottom: 5px;">Consolidated Form:</label> </div>
+            <div layout style="font-size: small;" data-ng-if="mScope.instituteType != 'School'">
+                <div class="col-md-4 col-sm-4 col-xs-4 pl-0">
+                    <label>Exam </label>
+                    <md-input-container >
+                <input name="electiveSubjectCode" aria-label="elective subject code" class="md-input" data-ng-model="mScope.mForm.examConsolidatedMark" autocomplete="off">
+            </md-input-container>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-4 pl-0">
+                    <label>Assignment </label>
+                    <md-input-container >
+                <input name="electiveSubjectName" aria-label="elective subject name" class="md-input" data-ng-model="mScope.mForm.assigmentConsolidatedMark" autocomplete="off">
+            </md-input-container>
+                </div>
+                <div class="col-md-4 col-sm-4 col-xs-4 pl-0">
+                    <label>Attendance</label>
+                    <md-input-container >
+                <input name="electiveDisplayName" aria-label="elective subject display name" class="md-input" data-ng-model="mScope.mForm.attedanceConsolidatedMark" maxlength="6" autocomplete="off">
+            </md-input-container>
+                </div>
+            </div>
+        <div class="row fluid" style="padding-left: initial; margin-left: -15px;">
+            <label class="radio radio-inline m-r-20">Status</label>
+            <md-radio-group ng-model="mScope.mForm.status">
+                <label class="radio radio-inline m-r-20">
+                    <md-radio-button value="ACTIVE">Active</md-radio-button>
+                </label>
+                <label class="radio radio-inline m-r-20">
+                    <md-radio-button value="INACTIVE">InActive</md-radio-button>
+                </label>
+            </md-radio-group>
+        </div>
+    </div>
+</md-dialog-content>

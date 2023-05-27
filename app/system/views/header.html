@@ -1,0 +1,78 @@
+<div class="md-toolbar-tools">
+	<div class="col-sm-10 col-xs-8 pl-0">
+		<div data-ng-click="systemCtrl.toggleState()" ng-class="{'hamburger': !systemCtrl.state, 'arrow-right': systemCtrl.state}" class="nav-toggle">
+			<span></span>
+		</div>
+		<div class="font-header institute-name-header pl-5 pl-xs-2">
+			<img class="img-header" data-ng-show="systemCtrl.role !='ROLE_SUPER_ADMIN'"
+				data-ng-src="{{systemCtrl.instituteDetails.logo}}" data-ng-if="systemCtrl.instituteDetails.logo.length">
+				<img class="img-header" data-ng-show="systemCtrl.role !='ROLE_SUPER_ADMIN'"
+					src="assets/images/logo2.png" data-ng-if="!systemCtrl.instituteDetails.logo.length"> 
+					<span>{{::systemCtrl.instituteDetails.instituteName}}</span>
+		</div>
+	</div>
+	<div class="col-sm-2 col-xs-4 col-md-2">
+		<div class="username-header font-header" data-ng-if="systemCtrl.role=='ROLE_USER'" data-ng-bind="systemCtrl.userDetails.student.firstName"></div>
+		<div class="username-header font-header" data-ng-if="systemCtrl.role=='ROLE_STAFF' || systemCtrl.role=='ROLE_STAFF_HOD'" 
+			data-ng-bind="systemCtrl.userDetails.staff.firstName"></div>
+		<div class="username-header font-header" data-ng-if="systemCtrl.role=='ROLE_ADMIN'">Admin</div>
+		<div class="username-header font-header" data-ng-if="systemCtrl.role=='ROLE_SUPER_ADMIN'">Super Admin</div>
+
+		<md-menu md-position-mode="target-right bottom" class="target-right">
+		<md-button class="md-icon-button" aria-label="Messages" ng-click="$mdOpenMenu($event)">
+		<div data-ng-if="systemCtrl.userDetails.profilePath.length" class="profile-pic">
+			<img data-ng-src="{{systemCtrl.userDetails.profilePath}}" alt="">
+		</div>
+		<div data-ng-if="!systemCtrl.userDetails.profilePath.length" class="profile-pic">
+			<img data-ng-src="/assets/images/1.jpg" alt="">
+		</div>
+		</md-button> 
+		<md-menu-content width="3" class="pb-0"> 
+		<md-menu-item
+			class="menu-item" style="height: auto;">
+		<div>
+			<md-content flex> <md-list class="pb-0">
+				<md-list-item class="md-3-line pl-0" style="min-height: 48px;">
+					<img data-ng-src="{{systemCtrl.userDetails.profilePath?systemCtrl.userDetails.profilePath:'/assets/images/1.jpg'}}" 
+						onerror="this.src='/assets/images/1.jpg'" class="md-avatar my-0">
+
+			<div class="md-list-item-text">
+				<h3 style="font-weight: 500;" data-ng-if="systemCtrl.role=='ROLE_USER'"
+					data-ng-bind="systemCtrl.userDetails.student.firstName"></h3 >
+		<h3 style="font-weight: 500;" data-ng-if="systemCtrl.role=='ROLE_STAFF' || systemCtrl.role=='ROLE_STAFF_HOD'"
+			data-ng-bind="systemCtrl.userDetails.staff.firstName"></h3 >
+		<h3 style="font-weight: 500;" data-ng-if="systemCtrl.role=='ROLE_ADMIN'">Admin</h3 >
+		<h3 style="font-weight: 500;" data-ng-if="systemCtrl.role=='ROLE_SUPER_ADMIN'">Super Admin</h3>
+				<p data-ui-sref="profile" style="outline:none;color: blue;opacity:0.7;padding:2px;font-size:11px;cursor:pointer;"
+				data-ng-click="systemCtrl.resetTabIndex()">View profile</p>
+			</div>
+			
+			<md-divider inset></md-divider> </md-list-item> </md-list> </md-content>
+		</div>
+		</md-menu-item>
+		<md-menu-item data-ng-if="systemCtrl.userDetails.students.length > 0"
+			class="menu-item" style="height: auto;border-left: 5px solid rgb(0,150,136);min-height: 0px;">
+		<div>
+			<md-content flex> 
+			<md-list class="p-0" ng-repeat="student in systemCtrl.userDetails.students"> 
+			<md-list-item  ng-if="student.id !== systemCtrl.userDetails.student.id && !student.isDeleted" class="md-3-line px-0" style="min-height: 40px;">
+			<button class="md-no-style px-0 md-button md-dark-teal-theme md-ink-ripple" style="min-height: 40px;" type="button" ng-click="systemCtrl.loginStudentChange(student.id)">
+			<div class="md-list-item-inner ng-scope"> 
+			 <img ng-src="{{student.profilePicture ? student.profilePicture:'/assets/images/user.ico'}}" onerror="this.src='/assets/images/user.ico'" style="height: 30px;width:30px;" class="md-avatar my-0">
+			<div class="md-list-item-text" style="margin: unset;">
+				<p style="margin-top: 6px;" class="ng-binding">{{student.firstName}}</p>
+			</div></div></button>
+			<md-divider inset></md-divider> </md-list-item>
+			 </md-list> </md-content>
+		</div>
+		</md-menu-item> 
+		
+		<md-menu-item class="menu-item" style="height: auto;">
+			<md-button class="py-1" style="width: 100%;text-align:center" ng-click="systemCtrl.logout()">
+			<span style="width: 100%;font-size: small;">Logout<i class="zmdi zmdi-sign-in ml-1"></i></span>
+			</md-button> 	
+		</md-menu-item> 
+			
+		</md-menu-content> </md-menu>
+	</div>
+</div>

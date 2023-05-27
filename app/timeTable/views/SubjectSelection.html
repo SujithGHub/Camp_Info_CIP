@@ -1,0 +1,56 @@
+<md-dialog-content>
+    <div class="md-dialog-content">
+        <md-input-container class="align-center">
+            <label>Hour 1</label>
+            <md-select ng-model="mScope.mForm.hour1" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show="mScope.hourCount == 2 || mScope.hourCount == 4 || mScope.hourCount == 5 || 
+             mScope.hourCount == 6 || mScope.hourCount == 7 || mScope.hourCount == 8 ">
+            <label>Hour 2</label>
+            <md-select ng-model="mScope.mForm.hour2" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show="mScope.hourCount == 4 || mScope.hourCount == 5 || 
+             mScope.hourCount == 6 || mScope.hourCount == 7 || mScope.hourCount == 8 ">
+            <label>Hour 3</label>
+            <md-select ng-model="mScope.mForm.hour3" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show="mScope.hourCount == 4 || mScope.hourCount == 5 || 
+             mScope.hourCount == 6 || mScope.hourCount == 7 || mScope.hourCount == 8 ">
+            <label>Hour 4</label>
+            <md-select ng-model="mScope.mForm.hour4" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show=" mScope.hourCount == 5 || 
+             mScope.hourCount == 6 || mScope.hourCount == 7 || mScope.hourCount == 8 ">
+            <label>Hour 5</label>
+            <md-select ng-model="mScope.mForm.hour5" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show=" mScope.hourCount == 6 || mScope.hourCount == 7 || mScope.hourCount == 8 ">
+            <label>Hour 6</label>
+            <md-select ng-model="mScope.mForm.hour6" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show="mScope.hourCount == 7 || mScope.hourCount == 8 ">
+            <label>Hour 7</label>
+            <md-select ng-model="mScope.mForm.hour7" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-input-container class="align-center" ng-show=" mScope.hourCount == 8 ">
+            <label>Hour 8</label>
+            <md-select ng-model="mScope.mForm.hour8" ng-model-options="{trackBy: '$value.id' }">
+                <md-option ng-value="subject" ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+</md-dialog-content>

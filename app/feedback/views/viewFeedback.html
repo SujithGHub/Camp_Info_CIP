@@ -1,0 +1,59 @@
+<div class="card-header" data-ng-init="(feedbackCtrl.role != 'ROLE_USER')? feedbackCtrl.init():''" data-ng-show="feedbackCtrl.role != 'ROLE_USER'">
+	<div class="row">
+		 <div class="col-sm-6"><h2>Feedbacks</h2></div>
+		
+		<div class="col-sm-5 col-xs-10" data-ng-init="pendingFeedback = true;">
+         <md-input-container>
+            <label>Search here</label>
+            <input id="search" type="text" data-ng-model="search" data-ng-change="pendingFeedback == true?feedbackCtrl.init():feedbackCtrl.getClosedFeedbacks();">
+         </md-input-container>
+      </div>
+	</div>
+</div>
+<md-content style="overflow:hidden;height:calc(100% - 50px)" class="card-body" data-ng-show="feedbackCtrl.role!== 'ROLE_USER'"> 
+<md-tabs md-selected="0" md-border-bottom="" md-autoselect="" style="min-height: 500px;">
+<md-tab label="Pending Feedbacks" data-ng-click = "pendingFeedback = true;search='';feedbackCtrl.init()">
+<div class="card">
+	<div id="table-responsive" class="table-responsive content" style="height: calc(100% - 92px); overflow-y: auto !important">
+		<table id="pendingFeedbackTable" class="display table" cellspacing="0" width="100%"></table>
+	</div>
+</div>
+</md-tab> <md-tab label="Closed Feedbacks" data-ng-click = "pendingFeedback = false;search='';feedbackCtrl.getClosedFeedbacks()">
+<div class="card">
+	<div id="table-responsive" class="table-responsive content">
+		<table id="closedFeedbackTable" class="display table" cellspacing="0"></table>
+	</div>
+</div>
+</md-tab> 
+</md-tabs>
+</md-content> 
+<div class="card-header" data-ng-init="feedbackCtrl.getFeedbackList()" data-ng-show="feedbackCtrl.role == 'ROLE_USER'">
+   <div class="row">
+      <div class="col-sm-6">
+         <div>
+            <h2> Feedback <small class="hidden-xs">
+                  <div class="grid-ellipsis "></div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-sm-5">
+         <md-input-container>
+            <label>Search here</label>
+            <input id="search" type="text" data-ng-model="search" data-ng-change="feedbackCtrl.getFeedbackList()">
+         </md-input-container>
+      </div>
+      <div class="col-sm-1">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" 
+            template-url="/app/feedback/views/create.html" form-modal  init-data="" 
+            m-title="Feedback" m-Scope="feedbackCtrl.mScope" form-submit="feedbackCtrl.saveFeedback(mForm)" 
+             ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Feedback</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content" data-ng-show="feedbackCtrl.role == 'ROLE_USER'" style="height: calc(100% - 92px);overflow-y:auto!important">
+   <table data-ng-if="feedbackCtrl.role == 'ROLE_USER'" id="feedbackDataTable" class="display table" cellspacing="0" width="100%"></table>
+</div>

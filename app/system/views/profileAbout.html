@@ -1,0 +1,173 @@
+<div class="content" style="height: 72vh; overflow-y: auto">
+	<h3 style="font-weight: 500; padding-left: 20px;font-size: 15px;" data-ng-if="!systemCtrl.showChangePassword">
+    	<i class="zmdi zmdi-person m-r-5"></i> Basic Information
+       <button type="button" class="btn btn-default float-right ml-1"
+               ng-click="systemCtrl.showChangePassword=true;"
+               ng-hide="systemCtrl.showEditProfile || systemCtrl.showChangePassword"
+               title="Change Password">
+          <i class="zmdi zmdi-lock"></i>
+       </button>
+       <button type="button" class="btn btn-default float-right ml-1"
+               ng-click="systemCtrl.showEditProfile=true;systemCtrl.formatDOB();"
+               ng-hide="systemCtrl.showEditProfile || systemCtrl.showChangePassword"
+               title="Edit Profile">
+          <i class="zmdi zmdi-edit"></i>
+       </button>
+    </h3>
+      <div class="pmbb-body" style="padding-left: 30px !important;">
+         <div data-ng-hide="systemCtrl.showEditProfile || systemCtrl.showChangePassword">
+            <dl data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF'
+             || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD'">
+               <dt>Full Name</dt>
+               <dd>{{systemCtrl.profileData.firstName }}
+                  {{systemCtrl.profileData.lastName}}
+               </dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.userDetails.roles[0].name == 'ROLE_ADMIN'">
+               <dt>Institute Name</dt>
+               <dd>{{systemCtrl.profileData.instituteName }}</dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF' ||
+            systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD'">
+               <dt>Gender</dt>
+               <dd>{{ systemCtrl.profileData.gender }}</dd>
+            </dl>
+            <dl data-ng-if="(systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF' ||
+            systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD')&&systemCtrl.profileData.dob">
+               <dt>Birthday</dt>
+               <dd>{{systemCtrl.profileData.dob | date:'MMM dd,yyyy' }}</dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.profileData.phoneNumber">
+               <dt>Mobile Phone</dt>
+               <dd>{{ systemCtrl.profileData.phoneNumber }}</dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.profileData.emailId">
+               <dt >Email Address</dt>
+               <dd>{{ systemCtrl.profileData.emailId }}</dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.profileData.emergencyContact">
+               <dt>Emergency Contact</dt>
+               <dd>{{ systemCtrl.profileData.emergencyContact }}</dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.profileData.contactPerson">
+               <dt>Contact Person</dt>
+               <dd>{{ systemCtrl.profileData.contactPerson }}</dd>
+            </dl>
+            <dl data-ng-if="systemCtrl.profileData.relation">
+               <dt>Relation</dt>
+               <dd>{{ systemCtrl.profileData.relation }}</dd>
+            </dl>
+         </div>
+         <form name="profileDetailForm" role="form" novalidate data-ng-submit="profileDetailForm.$valid ? pctrl.submit('profileInfo', 'Profile Information'): ' '"
+            class="pmbb-edit" data-ng-if="systemCtrl.showEditProfile">
+            <md-input-container class="flex" data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF'
+            || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD'">
+            <label>First Name</label> 
+               <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.firstName" placeholder="eg. Mallinda Hollaway"> 
+            </md-input-container>
+            <md-input-container class="flex" data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF'
+            || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD'">
+            <label>Last Name</label> 
+            <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.lastName"> 
+            </md-input-container>
+            <md-input-container data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_ADMIN'"> <label>Institute
+               Name</label> <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.instituteName"> 
+            </md-input-container>
+            <md-input-container class="align-center" data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF'
+            || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD'">
+               <label>Gender</label>
+               <md-select name="myModel" data-ng-model="systemCtrl.profileData.gender">
+                  <md-option value="Male">Male</md-option>
+                  <md-option value="Female">Female</md-option>
+               </md-select>
+            </md-input-container>
+            <md-input-container class="flex" data-ng-if="systemCtrl.userDetails.roles[0].name == 'ROLE_USER' || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF'
+            || systemCtrl.userDetails.roles[0].name == 'ROLE_STAFF_HOD' ">
+               <label>Date of Birth</label>
+               <input type="text"class="md-input" datepicker data-ng-model="systemCtrl.profileData.dob">
+            </md-input-container>
+            <md-input-container class="flex">
+               <label>Mobile Phone</label>
+               <input type="text"class="md-input" data-ng-model="systemCtrl.profileData.phoneNumber"
+               data-ng-disabled="systemCtrl.userDetails.roles[0].name != 'ROLE_ADMIN'">
+            </md-input-container>
+            <md-input-container>
+               <label>E-Mail</label>
+               <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.emailId" placeholder="eg. malinda.h@gmail.com" disabled>
+            </md-input-container>
+            <md-input-container data-ng-if="systemCtrl.profileData.emergencyContact">
+               <label>Emergency Contact</label>
+               <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.emergencyContact" disabled>
+            </md-input-container>
+            <md-input-container data-ng-if="systemCtrl.profileData.contactPerson">
+               <label>Contact Person</label>
+               <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.contactPerson" disabled>
+            </md-input-container>
+            <md-input-container data-ng-if="systemCtrl.profileData.relation">
+               <label>Relation</label>
+               <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.relation" disabled>
+            </md-input-container>
+            <md-input-container data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_ADMIN'">
+            	<label>E-Mail Template</label>
+                <input type="text" class="md-input" data-ng-model="systemCtrl.profileData.emailTemplate" 
+                	name="emailTemplate" data-ng-required='systemCtrl.profileData.emailAccess'>
+                <div data-ng-messages="profileDetailForm.emailTemplate.$error" class="has-error"
+					data-ng-if="profileDetailForm.emailTemplate.$touched || profileDetailForm.$submitted">
+					<div data-ng-message="required" class="help-block">
+						<small>E-Mail Template is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+            <md-input-container data-ng-if=" systemCtrl.userDetails.roles[0].name == 'ROLE_ADMIN'">
+				<label>SMS Template</label>
+				<input type="text" class="md-input" data-ng-model="systemCtrl.profileData.smsTemplate" 
+					name="smsTemplate" data-ng-required='systemCtrl.profileData.smsAccess'>
+				<div data-ng-messages="profileDetailForm.smsTemplate.$error" class="has-error"
+					data-ng-if="profileDetailForm.smsTemplate.$touched || profileDetailForm.$submitted">
+					<div data-ng-message="required" class="help-block">
+						<small>SMS-Template is required !</small>
+					</div>
+				</div>
+            </md-input-container>
+            <div class="m-t-30">
+               <button class="btn btn-sm btn-primary bgm-teal" data-ng-click="profileDetailForm.$valid ? systemCtrl.updateProfile(systemCtrl.profileData): ''">Save</button>
+               <button class="btn btn-sm btn-cancel" data-ng-click="systemCtrl.showEditProfile=false;">CANCEL</button>
+            </div>
+         </form>
+      </div>
+   <div class="pmb-block" data-ng-if="systemCtrl.showChangePassword">
+      <div class="pmbb-header">
+         <h3 style="font-weight: 400;">
+            <i class="zmdi zmdi-person m-r-5"></i>Change Password
+         </h3>
+      </div>
+      <div class="pmbb-body" style="padding-left: 30px !important;">
+         <form name="profileForm" role="form" novalidate
+            data-ng-submit="profileForm.$valid && isValidPwd == 'true'? pctrl.resetUpdatePassword(profileForm): '' ">
+            <md-input-container class="flex"> 
+               <label>Current Password</label> <input type="text" class="md-input" data-ng-model="systemCtrl.form.currentPassword" data-ng-focus="iscurrentPassword=true;systemCtrl.statusData=true" name="currentPassword" required  data-ng-blur="profileForm.currentPassword.$valid ?systemCtrl.checkCurrentPassword(systemCtrl.form.currentPassword): '';iscurrentPassword=false" value="">
+               <div data-ng-show="systemCtrl.statusData == 'false' && !iscurrentPassword"  class="help-block" ><small style="color:rgb(213,0,0) ">Current password is incorrect !</small></div>
+               <div data-ng-messages="profileForm.currentPassword.$error"  data-ng-if="profileForm.currentPassword.$touched || profileForm.$submitted"  class="has-error">
+                   <p data-ng-message="required"   class="help-block"><small>Current password is Required !</small></p>
+		       </div> 
+            </md-input-container>
+            <md-input-container class="flex"> <label>New Password</label> <input type="text" class="md-input" data-ng-model="systemCtrl.form.newPassword"  name="newPassword" required data-ng-blur="profileForm.confirmPassword ?systemCtrl.checkConfirmPassword(systemCtrl.form.newPassword, systemCtrl.form.confirmPassword): ' ' ; isconfirmPassword=false">
+            <div data-ng-messages="profileForm.newPassword.$error"  data-ng-if="profileForm.newPassword.$touched || profileForm.$submitted"  class="has-error">
+            	<p data-ng-message="required"   class="help-block"><small>New Password is Required !</small></p>
+            </div>
+            </md-input-container>
+            <md-input-container class="flex"> <label>Confirm Password</label> 
+               <input type="text" class="md-input" data-ng-model="systemCtrl.form.confirmPassword" name="confirmPassword" required data-ng-focus="isconfirmPassword=true;systemCtrl.passwordMatch=true" data-ng-blur="profileForm.confirmPassword.$valid ?systemCtrl.checkConfirmPassword(systemCtrl.form.newPassword, systemCtrl.form.confirmPassword): ' ' ; isconfirmPassword=false">
+               <div data-ng-show="systemCtrl.passwordMatch == false && !isconfirmPassword"  class="help-block" ><small style="color:rgb(213,0,0)">Passwords do not match!</small></div>
+               <div data-ng-messages="profileForm.confirmPassword.$error"  data-ng-if="profileForm.confirmPassword.$touched || profileForm.$submitted"  class="has-error">
+         			<p data-ng-message="required"   class="help-block"><small>Confirm Password is Required !</small></p>
+               </div>
+            </md-input-container>
+            <div class="m-t-30">
+               <button class="btn btn-sm btn-primary bgm-teal" data-ng-click="profileForm.$valid && systemCtrl.statusData =='true' && systemCtrl.passwordMatch == true ? systemCtrl.changePassword(systemCtrl.form) : ''">Save</button>
+               <button class="btn btn-sm btn-cancel" data-ng-click="systemCtrl.showChangePassword=false;systemCtrl.form = {};profileForm.$setPristine();profileForm.$setUntouched();systemCtrl.statusData=true;systemCtrl.passwordMatch=true">Cancel</button>
+            </div>
+         </form>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="card-header" data-ng-init="departmentCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2> Department <small class="hidden-xs">
+                  <div class="grid-ellipsis ">All departments in all academic years</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="departmentCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button id="modelForm" class="md-fab md-mini md-primary m-0" aria-label="add"
+            template-url="/app/department/views/create.html" form-modal
+            m-title="Department" m-Scope="departmentCtrl.mScope" form-submit="departmentCtrl.saveOrUpdateDepartment(mForm)" init-data="departmentCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Department</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="departmentDataTable" class="display table" cellspacing="0">
+       
+   </table>
+</div>

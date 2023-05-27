@@ -1,0 +1,44 @@
+<div class="card-header ch-al">
+   <div class="row">
+      <h2>Send Group SMS</h2>
+   </div>
+</div>
+<div class="card-body content" style="height: calc(100% - 10%);">
+   <form class="form-horizontal pad-top" role="form" name="smsForm" novalidate>
+      <div class="form-group row" style="margin-bottom: 0px">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+         <label>Phone Number</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container flex><input class="md-input" name="phoneno" data-ng-pattern="/^\d{1,8}(,\d{1,8}){0,9}/" data-ng-required="true" data-ng-model="smsCtrl.form.mobileNumber">
+            <div data-ng-messages="smsForm.phoneno.$error" data-ng-show="smsForm.phoneno.$touched || smsForm.$submitted">
+                     <div data-ng-message="required"><small>Mobile Number is required !</small></div>
+                    <div data-ng-message="minlength"><small>Mobile Number is too short.</small></div>
+                    <div data-ng-message="maxlength"><small>Mobile Number is too long.</small></div>
+                    <div data-ng-message="pattern"><small>Mobile Number is not valid.</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+		<label>Message</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <textarea class="input-sm form-control" 
+               data-ng-model="smsCtrl.form.textMessage" id="textMessage" rows="5" data-ng-minlength="3" data-ng-maxlength="160"
+               name="message" placeholder="Type the message here...." data-ng-required="true"></textarea>
+                <div id="count"></div>
+               <div data-ng-messages="smsForm.message.$error" data-ng-show="smsForm.message.$touched || smsForm.$submitted">
+                     <div data-ng-message="required"><small style="color: rgb(213,0,0);">Message is required !</small></div>
+                    <div data-ng-message="minlength"><small style="color: rgb(213,0,0);">Message is too short.</small></div>
+                    <div data-ng-message="maxlength"><small style="color: rgb(213,0,0);">Message is too long.</small></div>
+                  </div>
+         </div>
+      </div>
+      <div class="form-group row">
+       <div class="col-xs-4 col-sm-3 col-md-3"></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <button type="submit" class="btn btn-danger" data-ng-click="smsForm.$valid ? smsCtrl.sendGroupSms(smsCtrl.form) : null">SEND<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i></button>
+         </div>
+      </div>
+   </form>
+</div>

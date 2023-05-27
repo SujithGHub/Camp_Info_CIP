@@ -1,0 +1,156 @@
+<div id="paymentCard" data-ng-init="paymentCtrl.initPayment()">
+   <div class="card-header ch-al">
+      <div class="row">
+          <div class="col-11">
+              <h2>Payment
+                  <small class="hidden-xs">
+                      <div class="grid-ellipsis ">An amount of money paid for a particular piece of work or service</div>
+                  </small>
+              </h2>
+          </div>
+          <div class="col-1">
+              <button class="btn bgm-teal btn-xs pull-right" data-ui-sref="payment" style="float: right;"><span>BACK</span></button>
+          </div>
+      </div>
+   </div>
+   <div class="card-body card-padding" style="height: 78vh !important;">
+      <form name='payForm' role='form' novalidate>
+         <div class="form-group row" style="margin-bottom: 0px">
+            <label class="col-sm-3 control-label">Amount in INR</label>
+            <div class="col-sm-7">
+               <md-input-container md-no-float="" class="md-block">
+                  <input ng-model="paymentCtrl.form.amount" placeholder="Amount" name="amount" data-ng-required="true" data-ng-pattern="/^[1-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/">
+                  <div data-ng-messages="payForm.amount.$error" data-ng-show="payForm.amount.$touched || payForm.$submitted">
+                     <div data-ng-message="required"><small>This field is Required !</small></div>
+                     <div data-ng-message="pattern"><small>Please enter valid amount</small></div>
+                  </div>
+               </md-input-container>
+            </div>
+         </div>
+         <div class="form-group row" style="margin-bottom: 0px">
+            <label class="col-sm-3 control-label">Towards</label>
+            <div class="col-sm-7">
+               <md-input-container md-no-float="" class="md-block">
+                  <input ng-model="paymentCtrl.form.productinfo" name="towards" data-ng-required="true" data-ng-maxlength="50" data-ng-minlength="5" placeholder="Description"> 
+                  <div data-ng-messages="payForm.towards.$error" data-ng-show="payForm.towards.$touched || payForm.$submitted">
+                     <div data-ng-message="required"> <small>This field is Required !</small></div>
+                     <div data-ng-message="maxlength"><small>Max 50 characters are allowed</small></div>
+					 <div data-ng-message="minlength"><small>Please enter minimum 5 characters</small></div>
+                  </div>
+               </md-input-container>
+            </div>
+         </div>
+         <div class="form-group">
+            <div class="offset-sm-3 col-sm-10">
+               <button type="submit" class="btn btn-danger" data-ng-click='payForm.$valid ? paymentCtrl.savePayment(paymentCtrl.form) : null;'>PAY
+               NOW</button>
+            </div>
+         </div>
+      </form>
+   </div>
+</div>
+<div id="success" style="display:none" class="">
+   <div class="card">
+      <div class="card-header"></div>
+      <div class="card-body">
+         <button class="btn bgm-teal btn-xs pull-right" style="margin:10px" data-ng-click="clearData()"
+            data-tooltip-placement="bottom" data-tooltip="Back" data-ui-sref="viewpayment">Back
+         </button>
+         <div class="invoice-box content col-sm-10" style="width:100%">
+            <table cellpadding="0" cellspacing="0">
+               <tr class="top">
+                  <td colspan="2">
+                     <table>
+                        <tr>
+                           <td class="title" style="text-align:center">
+                           <img src="/assets/images/logo.jpg" style="max-width: 48px;vertical-align: middle;">{{paymentCtrl.instituteDetails.instituteName}}<br>
+                              <span style="font-size:14px;">{{paymentCtrl.instituteDetails.address}}<br>
+                              <span>Contact :</span> {{paymentCtrl.instituteDetails.phoneNumber}} &nbsp&nbsp<span>WebSite :</span> {{paymentCtrl.instituteDetails.website}}</span>
+                           </td>
+                        </tr>
+                     </table>
+                  </td>
+               </tr>
+               <tr class="information">
+                  <td colspan="2">
+                     <table>
+                        <tr>
+                           <td style="padding-bottom:10px"><span style="font-weight:600">Invoice No :</span> {{paymentCtrl.payment.receiptNo}}</td>
+                           <td style="padding-bottom:10px">
+                              <span style="font-weight:600"> Date :</span> {{paymentCtrl.payment.paymentDate}}
+                           </td>
+                        </tr>
+                        <tr>
+                           <td>Name : {{paymentCtrl.payment.student.firstName}}&nbsp{{paymentCtrl.payment.student.lastName}}
+                              <br>
+                              <span data-ng-show="payment.student.department">Department : {{paymentCtrl.payment.student.department.name}}</span>
+                              <span data-ng-hide="payment.student.department">Standard :  {{paymentCtrl.payment.student.classYear.name}}</span>
+                           </td>
+                           <td>Roll No: {{paymentCtrl.payment.student.rollNumber}}
+                              <br>
+                              <span data-ng-show="payment.student.department">Year : {{paymentCtrl.payment.student.classYear.name}}</span>  &nbsp Section : {{paymentCtrl.payment.student.section.sectionName}}
+                           </td>
+                        </tr>
+                     </table>
+                  </td>
+               </tr>
+               <tr class="heading">
+                  <td>Payment Details</td>
+                  <td></td>
+               </tr>
+               <tr class="details">
+                  <td>Amount Paid</td>
+                  <td>{{paymentCtrl.payment.amount}}</td>
+               </tr>
+               <tr class="details">
+                  <td>Towards</td>
+                  <td>{{paymentCtrl.payment.productinfo}}</td>
+               </tr>
+               <tr class="details">
+                  <td>Payment Type</td>
+                  <td>Online</td>
+               </tr>
+               <tr class="">
+                  <td colspan="2" style="text-align:center;font-size:12px">This is a system generated receipt and does not require signature </td>
+               </tr>
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="" data-ng-if="paymentCtrl.instituteType == 'College'">
+<form name="paymentForm" method="POST" id="paymentForm"
+   action="https://test.payu.in/_payment">
+   <input type="hidden" name="key" value="{{paymentCtrl.gatewayObject.key}}" /> 
+   <input type="hidden" name="txnid" value="{{paymentCtrl.gatewayObject.txnid}}" /> 
+   <input type="hidden" name="productinfo" value="{{paymentCtrl.gatewayObject.productinfo}}" /> 
+   <input type="hidden" name="firstname" value="{{paymentCtrl.gatewayObject.student.firstName}}" /> 
+   <input type="hidden" name="email" value="{{paymentCtrl.gatewayObject.email}}" /> 
+   <input type="hidden" name="phone" value="{{paymentCtrl.gatewayObject.student.phoneNumber}}" /> 
+   <input type="hidden" name="surl" value="{{paymentCtrl.gatewayObject.surl}}" />
+   <input type="hidden" name="furl" value="{{paymentCtrl.gatewayObject.furl}}" /> 
+   <input type="hidden" name="hash" value="{{paymentCtrl.gatewayObject.hash}}" /> 
+   <input type="hidden" name="service_provider" value="{{paymentCtrl.gatewayObject.service_provider}}" /> 
+   <input type="hidden" name="amount" value="{{paymentCtrl.gatewayObject.amount}}" />
+   <input type="hidden"  name="udf1" value="{{paymentCtrl.gatewayObject.id}}" /> 
+   <input type="hidden" name="udf2" value="{{paymentCtrl.gatewayObject.student.id}}" />
+</form>
+</div>
+<div class="" data-ng-if="paymentCtrl.instituteType == 'School'">
+<form name="paymentForm" method="POST" id="paymentForm"
+   action="https://test.payu.in/_payment">
+   <input type="hidden" name="key" value="{{paymentCtrl.gatewayObject.key}}" /> 
+   <input type="hidden" name="txnid" value="{{paymentCtrl.gatewayObject.txnid}}" /> 
+   <input type="hidden" name="productinfo" value="{{paymentCtrl.gatewayObject.productinfo}}" /> 
+   <input type="hidden" name="firstname" value="{{paymentCtrl.gatewayObject.student.firstName}}" /> 
+   <input type="hidden" name="email" value="{{paymentCtrl.gatewayObject.email}}" /> 
+   <input type="hidden" name="phone" value="{{paymentCtrl.gatewayObject.student.fatherNumber}}" /> 
+   <input type="hidden" name="surl" value="{{paymentCtrl.gatewayObject.surl}}" />
+   <input type="hidden" name="furl" value="{{paymentCtrl.gatewayObject.furl}}" /> 
+   <input type="hidden" name="hash" value="{{paymentCtrl.gatewayObject.hash}}" /> 
+   <input type="hidden" name="service_provider" value="{{paymentCtrl.gatewayObject.service_provider}}" /> 
+   <input type="hidden" name="amount" value="{{paymentCtrl.gatewayObject.amount}}" />
+   <input type="hidden"  name="udf1" value="{{paymentCtrl.gatewayObject.id}}" /> 
+   <input type="hidden" name="udf2" value="{{paymentCtrl.gatewayObject.student.id}}" />
+</form>
+</div>

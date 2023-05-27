@@ -1,0 +1,24 @@
+<md-dialog-content>
+<div class="md-dialog-content">
+	 <md-input-container class="align-center"> <label>Year</label> 
+		<md-select data-ng-model="mScope.mForm.classYear" data-ng-disabled="mScope.mForm.id"  name="classYear" data-ng-change="mScope.getSemesterByClassYear(mScope.mForm.classYear)" data-ng-init="mScope.getSemesterByClassYear(mScope.mForm.classYear)" required>
+        	<md-option data-ng-repeat="classYear in mScope.classYearList" data-ng-value="classYear">{{::classYear}}</md-option>
+        </md-select>
+      	<div data-ng-messages="modelForm.classYear.$error"  class="has-error">
+        <div data-ng-message="required"  data-ng-if="modelForm.$submitted" class="help-block"  style="margin-top: 0px !important; margin-bottom: 0px !important">
+             <small>year is required !</small>
+        </div>
+        </div>
+    </md-input-container>
+     <md-input-container class="align-center"> <label>Semester</label> 
+		<md-select data-ng-model="mScope.mForm.semester"  name="semester" required>
+        	<md-option data-ng-repeat="semester in mScope.semestersLists" data-ng-value="semester">{{::semester}}</md-option>
+        </md-select>
+      	<div data-ng-messages="modelForm.semester.$error"  class="has-error">
+        <div data-ng-message="required"  data-ng-if="modelForm.$submitted" class="help-block"  style="margin-top: 0px !important; margin-bottom: 0px !important">
+             <small>Semester is required !</small>
+        </div>
+        </div>
+    </md-input-container>
+</div>
+</md-dialog-content>

@@ -1,0 +1,199 @@
+<div class="card-header ch-al p-0-75" data-ng-init="resultCtrl.initResultImport()">
+    <div class="row">
+        <div class="col-sm-8 col-xs-5 pt-1">
+            <h2>Result Import</h2>
+        </div>
+        <div class="col-sm-4 col-xs-7 text-right">
+            <button class="btn btn-danger" aria-label="add"
+                template-url="{{resultCtrl.JSONtemplate.url}}"
+                m-title="{{resultCtrl.JSONtemplate.title}}"
+                m-scope="resultCtrl.mScope" 
+                form-submit="resultCtrl.downloadTemplate(mForm)"
+                ok-button-text="{{resultCtrl.JSONtemplate.okText}}" init-data="" form-modal>DOWNLOAD TEMPLATE</button> 
+        </div>
+    </div>
+</div>
+<div class="card-body content" style="position: relative; overflow: auto; width: 100%; max-height: 500px;">
+    <form class="form-horizontal pad-top" role="form" name="resultForm" novalidate>
+        <div class="form-group mb-0">
+        <div class="row">
+            <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Academic Year</label>
+            </div>
+            
+            <div class="col-sm-6 col-xs-6">
+                <md-input-container class="align-center">
+	                <md-select name="academic" data-ng-required="true" ng-model="resultCtrl.form.academic.id" aria-label="academic">
+	                    <md-option ng-value="academic.id" data-ng-repeat="academic in resultCtrl.mScope.academicList">{{::academic.academicYear}}</md-option>
+	                </md-select>
+	                <div data-ng-messages="resultForm.academic.$error" data-ng-if="resultForm.academic.$touched || resultForm.$submitted">
+	            		<div data-ng-message="required"><small>Academic is Required !</small></div>
+	  	            </div>
+	            </md-input-container>
+            </div></div>
+        </div>
+        
+        <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType=='College' && resultCtrl.mScope.roles == 'ROLE_STAFF_HOD'">
+         <div class="row">
+         <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Department</label>
+            </div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select aria-label="department" name="department" data-ng-required="true" ng-model="resultCtrl.form.department" disabled data-ng-change="resultCtrl.mScope.getClassByDepartmentId(resultCtrl.form.department.id)">
+                  <md-option ng-value="department.id" data-ng-repeat="department in resultCtrl.mScope.departmentList">{{::department.name}}</md-option>
+               </md-select>
+               <div data-ng-messages="resultForm.department.$error" data-ng-if="resultForm.department.$touched || resultForm.$submitted">
+            		<div data-ng-message="required"><small>Department Name is Required !</small></div>
+         	   </div>
+            </md-input-container>
+         </div></div>
+      </div>
+      
+      <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType=='College' && resultCtrl.mScope.roles != 'ROLE_STAFF_HOD'">
+         <div class="row">
+         <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Department</label>
+            </div>
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select aria-label="department" name="department" data-ng-required="true" ng-model="resultCtrl.form.department.id" data-ng-change="resultCtrl.mScope.getClassByDepartmentId(resultCtrl.form.department.id)">
+                  <md-option ng-value="department.id" data-ng-repeat="department in resultCtrl.mScope.departmentList">{{::department.name}}</md-option>
+               </md-select>
+               <div data-ng-messages="resultForm.department.$error" data-ng-if="resultForm.department.$touched || resultForm.$submitted">
+            		<div data-ng-message="required"><small>Department Name is Required !</small></div>
+         	   </div>
+            </md-input-container>
+         </div></div>
+      </div>
+      <div class="form-group mb-0">
+       <div class="row">
+       <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label" data-ng-if="resultCtrl.mScope.instituteType=='College'">Year</label>
+          <label class="control-label" data-ng-if="resultCtrl.mScope.instituteType=='School'">Standard</label>
+            </div>
+         
+         <div class="col-sm-6 col-xs-6">
+            <md-input-container class="align-center">
+               <md-select aria-label="class year" name="class" data-ng-required="true" ng-model="resultCtrl.form.classYear.id" data-ng-change="resultCtrl.mScope.instituteType=='College' ? resultCtrl.mScope.getSectionByClassId(resultCtrl.form.classYear.id, true) : resultCtrl.mScope.getSectionByClassId(resultCtrl.form.classYear.id);resultCtrl.mScope.instituteType=='College' ? resultCtrl.mScope.getSemesterByClassYear(resultCtrl.form.classYear.id):null;">
+                  <md-option ng-value="standard.id" data-ng-repeat="standard in resultCtrl.mScope.yearAndStandardList">{{::standard.name}}</md-option>
+               </md-select>
+                     <div data-ng-messages="resultForm.class.$error" data-ng-if="resultForm.class.$touched || resultForm.$submitted">
+			            <div data-ng-message="required" data-ng-if="resultCtrl.mScope.instituteType=='School'"><small>Standard is Required !</small></div>
+			            <div data-ng-message="required" data-ng-if="resultCtrl.mScope.instituteType=='College'"><small>Year is Required !</small></div>
+         			</div>
+            </md-input-container>
+         </div></div>
+      </div>
+	    <div class="form-group mb-0" data-ng-if="resultCtrl.mScope.instituteType=='College'">
+	     <div class="row">
+	     <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Semester</label>
+            </div>
+	        <div class="col-sm-6 col-xs-6">
+		        <md-input-container class="align-center">
+		            <md-select aria-label="semester" name="semester" data-ng-model="resultCtrl.form.semester" data-ng-change="resultCtrl.mScope.getSectionByClassId(resultCtrl.form.classYear.id);" required>
+		                <md-option ng-value="semester" data-ng-repeat="semester in resultCtrl.mScope.semestersLists">{{::semester}}</md-option>
+		            </md-select>
+		            <div data-ng-messages="resultForm.semester.$error" data-ng-if="resultForm.$submitted" class="has-error">
+		                <div data-ng-message="required" class="help-block">
+		                    <small>Semester is required !</small>
+		                </div>
+		            </div>
+		        </md-input-container>
+		    </div></div>
+	    </div>
+        <div class="form-group mb-0">
+         <div class="row">
+         <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Section</label>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+                <md-input-container class="align-center">
+	                <md-select aria-label="section" name="section" data-ng-required="true" ng-model="resultCtrl.form.section.id" 
+                        data-ng-change="resultCtrl.mScope.instituteType=='College' ? resultCtrl.mScope.getExamByClassAndAcademicId(resultCtrl.form.classYear.id, resultCtrl.form.academic.id, resultCtrl.form.section.id,  resultCtrl.form.semester) : resultCtrl.mScope.getExamByClassAndAcademicId(resultCtrl.form.classYear.id, resultCtrl.form.academic.id, resultCtrl.form.section.id)">
+	                    <md-option ng-value="section.id" data-ng-repeat="section in resultCtrl.mScope.sectionList">{{::section.sectionName}}</md-option>
+	                </md-select>
+	                <div data-ng-messages="resultForm.section.$error" data-ng-if="resultForm.section.$touched || resultForm.$submitted">
+	            		<div data-ng-message="required"><small>Section is Required !</small></div>
+	                </div>
+	            </md-input-container>
+	        </div></div>
+        </div>
+        <div class="form-group mb-0">
+         <div class="row">
+         <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Examination</label>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+                <md-input-container class="align-center">
+                    <md-select aria-label="examination" name="exam" data-ng-required="true" ng-model="resultCtrl.form.examination.id" data-ng-change="resultCtrl.mScope.getSubjectByExamId(resultCtrl.form.examination.id)">
+                        <md-option ng-value="examination.id" data-ng-repeat="examination in resultCtrl.mScope.examinationList">{{::examination.examName}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="resultForm.exam.$error" data-ng-if="resultForm.exam.$touched || resultForm.$submitted">
+                        <div data-ng-message="required"> <small>Examination is Required !</small> </div>
+                    </div>
+                </md-input-container>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" data-ng-style="resultCtrl.mScope.subjectElectiveList.length ? {'margin-bottom' : '0px'} : null">
+             <div class="row">
+             <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Subject</label>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+                <md-input-container class="align-center">
+                    <md-select aria-label="subject" name="subject" data-ng-required="true" ng-model="resultCtrl.form.subject.id" 
+                        data-ng-change="resultCtrl.mScope.getElectiveSubjectBySubjectId(resultCtrl.form.subject.id, resultCtrl.form.examination.id, 'NonModelForm')">
+                        <md-option ng-value="subject.subject.id" data-ng-repeat="subject in resultCtrl.mScope.subjectsList">{{::subject.subject.subjectName}}</md-option>
+                    </md-select>
+                    <div data-ng-messages="resultForm.subject.$error" data-ng-if="resultForm.subject.$touched || resultForm.$submitted">
+                        <div data-ng-message="required"> <small>Subject is Required !</small> </div>
+                    </div>
+                </md-input-container>
+            </div>
+            </div>
+        </div>
+        <div class="form-group" data-ng-if="resultCtrl.mScope.subjectElectiveList.length">
+           <div class="row">
+           <div class="col-sm-2 col-xs-4 text-right required-mark">
+                <label class="control-label">Elective Subject</label>
+            </div>
+            <div class="col-sm-6 col-xs-6">
+                <md-input-container class="align-center">
+                    <md-select aria-label="Elective subject"name="electiveSubject" data-ng-required="true" ng-model="resultCtrl.form.subjectElective.id">
+                        <md-option ng-value="subjectElective.subjectElective.id" data-ng-repeat="subjectElective in resultCtrl.mScope.subjectElectiveList">
+                            {{::subjectElective.subjectElective.electiveSubjectName}}
+                        </md-option>
+                    </md-select>
+                    <div data-ng-messages="resultForm.electiveSubject.$error" data-ng-if="resultForm.electiveSubject.$touched || resultForm.$submitted">
+                        <div data-ng-message="required"> <small>Elective Subject is Required !</small> </div>
+                    </div>
+                </md-input-container>
+            </div>
+        </div></div>
+        <div class="form-group row required-mark">
+            <label class="col-sm-2 col-xs-4 control-label pt-0">Choose File</label>
+            <div class="col-sm-6 col-xs-8">
+                <div class="fileUpload btn btn-danger">
+	                <span data-ng-if="!fileName">BROWSE FILE</span><span data-ng-if="fileName">CHANGE</span> <input type="file" id="fileInput" name="filedata"  data-ng-required="!fileName"
+	                    onchange="angular.element(this).scope().readFile(this)" class="upload" data-ng-model="resultCtrl.form.file" accept=".xlsx"/>
+                </div>
+                <span style="font-size:small">{{fileName | limitTo : 10}}&nbsp&nbsp<a href="" class="close-file" data-ng-click="resultCtrl.mScope.clearFile()" data-ng-if="fileName">&times;</a><br><strong> </strong></span>
+				<div data-ng-messages="resultForm.filedata.$error">
+					<div data-ng-message="required" data-ng-if="resultForm.$submitted || resultForm.filedata.$touched" class="help-block">
+						<small style="color: rgb(213,0,0)!important;">Please select file to import!</small>
+					</div>
+				</div>
+            </div>
+        </div>
+        <div class="form-group">
+         <div class="row">
+         <div class="col-sm-2 col-xs-4"></div>
+         <div class="col-sm-6 col-xs-8">
+				<button type="submit" class="btn btn-danger" data-ng-click="resultForm.$valid ? resultCtrl.fileUpload(resultCtrl.form) : null">UPLOAD</button>
+			</div></div>
+      </div>
+    </form>
+</div>

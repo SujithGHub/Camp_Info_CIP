@@ -1,0 +1,270 @@
+<div data-ng-init="resultCtrl.getResult()"
+	data-ng-if="(resultCtrl.roles == 'ROLE_SUPER_ADMIN' && resultCtrl.studentsResult == 0) || (resultCtrl.roles == 'ROLE_ADMIN' && resultCtrl.studentsResult == 0 ) || (resultCtrl.roles == 'ROLE_STAFF' && resultCtrl.studentsResult == 0 ) || (resultCtrl.roles == 'ROLE_STAFF_HOD' && resultCtrl.studentsResult == 0 ) ">
+	<div class="card-header">
+		<div class="row">
+			<div class="col-sm-5">
+				<div class="">
+					<h2>
+						Result<small class="hidden-xs">
+							<div class="grid-ellipsis">Results of students performance
+								in the Examinations</div>
+						</small>
+					</h2>
+				</div>
+			</div>
+			<div class="col-sm-3" style="height: 64px;">
+				<md-input-container class="md-dark-teal-theme">
+				<input type="text" class="md-input input-sm"
+					data-ng-change="resultCtrl.getResult()" id="search"
+					data-ng-model="searchValue" placeholder="Search here...." autocomplete="off">
+				</md-input-container>
+			</div>
+			<div class="col-sm-2 text-right my-3">
+				<md-menu md-position-mode="target-right bottom"
+					data-ng-if="totalCount"> <md-button
+					ng-click="$mdOpenMenu($event)" class="md-icon-button"
+					style=" margin: -11px -14px !important; width: 68px !important;">
+				<button type="button" class="btn bgm-teal btn-xs">
+					Export</button>
+				</md-button> <md-menu-content width="2"> <md-menu-item
+					data-ng-click="resultCtrl.getData('pdf')"
+					style="min-height: 25px;height: 30px;"> <md-button
+					style="height: 10px;"> <a
+					style="font-size: 13px; color: black; margin-left: 5px;"> Pdf</a> </md-button>
+				</md-menu-item> <md-menu-item data-ng-click="resultCtrl.getData('excel')"
+					style="min-height: 25px;height: 30px;"> <md-button
+					style="height: 10px;"> <a
+					style="font-size: 13px; color: black; margin-left: 5px;"> Excel</a>
+				</md-button> </md-menu-item> </md-menu-content> </md-menu>
+			</div>
+			<div class="col-sm-1 my-3" >
+				<button class="btn bgm-teal btn-xs" data-tooltip-placement="bottom"
+					data-tooltip="Back" data-ui-sref="result">Back</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6" style="height: 25px;">
+				<table class="table">
+					<tbody style="margin-bottom: 0 !important;">
+					<tr>
+						<td
+								style="width: 43%; font-size: 16px; padding-top: 0px; padding-bottom: 4px;font-weight: bold;">Exam Name</td>
+						<td
+								style="font-size: 16px; padding-top: 0px; padding-bottom: 4px;font-weight: bold;">:
+							{{resultCtrl.examName}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-6" style="height: 25px;">
+			</div>
+			<div class="col-sm-6" style="height: 50px;">
+				<table class="table">
+					<tbody>
+						<tr data-ng-if="resultCtrl.mScope.instituteType == 'School'">
+							<td
+								style="width: 43%; font-size: 14px; padding-top: 0px; padding-bottom: 4px;">Standard</td>
+							<td
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 4px;">:
+								{{resultCtrl.className}}</td>
+						</tr>
+						<tr data-ng-if="resultCtrl.mScope.instituteType == 'College'">
+							<td class= "department-align">Department</td>
+							<td
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 4px;">:
+								{{resultCtrl.departmentName}}</td>
+						</tr>
+						<tr>
+							<td class="percentage-align">Pass Percentage</td>
+							<td
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 0px;">:
+								{{passPercentage}}%</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-sm-6" style="height: 50px;">
+				<table class="table">
+					<tbody>
+						<tr data-ng-if="resultCtrl.mScope.instituteType == 'School'">
+							<td 
+								style="width: 23%; font-size: 14px; width: 20px; padding-top: 0px; padding-bottom: 4px;">Section</td>
+							<td
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 4px;">:
+								{{resultCtrl.sectionName}}</td>
+						</tr>
+						<tr data-ng-if="resultCtrl.mScope.instituteType == 'College'">
+							<td class= "year-align"
+								>Year/Section</td>
+							<td
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 4px;">:
+								{{resultCtrl.className}} &nbsp/&nbsp {{resultCtrl.sectionName}}
+							</td>
+						</tr>
+						<tr>
+							<td class= "subject-align"
+								>Subject</td>
+							<td data-ng-if="!resultCtrl.subjectElectiveName"
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 0px;">:
+								{{resultCtrl.subjectName}}</td>
+							<td data-ng-if="resultCtrl.subjectElectiveName"
+								style="font-size: 14px; padding-top: 0px; padding-bottom: 0px;">:
+								{{resultCtrl.subjectElectiveName}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div id="resultCard" class="card-body"
+		style="height: 68vh; overflow-y: auto !important">
+		<div id="htmlContent" style="display: none"></div>
+		<div id="table-responsive" class="table-responsive content"
+			style="height: calc(100% - 45px); overflow-y: auto !important">
+			<table id="resultBySubjectTable" class="display table"
+				cellspacing="0" width="100%"></table>
+		</div>
+	</div>
+</div>
+<div class="col-sm-1 col-xs-2" style="display: none">
+	<md-button class="md-fab md-mini md-primary" aria-label="add"
+		template-url="/app/result/views/create.html" form-modal
+		m-title="Result" m-Scope="resultCtrl.mScope"
+		form-submit="resultCtrl.saveOrUpdateResult(mForm)"
+		init-data="resultCtrl.initData" ok-button-text="SUBMIT"> <md-icon
+		class="material-icons">+</md-icon> <md-tooltip>Add Result</md-tooltip>
+	</md-button>
+</div>
+<div id='student' style="padding-top: 0px; padding-bottom: 0px" class=""
+	data-ng-init="resultCtrl.studentsResult == '0' ? resultCtrl.getResultByExamination() : resultCtrl.getResultByExamAndRollNo()"
+	data-ng-if="resultCtrl.roles == 'ROLE_USER' || (resultCtrl.roles == 'ROLE_SUPER_ADMIN' && resultCtrl.studentsResult == '1') || (resultCtrl.roles == 'ROLE_ADMIN' && resultCtrl.studentsResult == '1') || (resultCtrl.roles == 'ROLE_STAFF' && resultCtrl.studentsResult == '1') || (resultCtrl.roles == 'ROLE_STAFF_HOD' && resultCtrl.studentsResult == '1')">
+	<div class="card-header">
+		<div class="row">
+			<div class="col-md-6 col-sm-6">
+				<div class="">
+					<h2>
+						Result <small class="hidden-xs">
+							<div class="grid-ellipsis ">Results of students performance
+								in the Examinations</div>
+						</small>
+					</h2>
+				</div>
+			</div>
+			<div class="col-md-4 col-sm-4">
+				<md-input-container class="md-dark-teal-theme">
+				<input type="text" class="md-input" data-ng-model="searchValue"
+					placeholder="Search here...."> </md-input-container>
+			</div>
+			 <div class="col-md-1 col-sm-2 my-3">
+				<button class="btn bgm-teal btn-xs" data-tooltip-placement="bottom"
+					data-tooltip="Remarks" data-ng-click="resultCtrl.viewImage()">Remarks</button>
+			</div>
+			<div class="col-md-1 col-sm-2 my-3">
+				<button class="btn bgm-teal btn-xs" data-tooltip-placement="bottom"
+					data-tooltip="Back" data-ui-sref="result">Back</button>
+			</div>
+		</div>
+		<div data-ng-if="average">
+			 <div class="row">
+            <div class="col-sm-6">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 30%; font-size: 14px;max-width: none;">Student Name</td>
+                            <td style="font-size: 14px;">: &nbsp&nbsp{{resultList[0].student.firstName}}</td>
+                        </tr>
+                        <tr>
+							<td style="font-size: 14px;  padding-top: 0px;max-width: none;">Exam Name / Average : </td>
+                            <td style="font-size: 14px; padding-top: 0px;">: &nbsp&nbsp{{resultList[0].examination.examName}} &nbsp/&nbsp{{average}}% </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <table class="table">
+                    <tbody>
+                        <tr data-ng-show="resultCtrl.mScope.instituteType == 'College'">
+                            <td style="font-size: 14px; width: 20px;max-width: none;">Department</td>
+                            <td style="font-size: 14px;">: &nbsp&nbsp{{resultList[0].department.displayName}}</td>
+                        </tr>
+                        <tr data-ng-show="resultCtrl.mScope.instituteType == 'College'">
+                            <td style="font-size: 14px;  padding-top: 0px;max-width: none;">Year / Section : </td>
+                            <td style="font-size: 14px;  padding-top: 0px;">: &nbsp&nbsp{{resultList[0].classYear.name}}
+                               &nbsp/&nbsp {{resultList[0].section.sectionName}}
+                            </td>
+                        </tr>
+                        <tr data-ng-show="resultCtrl.mScope.instituteType == 'School'">
+                            <td style="font-size: 14px;width: 20px;max-width: none;">Standard</td>
+                            <td style="font-size: 14px;">: &nbsp&nbsp{{resultList[0].classYear.name}}</td>
+                        </tr>
+                        <tr data-ng-show="resultCtrl.mScope.instituteType == 'School'">
+                            <td style="font-size: 14px;padding-top: 0px;max-width: none;">Section</td>
+                            <td style="font-size: 14px;padding-top: 0px;">: &nbsp&nbsp{{resultList[0].section.sectionName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+		</div>
+	</div>
+	<div class="card-body content"
+		style="height: 71vh; overflow-y: auto !important">
+		<div class="table-responsive">
+			<table data-ng-table="tableData" id="resultByRollNumber"
+				class="table table-striped table-vmiddle" style="margin-top: 10px;"
+				data-ng-class="{ 'no-pager': totalCount.length <= 6, 'no-counts':true, 'custom-pager':true}">
+				<tr>
+					<th>S.No</th>
+					<th>Subject name</th>
+					<th>Max Marks</th>
+					<th>Pass Mark</th>
+					<th>Marks Obtained</th>
+					<th>Class Average</th>
+					<th data-ng-if="resultCtrl.roles != 'ROLE_USER'">Action</th>
+				</tr>
+				<tr data-ng-repeat="result in resultList  | filter:searchValue">
+					<td>{{$index+1}}</td>
+					<td data-ng-if="!result.subjectElective.id">{{result.subject.subjectName}}</td>
+					<td data-ng-if="result.subjectElective.id">{{result.subjectElective.electiveSubjectName}}</td>
+					<td>{{result.maxMark}}</td>
+					<td>{{result.passMark}}</td>
+					<td>{{result.mark}}</td>
+					<td>{{result.classAverage}}</td>
+					<td data-ng-if="resultCtrl.roles != 'ROLE_USER'">
+						<button class='btn bgm-teal btn-xs'
+							data-ng-click="resultCtrl.updateOrDeleteResultByRollNumber(result)">
+							<i class='zmdi zmdi-edit zmdi-hc-fw'></i>
+						</button>
+					</td>
+				</tr>
+				</tbody>
+			</table>
+			<div class="no-record" data-ng-if="searchValue.length">
+				<div class="alert alert-warning"
+					data-ng-hide="(resultList  | filter:searchValue).length != 0 "
+					style="text-align: center; font-size: 13px !important; color: rgba(0, 0, 0, 0.87);">No
+					record found</div>
+			</div>
+			<div class="no-record" data-ng-if="!searchValue.length">
+				<div class="alert alert-warning"
+					data-ng-hide="resultList.length != 0"
+					style="text-align: center; font-size: 13px !important; color: rgba(0, 0, 0, 0.87);">No
+					record found</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+.no-record {
+	padding-top: 100px;
+	padding-left: 50px;
+	padding-right: 50px
+}
+
+#student {
+	font-family: roboto;
+	font-size: 13px;
+	line-height: 1.42857143;
+	color: #5E6015;
+}
+</style>

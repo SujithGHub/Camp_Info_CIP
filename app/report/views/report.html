@@ -1,0 +1,259 @@
+<style>
+    #pdf.table>thead>tr>th,
+    .table>tbody>tr>th,
+    .table>tfoot>tr>th,
+    .table>thead>tr>td,
+    .table>tbody>tr>td,
+    .table>tfoot>tr>td {
+        border-top: 0;
+    }
+</style>
+<div id="reportForm">
+    <div class="card-header ch-al p-0-75">
+        <h2>Report</h2>
+    </div>
+    <div class="card-body content" style="height: 75vh" data-ng-init="reportCtrl.init()">
+        <form name="reportCardForm" class="form-horizontal ng-pristine ng-valid" role="form" novalidate>
+            <div class="form-group row mb-0">
+                <label for="inputEmail3" class="col-sm-3 col-xs-5 p-t-30 control-label"> Academic Year</label>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container flex>
+                        <md-select data-ng-model="reportCtrl.form.academic" name="academic" required>
+                            <md-option class="select-options" id="academic" data-ng-repeat="acad in reportCtrl.academic" data-ng-value="acad">{{acad.academicYear}}</md-option>
+                        </md-select>
+                        <div data-ng-messages="reportCardForm.academic.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="reportCardForm.$submitted" class="help-block">
+                                <small>Academic year is required !</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="form-group row mb-0 required-mark" data-ng-if="roles != 'ROLE_USER'">
+                <label for="inputEmail3" class="col-sm-3 col-xs-5 control-label"> Roll No</label>
+                <div class="col-sm-6 col-xs-6">
+                    <md-input-container flex>
+                        <input type="text" name="rollNo" data-ng-model="reportCtrl.form.rollNo" class="md-input" data-ng-required="roles != 'ROLE_USER'" data-ng-minlength="3" data-ng-maxlength="40" />
+                        <div data-ng-messages="reportCardForm.rollNo.$error" class="has-error">
+                            <div data-ng-message="required" data-ng-if="reportCardForm.$submitted" class="help-block">
+                                <small>Roll no is required !</small>
+                            </div>
+                            <div data-ng-message="minlength" class="help-block">
+                                <small>Roll no is too short.</small>
+                            </div>
+                            <div data-ng-message="maxlength" class="help-block">
+                                <small>Roll no is too long.</small>
+                            </div>
+                        </div>
+                    </md-input-container>
+                </div>
+            </div>
+            <div class="form-group" style="">
+                <div class="offset-sm-3 offset-xs-5 col-sm-10">
+                    <button class="btn bgm-teal" type="submit" data-ng-click="reportCardForm.$valid ? reportCtrl.getStudentDetails(reportCtrl.form):'' ">Show</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div id="reportTable" class="" style="display: none">
+    <div class="card-header ch-al p-0-75">
+        <div class="row">
+            <div class="col-sm-6 col-xs-7 pt-1">
+                <h2>Performance Report</h2>
+            </div>
+            <div class="col-sm-5" style="margin-top: -10px;" data-ng-if="reportCtrl.roles == 'ROLE_USER'">
+                <div class="col-sm-7">
+                    <label class="pull-right" style="margin-bottom: 0px;margin-top: 8px;">
+                        Academic Year</label>
+                </div>
+                <div class="col-sm-5">
+                    <md-select style="margin:0px 0 0px 0;" data-ng-model="academicYear" name="academic" class="pull-right" data-ng-change="reportCtrl.getReportByAcademic(academicYear)">
+                        <md-option class="select-options" data-ng-repeat="acad in reportCtrl.academic" data-ng-value="acad">{{acad.academicYear}}</md-option>
+                    </md-select>
+                </div>
+            </div>
+            <div class="col-sm-4" data-ng-if="reportCtrl.roles != 'ROLE_USER'">
+            </div>
+            <div class="col-sm-1 col-xs-2 text-right">
+                <md-menu md-position-mode="target-right bottom" data-ng-if="reportCtrl.sortedAcademicPerformance && reportCtrl.workingDays">
+                    <md-button ng-click="$mdOpenMenu($event)" class="md-icon-button" style=" margin: -11px -14px !important; 
+							width: 68px !important;">
+                        <button type="button" class="btn btn-xs bgm-teal">Export</button>
+                    </md-button>
+                    <md-menu-content width="2">
+                        <md-menu-item data-ng-click="reportCtrl.getData('pdf')" style="min-height: 25px;height: 30px;">
+                            <md-button style="height: 10px;">
+                                <a style="font-size: 13px; color: black; margin-left: 5px;">PDF</a>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+
+            <div class="col-sm-1 col-xs-2" data-ng-if="reportCtrl.roles != 'ROLE_USER'">
+                <button class="btn bgm-teal btn-xs" data-ng-click="reportCtrl.hideReportCard()">Back</button>
+            </div>
+        </div>
+    </div>
+    <div id="htmlContent" style="display: none"></div>
+    <div id="pdfBody" class="card-body content py-0" style="height: 75vh; overflow-y: auto;">
+        <div class="row">
+            <div class="col-sm-6">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td style="width: 30%; font-size: 14px;">Student Name</td>
+                            <td style="font-size: 14px;">: {{reportCtrl.student.firstName +" "+ reportCtrl.student.lastName}}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%; font-size: 14px; padding-top: 0px;">Reg No</td>
+                            <td style="font-size: 14px; padding-top: 0px;">: {{reportCtrl.student.rollNumber}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-sm-6">
+                <table class="table">
+                    <tbody>
+                        <tr data-ng-show="reportCtrl.student.department">
+                            <td style="font-size: 14px; width: 20px">Department</td>
+                            <td style="font-size: 14px;">: {{reportCtrl.student.department.displayName}}</td>
+                        </tr>
+                        <tr data-ng-show="reportCtrl.instituteType == 'College'">
+                            <td style="font-size: 14px;  padding-top: 0px;">Year / Section : </td>
+                            <td style="font-size: 14px;  padding-top: 0px;">: {{reportCtrl.student.classYear.name}}
+                               &nbsp/&nbsp {{reportCtrl.student.section.sectionName}}
+                            </td>
+                        </tr>
+                        <tr data-ng-show="reportCtrl.instituteType == 'School'">
+                            <td style="font-size: 14px;">Standard</td>
+                            <td style="font-size: 14px;">: {{reportCtrl.student.classYear.name}}</td>
+                        </tr>
+                        <tr data-ng-hide="reportCtrl.student.department">
+                            <td style="font-size: 14px; padding-top: 0px;">Section</td>
+                            <td style="font-size: 14px; padding-top: 0px;">: {{reportCtrl.student.section.sectionName}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card" style="height:inherit">
+                    <div class="card-header bgm-gray" style="padding-top: 5px;padding-bottom: 5px;margin-top: 10px;margin-left: 0px;margin-right: 0px;">
+                        <h2 style="padding-bottom: 10px;padding-top: 4px;padding-left: 22px;"> Attendance Report
+		                    </h2>
+                    </div>
+                    <div class="card-body" style="height:inherit">
+                        <div class="row" style="float: right;">
+                            <div class="col-xs-12" style="text-align: right;">
+                                <button class="btn bgm-teal btn-xs" style="margin-top: 10px; margin-right: 10px;" data-ng-click="reportCtrl.getAttendanceAnalysis()">View Attendance</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 65%; font-size: 13px">Total Number of Working {{reportCtrl.attendanceLabel}}</td>
+                                    <td style="font-size: 13px">: {{reportCtrl.workingDays}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 13px">Number Of {{reportCtrl.attendanceLabel}} Present</td>
+                                    <td style="font-size: 13px">: {{reportCtrl.presentCount}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 13px">Number Of {{reportCtrl.attendanceLabel}} Absent</td>
+                                    <td style="font-size: 13px">: {{reportCtrl.absentCount}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 13px">Over All Percentage</td>
+                                    <td style="font-size: 13px">: {{reportCtrl.attendancePercentage}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card" style="height: 221px;">
+                    <div class="card-header bgm-gray" style="padding-top: 5px;padding-bottom: 5px;margin-top: 10px;margin-left: 0px;  margin-right: 0px;">
+                        <h2 style="padding-bottom: 10px;padding-top: 4px;padding-left: 22px;">Academic Report
+		                    </h2>
+                    </div>
+                    <div class="card-body academicDiv" style="max-height:22vh;margin-right: 0px;">
+                        <div class="row" style="float: right;">
+                            <div class="col-xs-12 text-right">
+                                <button class="btn bgm-teal btn-xs" style="margin-top: 10px; margin-right: 10px;" data-ng-click="reportCtrl.getResults()">View Result</button>
+                            </div>
+                        </div>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 25%">Month</th>
+                                    <th>Exam</th>
+                                    <th>Percent</th>
+                                </tr>
+                                <tr data-ng-repeat="exam in reportCtrl.sortedAcademicPerformance">
+                                    <td style="font-size: 13px;padding-left: 13px;">{{exam.date | date:'MMM-yyyy'}}</td>
+                                    <td style="font-size: 13px;white-space: inherit;">{{exam.name}}</td>
+                                    <td style="font-size: 13px">{{exam.percentage}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    td {
+        max-width: none;
+    }
+    @media screen and (min-width: 768px) .card-header.ch-alt {
+        padding:20px 23px;
+    }
+    .pull-right {
+        float: right!important;
+    }
+    #pdfBody {
+        font-family: roboto;
+        font-size: 12px;
+        line-height: 1.42857143;
+        color: #5e5e5e;
+    }
+    .table>tbody>tr>td:first-child {
+        padding-left: 30px;
+    }
+    .table>tbody>tr>td {
+        padding: 10px;
+    }
+    .table>tbody>tr>td {
+        line-height: 1.42857143;
+        vertical-align: top;
+    }
+    th {
+        text-align: left;
+    }
+    .table > tbody > tr > th {
+        padding: 13px;
+        line-height: 1.42857143;
+        vertical-align: top;
+    }
+    th {
+        font-size: 12px;
+    }
+    .bgm-gray {
+        background-color: #9e9e9e !important;
+    }
+    th {
+        font-weight: bold;
+    }
+    .card-header[class*="bgm-"] h2,
+    .card-header[class*="bgm-"] h2 small {
+        color: #fff;
+    }
+</style>

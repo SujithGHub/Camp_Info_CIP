@@ -1,0 +1,40 @@
+<div class="card-header" data-ng-init="studentCtrl.init()">
+   <div class="row">
+      <div class="col-md-4 col-sm-6">
+            <h2> Student <small class="hidden-xs"> <div class="grid-ellipsis ">Details of all students in one place</div> </small> </h2>
+      </div>
+      <div class="col-md-4 col-sm-6">
+         <md-input-container class="align-center" ng-if="studentCtrl.mScope.instituteType == 'College'">
+            <label>Department</label>
+            <md-select data-ng-model="studentCtrl.studentSearch.department.id" name="department" ng-init="(studentCtrl.studentSearch.department.id == null)? '' : studentCtrl.mScope.getClassByDepartmentId(studentCtrl.studentSearch.department.id)" data-ng-change="studentCtrl.initDataTable()">
+               <md-option ng-value="">All</md-option>
+                <md-option ng-repeat="department in studentCtrl.mScope.departmentList" ng-value="department.id">{{department.name}}</md-option>
+            </md-select>
+         </md-input-container>
+         <md-input-container class="align-center" data-ng-if="studentCtrl.mScope.instituteType == 'School'">
+            <label data-ng-if="studentCtrl.mScope.instituteType == 'School'">Standard</label>
+            <md-select data-ng-model="studentCtrl.studentSearch.classYear.id" data-ng-change="studentCtrl.initDataTable()" name="class">
+                <md-option ng-value="">All</md-option>
+                <md-option ng-repeat="classYear in studentCtrl.mScope.yearAndStandardList" ng-value="classYear.id">{{classYear.name}}</md-option>
+            </md-select>
+         </md-input-container>
+      </div>
+      <div class="col-md-3 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="studentCtrl.initDataTable()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" 
+            template-url="/app/student/views/create.html" form-modal
+            m-title="Student" m-scope="studentCtrl.mScope" form-submit="studentCtrl.saveOrUpdateStudent(mForm)" init-data="studentCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Student</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="studentDataTable" class="display table" cellspacing="0"></table>
+</div>

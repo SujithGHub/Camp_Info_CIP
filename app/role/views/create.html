@@ -1,0 +1,45 @@
+<md-dialog-content>
+   <div class="md-dialog-content">
+     	<md-input-container> <label>Name</label> <input data-ng-disabled="mScope.mForm.id"
+			type="text" class="md-input" id="inputName"
+			style="text-transform: uppercase" data-ng-model="mScope.mForm.name"
+			name="name" data-ng-required="true" data-ng-minlength=""
+			data-ng-maxlength="" />
+		<div data-ng-messages="modelForm.name.$error"
+			data-ng-if="modelForm.name.$touched || modelForm.$submitted"
+			class="has-error">
+			<p data-ng-message="required" class="help-block">
+				<small>Role Name is required !</small>
+			</p>
+		</div>
+		</md-input-container>
+		<md-input-container> <label>Description</label> <input
+			type="text" class="md-input" id="inputName"
+			data-ng-model="mScope.mForm.description" name="description"
+			data-ng-required="true" data-ng-minlength="" data-ng-maxlength="" />
+			<div data-ng-messages="modelForm.description.$error"
+			data-ng-if="modelForm.description.$touched || modelForm.$submitted"
+			class="has-error">
+			<p data-ng-message="required" class="help-block">
+				<small>Description is required !</small>
+			</p>
+		</div>
+		</md-input-container>
+	<div class="" style="margin-left: -9px;">
+		<label for="slot" class="control-label col-lg-2" style="text-align:left;padding-top:0px;">Features</label>
+		<div class="col-lg-4">
+			<select multiple="multiple" id="features" name="features"
+				data-ng-model="mScope.mForm.features" class="form-control" required
+				ng-options="feature.featureKey for feature in featureList track by feature.id"
+				size="8">
+			</select>
+			<div ng-show="modelForm.$submitted">
+				<small class="field-error" style="color: rgb(213,0,0);"
+					ng-show="modelForm.features.$error.required">Feature is
+					required!</small>
+			</div>
+		</div>
+	</div>
+
+</div>
+</md-dialog-content>

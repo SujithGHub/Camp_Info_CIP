@@ -1,0 +1,205 @@
+
+<md-dialog-content>
+<div class="md-dialog-content">
+	<md-input-container class="align-center required-mark" data-ng-if="mScope.instituteType =='College'"> <label>Department
+		Name</label> <md-select data-ng-model="mScope.mForm.department.id"
+		name="departmentName" data-ng-required="true"
+		data-ng-change="mScope.getClassByDepartmentId(mScope.mForm.department.id)">
+	<md-option data-ng-value="department.id"
+		data-ng-repeat="department in mScope.departmentList">{{::department.name}}</md-option>
+	</md-select>
+	<div data-ng-messages="modelForm.departmentName.$error"
+		data-ng-if="modelForm.departmentName.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Department name is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container class="align-center required-mark"> <label
+		data-ng-if="mScope.instituteType=='School'">Standard</label> <label
+		data-ng-if="mScope.instituteType=='College'">Year</label> <md-select
+		ng-model="mScope.mForm.classYear.id" name="class"
+		data-ng-required="true"
+		data-ng-change="mScope.instituteType != 'College' ? mScope.getSectionById(mScope.mForm.classYear.id):mScope.getSemesterByClassYear(mScope.mForm.classYear.id,mScope.mForm.department.id);mScope.getSectionById(mScope.mForm.classYear.id,mScope.mForm.department.id)">
+	<md-option ng-value="standard.id"
+		data-ng-repeat="standard in mScope.yearAndStandardList">{{::standard.name}}</md-option>
+	</md-select>
+	<div data-ng-messages="modelForm.class.$error"
+		data-ng-if="modelForm.class.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small data-ng-if="mScope.instituteType=='School'">Standard
+				is required !</small> <small data-ng-if="mScope.instituteType=='College'">Year
+				is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container class="align-center required-mark"
+		data-ng-if="mScope.instituteType == 'College'"> <label>Semester</label>
+	<md-select ng-model="mScope.mForm.semester" name="semester"
+		data-ng-required="true" data-ng-change="mScope.mForm.section.id = ''">
+	<md-option ng-value="semester"
+		data-ng-repeat="semester in mScope.semestersLists">{{::semester}}</md-option>
+	</md-select>
+	<div data-ng-messages="modelForm.semester.$error"
+		data-ng-if="modelForm.semester.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Semester is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container class="align-center required-mark"> <label>Section
+		Name</label> <md-select ng-model="mScope.mForm.section.id" name="sectionName"
+		data-ng-required="true"
+		data-ng-change="mScope.instituteType=='College' ? mScope.getSubjectBySemesterAndSectionAndStaff(mScope.mForm.semester,mScope.mForm.section.id,mScope.mForm.classYear.id,mScope.mForm.department.id) : mScope.getSubjectBySemesterAndSectionAndStaffSchool(mScope.mForm.classYear.id,mScope.mForm.section.id)">
+	<md-option ng-value="section.id"
+		data-ng-repeat="section in mScope.sectionList">{{::section.sectionName}}</md-option>
+	</md-select>
+	<div data-ng-messages="modelForm.sectionName.$error"
+		data-ng-if="modelForm.sectionName.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Section name is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container class="align-center required-mark"> <label>Subject
+		Name</label> <md-select ng-model="mScope.mForm.subject.id" name="subjectName"
+		data-ng-required="true"
+		data-ng-change="mScope.getElectiveSubject(mScope.mForm.subject.id,mScope.mForm.semester,mScope.mForm.section.id)">
+	<md-option ng-value="subject.id"
+		data-ng-repeat="subject in mScope.subjectList">{{::subject.subjectName}}</md-option>
+	</md-select>
+	<div data-ng-messages="modelForm.subjectName.$error"
+		data-ng-show="modelForm.subjectName.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Subject name is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container class="align-center required-mark"
+		data-ng-if="mScope.electiveSubjectList.length"> <label>Elective
+		Subject</label> <md-select data-ng-model="mScope.mForm.subjectElective.id"
+		name="electiveSubject"
+		data-ng-required="mScope.electiveSubjectList.length"> <md-option
+		data-ng-value="electiveSubject.id"
+		data-ng-repeat="electiveSubject in mScope.electiveSubjectList">{{::electiveSubject.electiveSubjectName}}</md-option>
+	</md-select>
+	<div data-ng-messages="modelForm.electiveSubject.$error"
+		data-ng-show="modelForm.electiveSubject.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Elective Subject is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<!--<md-input-container flex> <label>Date</label> <input
+		class="md-input" datepicker data-ng-model="mScope.mForm.date"
+		name="date" data-ng-required="true">
+	<div data-ng-messages="modelForm.date.$error"
+		data-ng-show="modelForm.date.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Date is required !</small>
+		</div>
+	</div>
+	</md-input-container>-->
+	<md-input-container flex class="required-mark"> <label>Submission
+		Date</label> <input class="md-input" data-ng-required="true" datepicker
+		data-ng-model="mScope.mForm.lastDateOfSubmission" data-zdp_direction="true"
+		name="submissionDate">
+	<div data-ng-messages="modelForm.submissionDate.$error"
+		data-ng-show="modelForm.submissionDate.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Last date of submission is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container flex class="required-mark"> <label>Title</label> <input
+		class="md-input" data-ng-model="mScope.mForm.title" name="title"
+		data-ng-required="true">
+	<div data-ng-messages="modelForm.title.$error"
+		data-ng-show="modelForm.title.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required">
+			<small>Title is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<div class="required-mark">
+	<label style="font-size: smaller;"><b>Description</b></label></div>
+	<div class="form-group row" data-ng-if="mScope.ImageList.length">
+		<div class="form-group my-0" data-ng-if="mScope.ImageList.length">
+			<div class="col-sm-12" style="padding-top: 0px; font-size: smaller">
+				<div style="float: left;" class="p-2"
+					data-ng-repeat="homeWorkPicture in mScope.ImageList">
+					<div class="img-container">
+						<img alt="nice" class="custom-close-btn"
+							src="../../assets/images/close_btn.png"
+							ng-click="mScope.removeImage(homeWorkPicture,mScope.mForm.id)">
+						<a class="fancybox" target="_blank" title="Click to view" 
+							href="{{homeWorkPicture.path}}" rel="gallery" download="{{homeWorkPicture.name}}"
+							style="margin-right: 5px;"> <img
+							class="fancy homeWorkPicture"
+							data-ng-src="{{homeWorkPicture.path}}" data-image-on-error/></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<md-content>
+			<md-tabs md-dynamic-height="" md-border-bottom="">
+				<md-tab label="Text">
+					<md-content class="md-padding">
+						<md-input-container flex id="editor">
+							<div class="form-group" text-angular="text-angular"
+								ta-toolbar="[['h1','h2','h3','bold','italics','justifyLeft','justifyCenter','justifyRight','justifyFull','ul','ol']]"
+								ng-model="mScope.mForm.description"></div>
+							<div data-ng-messages="modelForm.description.$error" data-ng-show="modelForm.$submitted"
+								class="has-error">
+								<div data-ng-message="required">
+									<small>Description or files is required !</small>
+								</div>
+							</div>
+		</md-input-container> </md-content> </md-tab> <md-tab label="File upload"> <md-content
+			class="md-padding"> <md-input-container flex id="editor">
+		<div class="form-group row pl-0 pb-2 m-0">
+			<div class="col-sm-6 col-xs-9">
+				<span style="font-size: small">{{mScope.upload.fileName |
+					limitTo : 10}}&nbsp;&nbsp;<a href="" class="close-file"
+					ng-style="{'top' : (mScope.ImageList.length) ? '4px': '4px'}"
+					data-ng-click="mScope.clearFile()"
+					data-ng-if="mScope.upload.fileName">&times;</a><br>
+				</span>
+			</div>
+			<span style="font-size: small"
+				data-ng-if="mScope.upload.fileLength > 1"><strong>{{mScope.upload.fileLength-
+					1}} more files</strong></span>
+			<div class="col-sm-4"></div>
+		</div>
+		<div class="dropzone dropbox" id="dropzone"
+			accept-format="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/vnd.ms-powerpoint" 
+			data-file-drag-and-drop
+			on-drop="mScope.dropFile(el)">Drag and drop files here or Click
+			Here to upload files</div>
+		<input type="file" id="upload" accept="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/vnd.ms-powerpoint"
+			data-ng-model="file" style="display: none;" multiple
+			custom-on-change="mScope.readFile" /> </md-input-container> </md-content> </md-tab> </md-tabs> </md-content>
+	</div>
+	<div class="row fluid"
+		style="padding-left: initial; margin-left: -15px;">
+		<label class="radio radio-inline">Status</label>
+		<md-radio-group data-ng-model="mScope.mForm.status">
+		<label class="radio radio-inline"> <md-radio-button
+				value="ACTIVE">Active</md-radio-button>
+		</label> <label class="radio radio-inline"> <md-radio-button
+				value="INACTIVE">InActive</md-radio-button>
+		</label> </md-radio-group>
+	</div>
+</div>
+</md-dialog-content>

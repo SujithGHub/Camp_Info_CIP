@@ -1,0 +1,27 @@
+<div class="card-header" data-ng-init="academicCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+            <h2> Academic
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Lists the details of all the available academic programs</div>
+               </small>
+            </h2>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+             <input type="search" id="search" data-ng-model="search" data-ng-change="academicCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2">
+         <md-button id="modelForm" class="md-fab md-mini md-primary m-0" aria-label="add" template-url="/app/academic/views/create.html" form-modal
+            m-title="Academic" m-Scope="academicCtrl.mScope" form-submit="academicCtrl.saveOrUpdateAcademic(mForm)" init-data="academicCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Academic</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="academicDataTable" class="display table" cellspacing="0"></table>
+</div>

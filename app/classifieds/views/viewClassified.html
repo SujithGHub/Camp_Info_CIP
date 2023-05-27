@@ -1,0 +1,212 @@
+<div class="card-header ch-al p-0-75"
+	data-ng-init="classifiedCtrl.viewClassifieds()">
+	<div class="row">
+		<div class="col-sm-12 col-xs-12">
+			<h2>View Classifieds</h2>
+		</div>
+	</div>
+</div>
+<div class="album-container content">
+	<div id="classifieds-home">
+        <div class="row m-2 p-0 category-box" style="padding-bottom: 5px">
+            <div class="col-sm-12">
+                <h4 class="category-header my-3">Electronics <small style=" color: #4C4C4C;">({{electronics.length}})</small></h4>
+            </div>
+            <div class="col-sm-12">
+                <div id="electronics" class="owl-classifieds">
+                    <div class="item mb-2"
+                         data-ng-repeat="classified in classifiedCtrl.activeClassifiedsList | filter : { category: 'Electronics' } as electronics"
+                         data-initialize-owl="electronics">
+                        <div data-ng-click="classifiedCtrl.classifiedDescription(classified)">
+                            <div class="thumbnail">
+                                <img data-ng-show="classified.image[0]" class="p-0"
+                                     data-ng-src="{{classified.image[0].path}}"
+                                     alt="" data-image-on-error
+                                     style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+                                <img data-ng-hide="classified.image[0]" class="p-0"
+                                     src="/assets/images/no-image-found.png" alt=""
+                                     style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+                                <div class="caption px-2">
+                                    <p class="caption text-center px-2 mt-3 mb-1"
+                                       style="font-size: 14px;">{{classified.title | limitTo: 18}}</p>
+                                    <p class="text-success text-center"
+                                       style="color:green;font-size: 12px;">{{classifiedCtrl.elapsedTime(classified.lastUpdatedDate)}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+		<div class="row m-2 p-0 category-box" style="padding-bottom: 5px">
+			<div class="col-sm-12">
+                <h4 class="category-header my-3">Study Materials <small style=" color: #4C4C4C;">({{studyMaterials.length}})</small></h4>
+            </div>
+			<div class="col-sm-12">
+				<div id="studymaterials" class="owl-classifieds">
+					<div class="item mb-2"
+						data-ng-repeat="classified in classifiedCtrl.activeClassifiedsList | filter : { category: 'StudyMaterials' } as studyMaterials"
+						data-initialize-owl="studymaterials">
+						<div data-ng-click="classifiedCtrl.classifiedDescription(classified)">
+							<div class="thumbnail">
+								<img data-ng-show="classified.image[0]" class="p-0"
+									data-ng-src="{{classified.image[0].path}}"
+									alt="" data-image-on-error
+									style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+								<img data-ng-hide="classified.image[0]" class="p-0"
+									src="/assets/images/no-image-found.png" alt=""
+									style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+								<div class="caption px-2">
+									<p class="caption text-center px-2 mt-3 mb-1"
+                                       style="font-size: 14px;">{{classified.title | limitTo: 18}}</p>
+                                    <p class="text-success text-center"
+										style="color:green;font-size: 12px;">{{classifiedCtrl.elapsedTime(classified.lastUpdatedDate)}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        <div class="row m-2 p-0 category-box" style="padding-bottom: 5px">
+            <div class="col-sm-12">
+                <h4 class="category-header my-3">Automobile <small style=" color: #4C4C4C;">({{automobile.length}})</small></h4>
+            </div>
+            <div class="col-sm-12">
+                <div id="automobile" class="owl-classifieds">
+                    <div class="item mb-2"
+                         data-ng-repeat="classified in classifiedCtrl.activeClassifiedsList | filter : { category: 'Automobile' } as automobile"
+                         data-initialize-owl="automobile">
+                        <div data-ng-click="classifiedCtrl.classifiedDescription(classified)">
+                            <div class="thumbnail">
+                                <img data-ng-show="classified.image[0]" class="p-0"
+                                     data-ng-src="{{classified.image[0].path}}"
+                                     alt="" data-image-on-error
+                                     style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+                                <img data-ng-hide="classified.image[0]" class="p-0"
+                                     src="/assets/images/no-image-found.png" alt=""
+                                     style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+                                <div class="caption px-2">
+                                    <p class="caption text-center px-2 mt-3 mb-1"
+                                       style="font-size: 14px;">{{classified.title | limitTo: 18}}</p>
+                                    <p class="text-success text-center"
+                                       style="color:green;font-size: 12px;">{{classifiedCtrl.elapsedTime(classified.lastUpdatedDate)}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row m-2 p-0 category-box" style="padding-bottom: 5px">
+            <div class="col-sm-12">
+                <h4 class="category-header my-3">Others <small style=" color: #4C4C4C;">({{others.length}})</small></h4>
+            </div>
+            <div class="col-sm-12">
+                <div id="others" class="owl-classifieds">
+                    <div class="item mb-2"
+                         data-ng-repeat="classified in classifiedCtrl.activeClassifiedsList | filter : { category: 'Others' } as others"
+                         data-initialize-owl="others">
+                        <div data-ng-click="classifiedCtrl.classifiedDescription(classified)">
+                            <div class="thumbnail">
+                                <img data-ng-show="classified.image[0]" class="p-0"
+                                     data-ng-src="{{classified.image[0].path}}"
+                                     alt="" data-image-on-error
+                                     style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+                                <img data-ng-hide="classified.image[0]" class="p-0"
+                                     src="/assets/images/no-image-found.png" alt=""
+                                     style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+                                <div class="caption px-2">
+                                    <p class="caption text-center px-2 mt-3 mb-1"
+                                       style="font-size: 14px;">{{classified.title | limitTo: 18}}</p>
+                                    <p class="text-success text-center"
+                                       style="color:green;font-size: 12px;">{{classifiedCtrl.elapsedTime(classified.lastUpdatedDate)}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+		
+<!--		<div class="row m-2 p-0 category-box" style="padding-bottom: 5px">
+            <div class="col-sm-12">
+                <h4 class="category-header my-3">Automobile <small style=" color: #4C4C4C;">({{automobile.length}})</small></h4>
+            </div>
+			<div class="col-sm-12">
+				<div id="automobile" class="owl-classifieds">
+					<div class="item mb-2"
+						data-ng-repeat="classified in classifiedCtrl.activeClassifiedsList | filter: { category: 'Automobile' } as automobile"
+							data-initialize-owl="automobile">
+						<div data-ng-click="classifiedCtrl.classifiedDescription(classified)">
+							<div class="thumbnail">
+								<img data-ng-show="classified.image[0]"
+									data-ng-src="{{classified.image[0].path}}"
+									alt="" data-image-on-error
+									style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+								<img data-ng-hide="classified.image[0]"
+									src="/assets/images/no-image-found.png" alt=""
+									style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+								<div class="caption">
+									<small>{{classified.title | limitTo: 18}}</small> <small class="pull-right"
+										style="padding-top: 3%">{{classifiedCtrl.elapsedTime(classified.lastUpdatedDate)}}</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		-->
+		<!--<div class="row m-2 p-0 category-box" style="padding-bottom: 5px">
+            <div class="col-sm-12">
+                <h4 class="category-header my-3">Others <small style=" color: #4C4C4C;">({{others.length}})</small></h4>
+            </div>
+			<div class="col-sm-12">
+				<div id="others" class="owl-classifieds">
+					<div class="item mb-2"
+						data-ng-repeat="classified in classifiedCtrl.activeClassifiedsList | filter : { category: 'Others' } as others"
+							data-initialize-owl="others">
+						<div data-ng-click="classifiedCtrl.classifiedDescription(classified)">
+							<div class="thumbnail">
+								<img data-ng-show="classified.image[0]"
+									data-ng-src="{{classified.image[0].path}}"
+									alt=""data-image-on-error
+									style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+								<img data-ng-hide="classified.image[0]"
+									src="/assets/images/no-image-found.png" alt=""
+									style="max-height: 120px; min-height: 120px; width: auto;cursor: pointer;">
+								<div class="caption">
+									<small>{{classified.title | limitTo: 18}}</small> <small class="pull-right"
+										style="padding-top: 3%">{{classifiedCtrl.elapsedTime(classified.lastUpdatedDate)}}</small>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>-->
+	</div>
+</div>
+<style>
+.caption{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.owl-theme .owl-controls.clickable .owl-buttons div:hover {
+    box-shadow: 1px 2px 10px -1px rgba(0,0,0,.3);
+}
+.owl-theme .owl-controls.clickable .owl-buttons div {
+    box-shadow: 1px 2px 10px -1px rgba(0,0,0,.3);
+    padding: 25px 18px;
+    border-radius: 5px 0 0 5px;
+}
+</style>

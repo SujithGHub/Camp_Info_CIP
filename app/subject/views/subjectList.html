@@ -1,0 +1,29 @@
+<div class="card-header" data-ng-init="subjectCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6 col-xs-6">
+            <h2>
+               Subject
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Subject Details</div>
+               </small>
+            </h2>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+           <input type="search" id="search" data-ng-model="search" data-ng-change="subjectCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2 col-xs-2">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" 
+            template-url="/app/subject/views/create.html" form-modal
+            m-title="Subject" m-scope="subjectCtrl.mScope" form-submit="subjectCtrl.SaveOrUpdateSubject(mForm)" init-data="subjectCtrl.initData"ok-button-text="SUBMIT" data-ng-click="subjectCtrl.mScope.subjectElectives=[];">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Subject</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="subjectDataTable" class="display table" cellspacing="0"></table>
+</div>

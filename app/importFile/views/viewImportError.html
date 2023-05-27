@@ -1,0 +1,21 @@
+<md-dialog-content">
+<div class="md-dialog-content">
+	<div class="row" style="font-size: 14px">
+		<div class="col-sm-12">
+			The&nbsp<span>Upload Failed&nbsp</span>due to following errors.
+			Please fix the errors and upload the file again.
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12" data-ng-repeat="(key, value) in mScope.error">
+			<div class="row">
+			<div class="col-sm-12"><h6 style="font-size: 13px; color: red" data-ng-if="value.length">{{key}}
+					:</h6></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-4" style="text-align: center" data-ng-repeat="v in value">{{v}}</div>
+			</div>
+		</div>
+	</div>
+</div>
+</md-dialog-content>

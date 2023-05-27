@@ -1,0 +1,55 @@
+<md-dialog-content class="card-header" ng-init="mScope.mForm.id?null:mScope.mForm.isLatest=true">
+<div class="md-dialog-content">
+
+
+	<!-- <div layout layout-sm="column"> -->
+	<md-input-container flex> <label>Description</label>
+	<input type="text" name="description"
+		data-ng-model="mScope.mForm.description" data-ng-required="true"
+		class="md-input" />
+	<div data-ng-messages="modelForm.description.$error"
+		data-ng-if="modelForm.description.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small>Apk description is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+
+	<!-- </div>
+	<div layout layout-sm="column"> -->
+	<md-input-container flex> <label>Release
+		Name</label> <input type="text" name="releaseName"
+		data-ng-model="mScope.mForm.releaseName" data-ng-required="true"
+		class="md-input" />
+	<div data-ng-messages="modelForm.releaseName.$error"
+		data-ng-if="modelForm.releaseName.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small>Apk Release Name is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+	<md-input-container flex> <label>Version</label> <input
+		type="text" name="version" data-ng-model="mScope.mForm.version"
+		data-ng-required="true" class="md-input" />
+	<div data-ng-messages="modelForm.version.$error"
+		data-ng-if="modelForm.version.$touched || modelForm.$submitted"
+		class="has-error">
+		<div data-ng-message="required" class="help-block">
+			<small>Apk Version is required !</small>
+		</div>
+	</div>
+	</md-input-container>
+
+	<div class="row fluid"
+		style="padding-left: initial; margin-left: -15px;">
+		<label class="radio radio-inline m-r-20">Is Latest</label>
+		<md-radio-group ng-model="mScope.mForm.isLatest"> <label
+			class="radio radio-inline m-r-20"> <md-radio-button ng-value="true" ng-checked="true">Yes</md-radio-button>
+		</label> <label class="radio radio-inline m-r-20"> <md-radio-button ng-value="false">No</md-radio-button>
+		</label> </md-radio-group>
+	</div>
+
+</div>
+</md-dialog-content>

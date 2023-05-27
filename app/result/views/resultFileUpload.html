@@ -1,0 +1,331 @@
+<div class="card-header ch-al pb-1-25 pt-1-25 " data-ng-init="resultCtrl.init()">
+    <div class="row">
+        <h2>File Upload</h2>
+    </div>
+</div>
+<div class="card-body">
+    <div class="row" style="height: 100%">
+        <div class="upgrade-rightalign" style="height: 100% !important;">
+            <form class="form-horizontal pad-top" role="imageForm" name="imageForm" novalidate
+                  style="height: 100% !important">
+                <div class="card allSides content" style="height: 100% !important">
+                    <div style="padding: 10px;">
+                        <md-input-container class="align-center required-mark">
+                            <label>Academic</label>
+                            <md-select data-ng-model="resultCtrl.imageForm.academic.id" name="academic"
+                                       data-ng-required="true">
+                                <md-option ng-repeat="academic in resultCtrl.mScope.academicList"
+                                           ng-value="academic.id">{{::academic.academicYear}}
+                                </md-option>
+                            </md-select>
+                            <div data-ng-messages="imageForm.academic.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="imageForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Academic is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"
+                                            ng-if="resultCtrl.mScope.instituteType == 'College'">
+                            <label>Department</label>
+                            <md-select data-ng-model="resultCtrl.imageForm.department.id" name="department"
+                                       data-ng-required="resultCtrl.mScope.instituteType == 'College'"
+                                       data-ng-change="resultCtrl.mScope.getClassByDepartmentId(resultCtrl.imageForm.department.id)">
+                                <md-option ng-repeat="department in resultCtrl.mScope.departmentList"
+                                           ng-value="department.id">{{department.name}}
+                                </md-option>
+                            </md-select>
+                            <div data-ng-messages="imageForm.department.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="imageForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label data-ng-if="resultCtrl.mScope.instituteType != 'School'">Year</label>
+                            <label data-ng-if="resultCtrl.mScope.instituteType == 'School'">Standard</label>
+                            <md-select data-ng-model="resultCtrl.imageForm.classYear.id"
+                                       data-ng-change="resultCtrl.mScope.getSectionByClassId(resultCtrl.imageForm.classYear.id);resultCtrl.mScope.getSemesterByClassYear(resultCtrl.imageForm.classYear.id);"
+                                       name="class" required="">
+                                <md-option ng-repeat="classYear in resultCtrl.mScope.yearAndStandardList"
+                                           ng-value="classYear.id">{{classYear.name}}
+                                </md-option>
+                            </md-select>
+                            <div data-ng-messages="imageForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="imageForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-show="resultCtrl.mScope.instituteType == 'School'">Standard is required
+                                        !
+                                    </small>
+                                    <small ng-show="resultCtrl.mScope.instituteType != 'School'">Year is required !
+                                    </small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark"
+                                            ng-show="resultCtrl.mScope.instituteType == 'College'">
+                            <label>Semester</label>
+                            <md-select data-ng-model="resultCtrl.imageForm.semester" name="semester"
+                                       data-ng-required="resultCtrl.mScope.instituteType == 'College'">
+                                <md-option ng-repeat="semester in resultCtrl.mScope.semestersLists"
+                                           data-ng-value="semester">{{::semester}}
+                                </md-option>
+                            </md-select>
+                            <div data-ng-messages="imageForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="imageForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Section</label>
+                            <md-select data-ng-model="resultCtrl.imageForm.section.id" name="section" required=""
+                                       data-ng-change="resultCtrl.mScope.getExamByClassAndAcademicId(resultCtrl.imageForm.classYear.id, resultCtrl.imageForm.academic.id, resultCtrl.imageForm.section.id)">
+                                <md-option ng-repeat="section in resultCtrl.mScope.sectionList " ng-value="section.id">
+                                    {{section.sectionName}}
+                                </md-option>
+                            </md-select>
+                            <div data-ng-messages="imageForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="imageForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Examination</label>
+                            <md-select data-ng-model="resultCtrl.imageForm.examination.id" name="section" required="">
+                                <md-option ng-repeat="examination in resultCtrl.mScope.examinationList "
+                                           ng-value="examination.id">{{examination.examName}}
+                                </md-option>
+                            </md-select>
+                            <div data-ng-messages="imageForm.examination.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="imageForm.$submitted" class="help-block"
+                                     style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <button type="submit" style="margin: 0 auto"
+                                data-ng-click="imageForm.$valid ? resultCtrl.getStudentList() : null;"
+                                class="btn btn-danger">
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="allSides upgrade-gride">
+            <div class="upgrade-table-responsive content" id="table">
+                <section class="w-100">
+                    <div class="table-container w-100" style="height:100%;max-height:336px;font-size: smaller">
+                        <table width="100%" align="center">
+                            <thead>
+                            <tr class="header">
+                                <th width="20%">S No
+                                    <div>S No</div>
+                                </th>
+                                <th width="30%">Roll Number
+                                    <div>Roll Number</div>
+                                </th>
+                                <th width="30%">Student Name
+                                    <div>Student Name</div>
+                                </th>
+                                <th width="20%">Upload
+                                    <div>Upload</div>
+                                </th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr data-ng-repeat="student in resultCtrl.studentList">
+                                <td>{{$index + 1}}</td>
+                                <td>{{student.rollNumber}}</td>
+                                <td>{{student.firstName}}</td>
+                                <td>
+                                    <button class="btn btn-xs" style="background-color: deepskyblue" hide-footer="true"
+                                            id="result-upload" data-ng-click="resultCtrl.showUploadForm(student)"
+                                            template-url="/app/result/views/upload.html" form-modal
+                                            m-title="File Upload" m-scope="resultCtrl.mScope"><i
+                                            class="zmdi zmdi-upload zmdi-hc-fw"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr data-ng-if="!resultCtrl.studentList.length">
+                                <td colspan="4" align="center">No matching records found</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+
+    .upgrade-rightalign {
+        width: 20%;
+        margin-left: 1%;
+        float: left;
+    }
+
+    .upgrade-gride {
+        width: 77%;
+        margin-left: 1%;
+        float: left;
+    }
+
+    .upgrade-table-responsive {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+        margin-left: 6px;
+    }
+
+    .no-records {
+        color: red;
+        font-size: 14px;
+        height: 27px;
+        line-height: 24px;
+        min-width: 95%;
+        padding: 2px 0px;
+        text-align: center;
+        width: 50%;
+    }
+
+    md-checkbox .md-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    md-checkbox {
+        margin-bottom: 0px;
+    }
+
+    md-checkbox.md-checked .md-icon:after {
+        left: 5.66667px;
+        top: 1.22222px;
+        width: 5.66667px;
+        height: 12.33333px;
+    }
+
+    md-checkbox .md-container {
+        width: 17px;
+        height: 17px;
+    }
+
+    td {
+        text-overflow: inherit;
+    }
+
+    .table-responsive {
+        border: 0;
+    }
+
+    .table-responsive {
+        border: 0;
+    }
+
+    .table {
+        table-layout: fixed;
+    }
+
+    .table-bordered {
+        border-bottom: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+
+    .table-bordered {
+        border: 1px solid #f0f0f0;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        font-size: smaller;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .table > thead > tr > th {
+        background-color: #fff;
+        vertical-align: middle;
+        font-weight: 500;
+        color: #333;
+        border-width: 1px;
+        text-transform: uppercase;
+    }
+
+    .table-bordered > thead > tr > th {
+        border: 1px solid #f0f0f0;
+    }
+
+    .table > thead > tr > th {
+        padding: 13px;
+        line-height: 1.42857143;
+    }
+
+    .table > tbody > tr > td {
+        padding: 12px;
+    }
+
+    .table-bordered > tbody > tr > td {
+        border: 1px solid #f0f0f0;
+    }
+
+    .table > tbody > tr > td {
+        line-height: 1.42857143;
+        vertical-align: top;
+    }
+
+    .table > tbody > tr > td {
+        line-height: 1.42857143;
+    }
+
+    .checkbox input[type="checkbox"],
+    .checkbox-inline input[type="checkbox"] {
+        position: absolute;
+    }
+
+    .checkbox input,
+    .radio input {
+        top: 0;
+        left: 0;
+        margin-left: 0 !important;
+        z-index: 1;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity 0);
+        margin-top: 0;
+    }
+
+    b,
+    strong {
+        font-weight: 700;
+    }
+
+    .has-error .checkbox {
+        color: #f44336
+    }
+
+    .has-success .checkbox {
+        color: #4caf50;
+    }
+
+    .has-warning .checkbox {
+        color: #ff9800;
+    }
+
+    th {
+        text-align: left;
+    }
+</style>

@@ -1,0 +1,62 @@
+<div class="card-header">
+   <div class="row">
+      <div class="col-md-5 col-sm-5">
+         <div>
+            <h2> Make Payment
+               <small class="hidden-xs">
+                 <div class="grid-ellipsis ">An amount of money paid for a particular piece of work or service</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-4 col-sm-4">
+         <md-input-container>
+            <label>Search here</label>
+           <input type="search" id="search" data-ng-model="search" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-3 col-sm-3">
+        <button class="btn bgm-teal btn-xs" data-ui-sref="payFees" style="float: right;"><span>MAKE PAYMENT</span></button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content" data-ng-init="paymentCtrl.initStudentFeesStructureTable()">
+   <table id="studentFeesStructureDataTable" class="display table" cellspacing="0"></table>
+</div>
+
+<div class="" data-ng-if="paymentCtrl.instituteType == 'College'">
+<form name="paymentForm" method="POST" id="paymentForm"
+   action="https://test.payu.in/_payment">
+   <input type="hidden" name="key" value="{{paymentCtrl.gatewayObject.key}}" /> 
+   <input type="hidden" name="txnid" value="{{paymentCtrl.gatewayObject.txnid}}" /> 
+   <input type="hidden" name="productinfo" value="{{paymentCtrl.gatewayObject.productinfo}}" /> 
+   <input type="hidden" name="firstname" value="{{paymentCtrl.gatewayObject.student.firstName}}" /> 
+   <input type="hidden" name="email" value="{{paymentCtrl.gatewayObject.email}}" /> 
+   <input type="hidden" name="phone" value="{{paymentCtrl.gatewayObject.student.phoneNumber}}" /> 
+   <input type="hidden" name="surl" value="{{paymentCtrl.gatewayObject.surl}}" />
+   <input type="hidden" name="furl" value="{{paymentCtrl.gatewayObject.furl}}" /> 
+   <input type="hidden" name="hash" value="{{paymentCtrl.gatewayObject.hash}}" /> 
+   <input type="hidden" name="service_provider" value="{{paymentCtrl.gatewayObject.service_provider}}" /> 
+   <input type="hidden" name="amount" value="{{paymentCtrl.gatewayObject.amount}}" />
+   <input type="hidden"  name="udf1" value="{{paymentCtrl.gatewayObject.id}}" /> 
+   <input type="hidden" name="udf2" value="{{paymentCtrl.gatewayObject.student.id}}" />
+</form>
+</div>
+<div class="" data-ng-if="paymentCtrl.instituteType == 'School'">
+<form name="paymentForm" method="POST" id="paymentForm"
+   action="https://test.payu.in/_payment">
+   <input type="hidden" name="key" value="{{paymentCtrl.gatewayObject.key}}" /> 
+   <input type="hidden" name="txnid" value="{{paymentCtrl.gatewayObject.txnid}}" /> 
+   <input type="hidden" name="productinfo" value="{{paymentCtrl.gatewayObject.productinfo}}" /> 
+   <input type="hidden" name="firstname" value="{{paymentCtrl.gatewayObject.student.firstName}}" /> 
+   <input type="hidden" name="email" value="{{paymentCtrl.gatewayObject.email}}" /> 
+   <input type="hidden" name="phone" value="{{paymentCtrl.gatewayObject.student.fatherNumber}}" /> 
+   <input type="hidden" name="surl" value="{{paymentCtrl.gatewayObject.surl}}" />
+   <input type="hidden" name="furl" value="{{paymentCtrl.gatewayObject.furl}}" /> 
+   <input type="hidden" name="hash" value="{{paymentCtrl.gatewayObject.hash}}" /> 
+   <input type="hidden" name="service_provider" value="{{paymentCtrl.gatewayObject.service_provider}}" /> 
+   <input type="hidden" name="amount" value="{{paymentCtrl.gatewayObject.amount}}" />
+   <input type="hidden"  name="udf1" value="{{paymentCtrl.gatewayObject.id}}" /> 
+   <input type="hidden" name="udf2" value="{{paymentCtrl.gatewayObject.student.id}}" />
+</form>
+</div>

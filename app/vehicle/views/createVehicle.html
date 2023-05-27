@@ -1,0 +1,138 @@
+<md-dialog-content class="card-header" ng-init="!mScope.mForm.id && mScope.mForm.status == 'Active' ? mScope.mForm.status = 'ACTIVE' : '' ">
+<div class="md-dialog-content">
+    <div class="layout-sm-column layout-row">
+        <md-input-container class="required-mark" flex style="margin: 0px auto!important;">
+        <label>Bus Number</label>
+        <input type="text" class="md-input" data-ng-model="mScope.mForm.busNumber"
+            style="text-transform: uppercase" name="busNumber" data-ng-required="true" data-ng-minlength="1" data-ng-maxlength="10" autocomplete="off"/>
+        <div data-ng-messages="modelForm.busNumber.$error" data-ng-if="modelForm.busNumber.$touched || modelForm.$submitted"
+            class="has-error">
+            <p data-ng-message="required" class="help-block">
+                <small>Bus Number is required !</small>
+            </p>
+            <p data-ng-message="minlength" class="help-block">
+                <small>Bus Number is too short.</small>
+            </p>
+            <p data-ng-message="maxlength" class="help-block">
+                <small>Bus Number is too long.</small>
+            </p>
+        </div>
+        </md-input-container>
+        <md-input-container  class="required-mark" flex style="margin: 0px auto!important">
+        <label>Registration Number</label>
+        <input class="md-input" type="text" style="text-transform: uppercase"
+            data-ng-model="mScope.mForm.registrationNumber" ng-disabled="mScope.mForm.id" name="serialNumber" data-ng-required="true" data-ng-maxlength="20" data-ng-minlength="9" autocomplete="off"/>
+        <div data-ng-messages="modelForm.serialNumber.$error" data-ng-if="modelForm.serialNumber.$touched || modelForm.$submitted"
+            class="has-error">
+            <p data-ng-message="pattern" class="help-block">
+                <small>Not a valid number!</small>
+            </p>
+            <p data-ng-message="required" class="help-block">
+                <small>Registration Number is required !</small>
+            </p>
+            <p data-ng-message="minlength" class="help-block">
+                <small>Registration Number is too short.</small>
+            </p>
+            <p data-ng-message="maxlength" class="help-block">
+                <small>Registration Number is too long.</small>
+            </p>
+        </div>
+        </md-input-container>
+    </div>
+
+    <div class="layout-sm-column layout-row">
+        <md-input-container class="required-mark" flex style="margin: 0px auto!important;">
+        <label>Driver Name</label>
+        <input class="md-input" data-ng-model="mScope.mForm.driverName" name="name"
+            data-ng-required="true" data-ng-minlength="2" data-ng-maxlength="100" autocomplete="off" />
+        <div data-ng-messages="modelForm.name.$error" data-ng-if="modelForm.name.$touched || modelForm.$submitted"
+            class="has-error">
+            <p data-ng-message="required" class="help-block">
+                <small>Driver name is required !</small>
+            </p>
+            <p data-ng-message="minlength" class="help-block">
+                <small>Driver name is too short.</small>
+            </p>
+            <p data-ng-message="maxlength" class="help-block">
+                <small>Driver name is too long.</small>
+            </p>
+        </div>
+        </md-input-container>
+        <md-input-container  class="required-mark" flex style="margin: 0px auto!important">
+        <label>Phone Number</label>
+        <input class="md-input" style="text-transform: uppercase" data-ng-model="mScope.mForm.phoneNumber" ng-disabled="mScope.mForm.id" name="phoneNumber"
+            data-ng-required="true" data-ng-maxlength="15" data-ng-minlength="10" data-ng-pattern="/^[0-9+ -]{10,15}$/" autocomplete="off"/>
+        <div data-ng-messages="modelForm.phoneNumber.$error" data-ng-if="modelForm.phoneNumber.$touched || modelForm.$submitted"
+            class="has-error">
+            <p data-ng-message="pattern" class="help-block">
+                <small>Not a valid number!</small>
+            </p>
+            <p data-ng-message="required" class="help-block">
+                <small>Contact number is required !</small>
+            </p>
+            <p data-ng-message="minlength" class="help-block">
+                <small>Contact number is too short.</small>
+            </p>
+            <p data-ng-message="maxlength" class="help-block">
+                <small>Contact number is too long.</small>
+            </p>
+        </div>
+        </md-input-container>
+    </div>
+    <div class="layout-sm-column layout-row">
+        <md-input-container class="align-center required-mark">
+            <label>Vehicle Type</label>
+            <md-select name="vehicleType" data-ng-model="mScope.mForm.vehicleType">
+                <md-option ng-value="value" ng-repeat="(key, value) in mScope.vehicleTypes">{{::value}}</md-option>
+            </md-select>
+        </md-input-container>
+        <md-radio-group data-ng-model="mScope.mForm.status"
+            style="width: 100%; display: inline-block; position: relative; padding: 2px; margin: 18px 0px; vertical-align: middle;">
+        <label class="radio radio-inline">Status</label> <label
+            class="radio radio-inline"> <md-radio-button value="ACTIVE">Active</md-radio-button>
+        </label> <label class="radio radio-inline"> <md-radio-button
+                value="INACTIVE">Inactive</md-radio-button>
+        </label> </md-radio-group>
+    </div>
+
+    <div layout="row" layout-xs="column">
+        <div flex>
+            <div layout="row">
+                <label>Add Vehicle Trip & Route</label>
+            </div>
+            <div layout="row">
+                <div class="col-sm-5 col-xs-5">
+                    <input type="text" class="form-control form-control-small" data-ng-model="mScope.mForm.trip.name" ng-changed = "mScope.mForm.isTripRequired = false"
+                        name="tripName" placeholder="Enter trip name" autocomplete="off" />
+                    <div data-ng-show="mScope.mForm.isTripRequired" >
+                            <small class="errormessage">Trip name is required !</small>
+                    </div>
+                </div>
+                <div class="col-sm-5 col-xs-5">
+                    <angucomplete-alt id="vehicleRouteAutoComplete" placeholder="Search vehicle route" pause="100" remote-url="{{mScope.baseApi}}/vehicleroute/search/"
+                    title-field="name" selected-object="mScope.mForm.trip.route" minlength="1"
+                    input-class="form-control form-control-small" match-class="highlight" field-required="true" />
+                </div>
+                <div class="col-2 col-xs-2 p-0">
+                    <button type="button" class="btn btn-default" ng-click="mScope.addTrip(mScope.mForm.trip);"
+                        style="background-color: rgba(158, 158, 158, 0.07); border: 1px solid #e0e0e0; color: black; height: inherit;padding: 4px 10px; box-shadow: none;">
+                        <i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="multi-list">
+            <div layout="row" ng-repeat="vehicleTrip in mScope.mForm.vehicleRouteTrips" class="m-2">
+                <div class="col-sm-5 col-xs-5"><label>{{vehicleTrip.tripName}}</label></div>
+                <div class="col-sm-5 col-xs-5"><label>{{vehicleTrip.vehicleRoute.name}}</label></div>
+                <div class="col-2 col-xs-2 p-0">
+                    <button type="button" class="btn btn-default" ng-click="mScope.removeTrip(vehicleTrip, $index)"
+                        style="background-color: rgba(158, 158, 158, 0.07); border: 1px solid #e0e0e0; color: black; height: inherit;padding: 4px 10px; box-shadow: none;">
+                        <i class="zmdi zmdi-close"></i>
+                    </button>
+                 </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+</md-dialog-content>

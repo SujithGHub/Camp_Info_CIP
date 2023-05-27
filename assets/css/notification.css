@@ -1,0 +1,107 @@
+/** Notification bar */
+
+.notification-bar {
+    width: 25%;
+    overflow: hidden;
+}
+.notification-header {
+    font-size: 17px;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.card {
+    position: relative;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.15);
+    margin-bottom: 0px;
+    height: 87vh;
+}
+.dashboard-header {
+    text-align: center;
+    padding : 3px;
+    border-bottom: 1px solid #F0F0F0;
+}
+.listview {
+    position: relative;
+}
+.listview:not(.lv-lg):not(.lv-message) .lv-item {
+    padding: 12px 20px;
+}
+.listview .lv-item {
+    position: relative;
+    display: block;
+    -webkit-transition: background-color;
+    -o-transition: background-color;
+    transition: background-color;
+    -webkit-transition-duration: 300ms;
+    transition-duration: 300ms;
+}
+.listview:not(.lv-message) .lv-title {
+    color: #000;
+    font-size: small;
+}
+.listview .lv-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+.listview .lv-item .lv-small {
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+}
+.media:first-child {
+    margin-top: 0;
+}
+.media {
+    overflow: visible;
+    margin-top: 15px;
+}
+.media, .media-body {
+    zoom: 1;
+    overflow: hidden;
+}
+.media:before, .media:after, .row:before {
+    content: " ";
+    display: table;
+}
+.media-left, .media > .pull-left {
+    padding-right: 15px;
+}
+.lv-img-sm {
+    width: 35px;
+    height: 35px;
+}
+.media-body {
+    display: block;
+    width: auto;
+}
+.media-left, .media-right, .media-body {
+    vertical-align: top;
+}
+small, .lv-small {
+    font-size: 12px;
+    color: #A9A9A9;
+}
+p {
+    margin-bottom: 20px;
+    margin: 0 0 9px;
+}
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-size: 13px;
+}
+.album {
+	padding-bottom: 5px;
+	height:25px;
+	text-align:center;
+	padding-top: 4px;
+}

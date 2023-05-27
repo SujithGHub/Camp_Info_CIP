@@ -1,0 +1,114 @@
+<md-dialog-content style="font-size:13px">
+    <div class="md-dialog-content">
+        <md-content>
+            <md-content class="md-padding row mx-0">
+                <div class="col-md-6">
+                    <label style="font-weight: 600">SubjectName</label>
+                    <p data-ng-bind="mScope.modelValue.subject.subjectName"></p>
+                </div>
+                <div class="col-md-6"
+                     data-ng-if="mScope.modelValue.subject.isElective">
+                    <label style="font-weight: 600">Elective SubjectName</label>
+                    <p
+                            data-ng-bind="mScope.modelValue.subjectElective.electiveSubjectName"></p>
+                </div>
+                <div class="col-md-6">
+                    <label style="font-weight: 600">Title</label>
+                    <p data-ng-bind="mScope.modelValue.title"></p>
+                </div>
+                <div class="col-md-6" data-ng-if="mScope.modelValue.description">
+                    <label style="font-weight: 600">Description Text</label>
+                    <p data-ng-bind-html="mScope.modelValue.description| to_trusted"></p>
+                </div>
+                <div class="col-md-12"
+                     data-ng-if="mScope.modelValue.image.length > 0 ">
+                    <label style="font-weight: 600">Description File</label><br>
+                    <div class="col-sm-12 py-3"
+                         style="padding-top: 0px; font-size: smaller;">
+                        <div style="float: left;margin-right:5px;"
+                             data-ng-repeat="homeWorkalbumPicture in mScope.modelValue.image">
+                            <a class="fancybox" target="_blank" href="{{homeWorkalbumPicture.path}}"
+                               download="{{homeWorkalbumPicture.name}}"
+                               rel="gallery" style="margin-right: 5px;"> <img
+                                    class="fancy homeWorkPicture" data-ng-src="{{homeWorkalbumPicture.path}}"
+                                    data-image-on-error/></a>
+                        </div>
+                    </div>
+                </div>
+            </md-content>
+            <md-content class="md-padding"
+                        data-ng-if="(mScope.modelValue.submittedImage.length > 0 || !mScope.modelValue.submitOption )">
+                <label
+                        data-ng-if="mScope.modelValue.institute =='College'"
+                        style="font-weight: 600">Submit Assignment</label> <label
+                    data-ng-if="mScope.modelValue.institute =='School'"
+                    style="font-weight: 600">Submit Homework</label>
+                <div class="form-group row" data-ng-if="mScope.modelValue.submittedImage.length > 0 ">
+                    <div class="form-group my-0">
+                        <div class="col-md-12 px-0">
+                            <div class="col-sm-12 py-3 px-0" style="padding-top: 0px; font-size: smaller;">
+                                <div style="float: left;margin-right:5px;"
+                                     data-ng-repeat="homeWorkalbumPicture in mScope.modelValue.submittedImage">
+                                    <div class="img-container">
+                                        <img alt="nice" class="custom-close-btn"
+                                             src="../../assets/images/close_btn.png"
+                                             data-ng-if="!mScope.modelValue.submitOption"
+                                             data-ng-click="mScope.removeSubmittedImage(homeWorkalbumPicture,mScope.modelValue)">
+                                        <a class="fancybox" target="_blank" title="Click to view"
+                                           href="{{homeWorkalbumPicture.path}}" rel="gallery"
+                                           download="{{homeWorkalbumPicture.name}}"
+                                           style="margin-right: 5px;"> <img
+                                                class="fancy homeWorkPicture"
+                                                data-ng-src="{{homeWorkalbumPicture.path}}"
+                                                data-image-on-error/></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <md-input-container flex id="editor" data-ng-if="!mScope.modelValue.submitOption">
+                    <div class="form-group row pl-0 mx-0">
+                        <div class="col-sm-6 col-xs-9">
+			<span style="font-size: small">{{mScope.upload.fileName
+				| limitTo : 10}}&nbsp;&nbsp;<a href="" class="close-file"
+                                               ng-style="{'top' : (mScope.ImageList.length) ? '4px': '4px'}"
+                                               data-ng-click="mScope.clearFile()"
+                                               data-ng-if="mScope.upload.fileName">&times;</a><br>
+			</span>
+                        </div>
+                        <span style="font-size: small"
+                              data-ng-if="mScope.upload.fileLength > 1"><strong>{{mScope.upload.fileLength-
+				1}} more files</strong></span>
+                        <div class="col-sm-4"></div>
+                    </div>
+                    <div class="dropzone dropbox" data-file-drag-and-drop
+                         accept-format="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/vnd.ms-powerpoint"
+                         on-drop="homeWorkCtrl.mScope.dropFile(el)">
+                        Drag and drop files here or Click Here to upload files
+                    </div>
+                    <input type="file" id="upload"
+                           accept="image/png,image/jpeg,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/vnd.ms-powerpoint"
+                           data-ng-model="file" style="display: none;" multiple
+                           data-ng-required='!mScope.files.length > 0'
+                           custom-on-change="mScope.readFile" name="upload"/>
+                    <div data-ng-messages="submittedHomework.upload.$error"
+                         data-ng-show="submittedHomework.$submitted" class="has-error">
+                        <div data-ng-message="required">
+                            <small> File is required !</small>
+                        </div>
+                    </div>
+                </md-input-container>
+
+            </md-content>
+        </md-content>
+    </div>
+    <div class="md-actions" layout="row">
+        <button aria-label="..." class="btn bgm-teal" type="submit" data-ng-if="!mScope.modelValue.submitOption"
+                data-ng-click="mScope.files.length > 0?mScope.submitHomework(mScope.modelValue):''">Submit
+        </button>
+        <button aria-label="..." class="btn btn-cancel ml-2" type="button"
+                data-ng-click="mScope.cancel()">Cancel
+        </button>
+    </div>
+</md-dialog-content>

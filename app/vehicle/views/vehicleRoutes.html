@@ -1,0 +1,40 @@
+<div class="card-header" data-ng-init="vehicleRouteCtrl.init()">
+   <div class="row">
+      <div class="col-md-6 col-sm-6">
+         <div>
+            <h2 data-ng-if="!vehicleRouteCtrl.mScope.routeStop"> Vehicle Route <small class="hidden-xs">
+                  <div class="grid-ellipsis ">All vehicle routes</div>
+               </small>
+            </h2>
+            <h2 data-ng-if="vehicleRouteCtrl.mScope.routeStop"> {{::routeForm.name}}
+            </h2>
+         </div>
+      </div>
+      <div class="col-md-5 col-sm-4">
+         <md-input-container data-ng-if="!vehicleRouteCtrl.mScope.routeStop">
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="vehicleRouteCtrl.init()" autocomplete="off">
+         </md-input-container>
+      </div>
+      <div class="col-md-1 col-sm-2" >
+         <md-button id="modelForm" class="md-fab md-mini md-primary m-0" aria-label="add" data-ng-if="!vehicleRouteCtrl.mScope.routeStop"
+            template-url="/app/vehicle/views/createVehicleRoute.html" form-modal
+            m-title="Vehicle Route" m-Scope="vehicleRouteCtrl.mScope" form-submit="vehicleRouteCtrl.saveOrUpdateVehicleRoute(mForm)" init-data="vehicleRouteCtrl.initData" ok-button-text="SUBMIT" data-ng-click="mScope.mForm.vehicleRouteStops=[]">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add vehicle route</md-tooltip>
+         </md-button>
+         <button type="submit" style="vertical-align: sub;"data-ng-if="vehicleRouteCtrl.mScope.routeStop"
+                 class="btn btn-danger"
+                 data-ng-click="vehicleRouteCtrl.backToVehicleRoutes()">Back</button>
+         <md-button id="studentUploadBtn" class="md-fab md-mini md-primary m-0" aria-label="add" ng-show="false"
+            template-url="/app/vehicle/views/vehicleStudentsUpload.html" form-modal hide-footer="true"
+            m-title="Vehicle Route Stop" m-Scope="vehicleRouteCtrl.mScope" init-data="vehicleRouteCtrl.initData">
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content" data-ng-show="!vehicleRouteCtrl.mScope.routeStop">
+   <table id="vehicleRouteTable" class="display table" cellspacing="0"></table>
+</div>
+<div class="layout-sm-column layout-row album-container p-2" id="mapcontainer" data-ng-show="vehicleRouteCtrl.mScope.routeStop" ng-include="'/app/vehicle/views/createRouteStop.html'">
+</div>

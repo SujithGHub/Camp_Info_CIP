@@ -1,0 +1,109 @@
+<div class="dash-widgets h-100" data-ng-init="systemCtrl.init()">
+   <div class="row" style="height: 100%">
+      <div class="col-md-6 col-sm-6 col-xs-12 dashboard-content" style="padding-right: 0px;padding-left: 10px;height: 100%;">
+         <div class="card home-card" style="height: 50%;">
+            <div class="listview p-t-5" style="height: 100%">
+               <div class="" style="padding-top: 5px; padding-bottom: 6px; margin-bottom: 0px; height:25px;text-align: center;padding-top: 7px;font-weight: bold;">CLASSIFIEDS</div>
+               <div class="lv-body content"  style="height:calc(100% - 50px)">
+                  <a class="lv-item" data-ng-repeat="classified in systemCtrl.classifiedList" data-ng-click="systemCtrl.viewClassifieds(ev, classified)">
+                     <div class="media">
+                        <div class="pull-left">
+                           <img style="height: 35px;border-radius: 0%" data-ng-if="classified.image.length" class="lv-img-sm"
+                              data-ng-src="{{classified.image[0].path}}" alt="">
+                           <img data-ng-if="!classified.image.length" class="lv-img-sm" style="border-radius: 0%"
+                              src="/assets/images/no-image.png" alt="">
+                        </div>
+                        <div class="media-body">
+                           <div class="lv-title" data-ng-bind="classified.title"></div>
+                           <small class="lv-small" data-ng-bind="classified.description"></small>
+                        </div>
+                     </div>
+                  </a>
+                  <p data-ng-show="!systemCtrl.classifiedList.length" style="text-align: center; padding-top: 15px;">
+                     <label>{{::DashBoardConstants.classifiedsEmpty}}</label><br> <img alt="" src="../assets/images/classifieds.png">
+                  </p>
+               </div>
+               <div class="clearfix"></div>
+               <div class="dashboard-header bottom-card" data-ng-show="systemCtrl.classifiedList.length" data-ui-sref="classifieds" style="height: 25px !important">View All</div>
+            </div>
+         </div>
+         <div class="card home-card" style="height: 50%; margin-top: 10px;background-color: #fff;">
+				<div class="listview p-t-5 " style="height: 100%">
+					<div class=""
+						Style="padding-top: 6px; padding-bottom: 6px; margin-bottom: 0px; text-align: center;font-weight: bold;"
+						data-ng-if="systemCtrl.role !='ROLE_USER'">VIEW ATTENDANCE</div>
+					<div class=""
+						Style="padding-top: 6px; padding-bottom: 6px; margin-bottom: 0px; text-align: center"
+						data-ng-if="systemCtrl.role =='ROLE_USER'">Attendance Report</div>
+						<div class="lv-body content" id="eventContent" style="height:calc(100% - 60px)">
+					<div class="row" style="margin-left: 39px; margin-top: 2px; font-size: 12px"
+						data-ng-if="systemCtrl.currentAcademicYear && systemCtrl.showAcademic">Academic Year :
+						{{::systemCtrl.currentAcademicYear}}</div>
+
+					<div id="container" class="chart-content" style="height: 192px"></div></div>
+					 <div class="clearfix"></div>
+               		<div class="dashboard-header bottom-card" data-ui-sref="reportAnalysis" style="height: 25px !important">View All</div>
+				</div>
+			</div>
+      </div>
+      <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 10px;height: 100%;">
+         <div class="card home-card homecard-viewall">
+				<div class="listview p-t-5" style="height: 100%">
+					<div class="album" style="font-weight: bold;" >ALBUMS</div>
+					<div class="lv-body" style="height:calc(100% - 50px)">
+						<div class="w3-content" id="albumContent" ng-mouseover="hoverIn()" ng-mouseleave="hoverOut()"
+							style="max-width: 1000px; position: relative;height: 100%"
+							data-ng-show="systemCtrl.albumList.length">
+							<div ng-repeat="album in systemCtrl.albumList">
+								<img ng-src="{{album.path}}" class="mySlides" style="width: 100%; height: 100%;">
+							</div>
+							<div id="navDiv"  ng-show="hoverEdit"> 
+							<a class="w3-btn-floating"
+								style="position: absolute; top: 45%; left: 0"
+								 ng-click="systemCtrl.plusDivs(-1)">&#60;</a><a class="w3-btn-floating" 
+								style="position: absolute; top: 45%; right: 0"
+								ng-click="systemCtrl.plusDivs(1)">&#62;</a></div>
+						</div>
+						<p data-ng-show="!systemCtrl.albumList.length" style="text-align: center; padding-top: 15px;">
+							<label>Album is empty</label><br> <img alt="" src="../assets/images/album.png">
+						</p>
+					</div>
+					<div class="clearfix"></div>
+					<div class="dashboard-header bottom-card" data-ng-show="systemCtrl.albumList.length" data-ui-sref="viewalbum"  style="height: 25px !important">View All</div>
+				</div>
+			</div>
+         <div class="card home-card" style="height: 50%; margin-top: 10px;">
+            <div class="listview p-t-5" style="height: 100%">
+               <div class=""
+                  style="padding-top: 5px; padding-bottom: 6px; margin-bottom: 0px; height:25px;text-align: center;padding-top: 7px;font-weight: bold;">EVENTS</div>
+               <div class="lv-body content" id="eventContent" style="height:calc(100% - 60px)">
+                  <a class="lv-item" href=""
+                     data-ng-repeat="event in systemCtrl.eventList" data-ng-click="systemCtrl.viewEvents(event)">
+                     <div class="media">
+                        <div class="pull-left">
+                           <img data-ng-if="event.image.length" class="lv-img-sm"
+                              style="border-radius: 0%"
+                              data-ng-src="{{event.image[0].path}}"
+                              alt=""> <img data-ng-if="!event.image.length"
+                              class="lv-img-sm" style="border-radius: 0%"
+                              src="/assets/images/no-image.png" alt="">
+                        </div>
+                        <div class="media-body">
+                           <div class="lv-title">{{ event.name}}</div>
+                           <small class="lv-small">{{event.description}}</small>
+                        </div>
+                     </div>
+                  </a>
+                  <p data-ng-show="!systemCtrl.eventList.length"
+                     style="text-align: center; padding-top: 15px;">
+                     <label>{{DashBoardConstants.eventEmpty}}</label><br> <img
+                        alt="" src="../assets/images/event.png">
+                  </p>
+               </div>
+               <div class="clearfix"></div>
+               <div class="dashboard-header bottom-card" data-ng-show="systemCtrl.eventList.length" data-ui-sref="viewevents" style="height: 25px">View All</div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="card-header" data-ng-init="exampaperCtrl.init()" id="examPaperDiv">
+   <div class="row">
+      <div class="col-sm-1">
+         <md-button class="md-fab md-mini md-primary" aria-label="add" data-ui-sref="exam">
+            <i class="zmdi zmdi-arrow-left zmdi-hc-fw" style="padding-right :0px!important"></i>
+            <md-tooltip>Back</md-tooltip>
+         </md-button>
+      </div>
+      <div class="col-sm-5" style="padding-top:16px;">
+         <h2> Examination Name : {{exampaperCtrl.examName}} </h2>
+      </div>
+      <div class="col-sm-5">
+         <md-input-container>
+            <label>Search here</label>
+            <input id="search" data-ng-model="searchValue" autocomplete="off" >
+         </md-input-container>
+      </div>
+      <div class="col-sm-1">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add"  data-ng-if="exampaperCtrl.role == 'ROLE_SUPER_ADMIN' || exampaperCtrl.role == 'ROLE_ADMIN' || exampaperCtrl.role == 'ROLE_STAFF' || exampaperCtrl.role == 'ROLE_STAFF_HOD' "
+            template-url="/app/examination/views/createExamPaper.html" form-modal
+            m-title="Exam Paper" m-scope="exampaperCtrl.mScope" form-submit="exampaperCtrl.saveOrUpdateExampaper(mForm)" init-data="exampaperCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add Exam Paper</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+
+<div class="card-body content" 
+	style="height: 71vh; overflow-y: auto !important">
+	<div class="table-responsive">
+		<table data-ng-table="tableData"
+			class="table table-striped table-vmiddle"
+			data-ng-class="{ 'no-pager': tableValue.length <= 5, 'no-counts':true, 'custom-pager':true}">
+			<thead>
+				<tr>
+					<th>S.No</th>
+					<th>Subject Name</th>
+					<th data-ng-if="exampaperCtrl.mScope.instituteType == 'College'">Semester</th>
+					<th>Exam Date</th>
+					<th>MaxMark</th>
+					<th>PassMark</th>
+					<th data-ng-if="exampaperCtrl.role == 'ROLE_SUPER_ADMIN' || exampaperCtrl.role == 'ROLE_ADMIN' || exampaperCtrl.role == 'ROLE_STAFF' || exampaperCtrl.role == 'ROLE_STAFF_HOD' ">Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="examPaper in $data | filter:searchValue">
+					<td>{{ $index+1 }}</td>
+					<td class='td-align' data-tooltip-placement="bottom"
+						data-tooltip="{{ examPaper.subject.subjectName}}"
+						data-tooltip-append-to-body="true" data-ng-bind="!examPaper.subjectElective.id ? examPaper.subject.subjectName : examPaper.subjectElective.electiveSubjectName">{{examPaper.subject.subjectName}}</td>
+					<td data-ng-if="exampaperCtrl.mScope.instituteType  == 'College'">{{ exampaperCtrl.semester}}</td>
+					<td data-ng-class="checkDate(examPaper)">{{examPaper.date |
+						date:'MMM dd,yyyy'}}</td>
+					<td>{{ examPaper.maxMark }}</td>
+					<td>{{ examPaper.passMark }}</td>
+					<td data-ng-if="exampaperCtrl.role == 'ROLE_SUPER_ADMIN' || exampaperCtrl.role == 'ROLE_ADMIN' || exampaperCtrl.role == 'ROLE_STAFF' || exampaperCtrl.role == 'ROLE_STAFF_HOD' ">
+						<button class="btn bgm-teal btn-xs"
+							data-tooltip-placement="bottom" data-tooltip="Edit"
+							data-ng-click="exampaperCtrl.editExamPaper(examPaper)">
+							<i class="zmdi zmdi-edit zmdi-hc-fw"></i>
+						</button>
+						<button class="btn btn-primary btn-xs btn-delete"
+							data-swal-warning data-tooltip-placement="bottom"
+							data-tooltip="Delete" data-ng-click="exampaperCtrl.deleteExampaper(examPaper)">
+							<i class="zmdi zmdi-delete zmdi-hc-fw"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+			<div class="no-record" data-ng-if="searchValue.length">
+				<div class="alert alert-warning"
+					data-ng-hide="(examPaperList  | filter:searchValue).length != 0 "
+					style="text-align: center; font-size: 13px !important; color: rgba(0, 0, 0, 0.87);">No
+					record found</div>
+			</div>
+			<div class="no-record" data-ng-if="!searchValue.length">
+				<div class="alert alert-warning"
+					data-ng-hide="examPaperList.length != 0"
+					style="text-align: center; font-size: 13px !important; color: rgba(0, 0, 0, 0.87);">No
+					record found</div>
+			</div>
+		</div>
+</div></div>
+<link rel="stylesheet" href="\assets\css\ngTable.css">
+<style>
+.no-record {
+	padding-top: 100px;
+	padding-left: 50px;
+	padding-right: 50px
+}
+.font-danger {
+    color: #f32c1e;
+}
+.fade {
+    opacity: 0.5;
+}
+#examPaperDiv {
+	font-family: roboto;
+	font-size: 13px;
+	line-height: 1.42857143; 
+	color: #5e5e5e;
+}
+
+
+</style>

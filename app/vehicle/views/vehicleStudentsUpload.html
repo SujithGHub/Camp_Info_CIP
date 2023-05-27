@@ -1,0 +1,161 @@
+<div class="content" style="height: calc(100% - 40px)">
+    <div class="form-group p-1 my-0">
+        <div class="row mr-0">
+            <div class="col-sm-6 col-xs-6">
+                <div class="row mx-0 mt-3">
+                     <div class="col-sm-6">
+                         <label style="font-weight: 500;">Bus Number</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>{{::mScope.mForm.busNumber}}</label>
+                    </div>
+                </div>
+                <div class="row mx-0 mt-3">
+                    <div class="col-sm-6">
+                        <label style="font-weight: 500;">Registration Number</label>
+                    </div>
+                    <div class="col-sm-6">
+                        <label>{{::mScope.mForm.registrationNumber}}</label>
+                    </div>
+                </div>
+                <div class="row mx-0 mt-3">
+                    <div class="col-sm-6">
+                        <label style="font-weight: 500;">Mobile Number</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-sm-6">
+                        <label>{{::mScope.mForm.phoneNumber}}</label>
+                    </div>
+                </div>
+                <div class="row mx-0 mt-3">
+                     <div class="col-sm-6">
+                        <label style="font-weight: 500;">Driver Name</label>
+                     </div>
+                    <div class="col-sm-6">
+                        <label>{{::mScope.mForm.driverName}}</label>
+                    </div>
+                </div>
+                <div class="row mx-0 mt-3">
+                    <div class="col-sm-6">
+                        <label style="font-weight: 500;">Vehicle Trip</label>
+                    </div>
+                    <div class="col-sm-6" style="width: 50%">
+                        <div>
+                            <select class="form-control form-control-sm"  ng-model="mScope.mForm.vehicleRouteTrip"
+                                    data-ng-options="vehicleRouteTrip.tripName for vehicleRouteTrip in mScope.mForm.vehicleRouteTrips track by vehicleRouteTrip.id"
+                                    ng-change="mScope.getStudentsByVehicleId(mScope.mForm.vehicleRouteTrip.id)">
+                            </select>
+                        </div>
+                        <div data-ng-show="mScope.mForm.isStudentTripRequired" >
+                            <small class="errormessage">Student trip is required !</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mx-0 mt-3" data-ng-if="mScope.mForm.vehicleRouteTrip">
+                    <div class="col-sm-6">
+                        <label style="font-weight: 500;">Vehicle Route</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                    <div class="col-sm-6">
+                        <label>{{mScope.mForm.vehicleRouteTrip.vehicleRoute.name}}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-6" style="overflow: hidden">
+                <md-tabs md-dynamic-height="" md-border-bottom="" style="overflow: visible" class="student-upload">
+                    <md-tab label="File Upload" data-ng-disabled="!mScope.mForm.vehicleRouteTrip">
+                        <md-content style="padding: 8px;">
+                            <div class="row mx-0 p-2">
+                                <div class="col-sm-6 col-xs-6 text-center">
+                                <span style="font-size: small;margin-bottom:10px;"> {{mScope.mForm.file.name | limitTo : 20}}&nbsp;&nbsp; <a href="" class="close-file"
+                                                                                                                                             data-ng-click="mScope.mForm.file=null" data-ng-if="mScope.mForm.file.name">&times;</a> <br>
+                            </span>
+                                </div>
+                                <div class="col-sm-6 col-xs-6 text-center">
+                                    <button class="btn btn-danger" type="button" data-ng-click="mScope.downloadTemplate()"
+                                            aria-label="DOWNLOAD SAMPLE TEMPLATE" style="background-color: slategray !important;" data-ng-disabled="!mScope.mForm.vehicleRouteTrip">DOWNLOAD TEMPLATE</button>
+                                </div>
+                            </div>
+                            <div class="dropzone dropbox" id="dropzone" data-ng-disabled="!mScope.mForm.vehicleRouteTrip"
+                                 accept-format="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                 data-file-drag-and-drop style="font-size: medium;min-height: 150px;"
+                                 on-drop="mScope.dropFile(el)">Drag and drop files here or Click
+                                here to upload files</div>
+                            <input type="file" id="upload" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" data-ng-required="true"
+                                   data-ng-model="mScope.mForm.file" style="display: none;"
+                                   custom-on-change="mScope.readFile" data-ng-disabled="!mScope.mForm.vehicleRouteTrip" />
+                        </md-content>
+                    </md-tab>
+                    <md-tab label="Add Student"  style="overflow: visible" data-ng-disabled="!mScope.mForm.vehicleRouteTrip">
+                        <md-content class="md-padding" style="overflow: visible" data-ng-disabled="!mScope.mForm.vehicleRouteTrip">
+                            <div class="col-sm-12 px-0" style="height: 80px">
+                                <div class="col-sm-5 pr-0">
+                                    <div>
+                                        <angucomplete-alt id="ex3" placeholder="Search Rollnumber" pause="100" remote-url="{{mScope.baseApi}}/student/rollno?searchValue="
+                                                          title-field="rollNumber" selected-object="vehicleStudent.student" description-field="firstName" minlength="1"
+                                                          input-class="form-control form-control-small" match-class="highlight" />
+                                    </div>
+                                    <div data-ng-show="mScope.mForm.isStudentRollNumberRequired" >
+                                        <small class="errormessage">Student rollnumber is required !</small>
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 pr-0">
+                                        <angucomplete-alt id="ex3" placeholder="Search Stop" pause="100" remote-url="{{mScope.baseApi}}/vehicleroutestop/search?route={{mScope.mForm.vehicleRouteTrip.vehicleRoute.id}}&searchValue="
+                                                          title-field="name" selected-object="vehicleStudent.stop" minlength="1"
+                                                          input-class="form-control form-control-small" match-class="highlight" />
+                                </div>
+                                <div class="col-sm-2 pr-0">
+                                    <button type="button" class="btn btn-default" ng-click="mScope.addStudentToVehicle(mScope.mForm, vehicleStudent);"
+                                            style="background-color: rgba(158, 158, 158, 0.07); border: 1px solid #e0e0e0; color: black; height: inherit;padding: 4px 10px; box-shadow: none;">
+                                        <i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </md-content>
+                    </md-tab>
+                </md-tabs>
+            </div>
+        </div>
+    <div class="row mx-0 p-2">
+        <section class="w-100">
+        <div class="table-container w-100" style="height:100%;max-height:336px;font-size: smaller">
+            <table width="100%" align="center">
+                <thead>
+                    <tr class="header">
+                        <th width="5%">S No <div>S No</div> </th>
+                        <th width="10%">Roll Number <div>Roll Number</div></th>
+                        <th width="15%">Student Name<div>Student Name</div></th>
+                        <th width="14%" ng-if="mScope.instituteType == 'College'">Department<div>Department</div></th>
+                        <th width="12%">Class Year <div>Class Year</div></th>
+                        <th width="9%">Section <div>Section</div></th>
+                        <th width="12%">Parent Number<div>Parent Number</div></th>
+                        <th width="12%">Stop Name<div>Stop Name</div></th>
+                        <th width="10%">Action <div>Action</div></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr data-ng-repeat="vehiclestudent in mScope.vehicleStudents track by vehiclestudent.id">
+                        <td>{{$index + 1}}</td>
+                        <td class="text-left">{{::vehiclestudent.student.rollNumber}}</td>
+                        <td class="text-left">{{::vehiclestudent.student.firstName}} {{::vehiclestudent.student.lastName}}</td>
+                        <td ng-if="mScope.instituteType == 'College'">{{::vehiclestudent.student.department.displayName}}</td>
+                        <td>{{::vehiclestudent.student.classYear.name}}</td>
+                        <td>{{::vehiclestudent.student.section.sectionName}}</td>
+                        <td class="text-left">{{::vehiclestudent.student.fatherNumber}}</td>
+                        <td>{{::vehiclestudent.vehicleRouteStop.name}}</td>
+                        <td><button type="button" ng-click="mScope.removeStudent(vehiclestudent)" class='btn btn-primary btn-xs btn-delete'>
+                                <i class='zmdi zmdi-delete zmdi-hc-fw' style='color: #fff;'></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-ng-if="mScope.vehicleStudents.length==0">
+                        <td colspan="9" align="center" data-ng-if="mScope.instituteType == 'College'">No matching records found</td>
+                        <td colspan="8" align="center" data-ng-if="mScope.instituteType == 'School'">No matching records found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </section>
+    </div>
+    </div>
+</div>
+

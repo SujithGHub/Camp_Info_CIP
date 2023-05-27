@@ -1,0 +1,310 @@
+<div data-ng-controller="ChatController as chatCtrl" style="height:100%" data-ng-init="chatCtrl.init()">
+    <a href="" data-ng-click="chatCtrl.openChat()" class="chat-panel-toggle"
+       data-ng-if="(chatCtrl.role == 'ROLE_USER' || chatCtrl.role == 'ROLE_STAFF' || chatCtrl.role == 'ROLE_STAFF_HOD') && chatCtrl.chatId && chatCtrl.chatOption">
+        <i class="zmdi zmdi-comments"></i>
+    </a>
+    <div class="enable-chat"
+         data-ng-if="(chatCtrl.role == 'ROLE_USER' || chatCtrl.role == 'ROLE_STAFF' || chatCtrl.role == 'ROLE_STAFF_HOD') && chatCtrl.chatEnabled && (chatCtrl.chatId == undefined)">
+        <a href="" class="enable-chat-icon">
+            <i class="zmdi zmdi-comments"></i>
+        </a>
+        <div style="padding:5px">
+            <button class="send-button enable-chat-button btn btn-success" data-ng-click="chatCtrl.enableChat()"
+                    type="button">Enable Chat
+            </button>
+        </div>
+    </div>
+
+    <div class="chat-body ps-container ps-theme-default ps-active-y">
+        <div class="chat-head">
+            <span class="name">Chats</span>
+            <span class="close-icon pr-3 cursor-pointer" style="font-size:22px;"data-ng-click="chatCtrl.openChat()">&times</span>
+        </div>
+        <div class="chat-contacts" data-ng-show="chatCtrl.openContacts && chatCtrl.openGroup">
+            <div class="chat-search p-2">
+                <input type="text" id=searchChat placeholder=" Search ..." data-ng-model="chatCtrl.searchTerm"
+                       />
+            </div>
+            <div id="contacts" class="contacts content">
+                <!--user group list-->
+                <ul style="list-style: none;margin-top:0;padding-left: 0;width:100%;margin-bottom: 0;">
+                    <li style="padding:4px;border-bottom:1px solid rgba(0,0,0,.1);border-radius: 10px;"
+                        class="contacts-user cursor-pointer"
+                        data-ng-repeat="group in chatCtrl.groupList |filter:{name:chatCtrl.searchTerm}"
+                        data-ng-click="chatCtrl.openGroupChat(group)">
+								   <span class="user-img cursor-pointer">
+                                        <img src="assets/images/group_avatar.png" alt="user" class="rounded-circle">
+                                    </span>
+                        <div class="mail-contnet" style="position: relative; height: 100%;">
+                            <h5 class="message-title" data-ng-if="group.name" style=" height: 50%; position: absolute;bottom: 25px;">
+                                <span class="cursor-pointer" style="outline: none">{{::group.name}}</span>
+                            </h5>
+                        </div>
+                    </li>
+                </ul>
+                <!--user friend list-->
+                <ul style="list-style: none;margin-top:0;padding-left: 0;width:100%;">
+                    <li style="padding:4px;border-bottom:1px solid rgba(0,0,0,.1);border-radius: 10px;"
+                        class="contacts-user cursor-pointer"
+                        data-ng-repeat="friend in chatCtrl.friendsList |filter:{firstName:chatCtrl.searchTerm}"
+                        data-ng-click="chatCtrl.openContactChat(friend)">
+								   <span class="user-img cursor-pointer">
+                                        <img src="assets/images/Woman.png" alt="user" style="position: relative; top: 3px;" class="rounded-circle" data-ng-if="friend.profileImagePath ==undefined">
+                                        <img class="rounded-circle" data-ng-src="{{friend.profileImagePath}}"
+                                               data-image-on-error data-ng-if="friend.profileImagePath != undefined"/>
+                                    </span>
+                        <div class="mail-contnet" style="position: relative; height: 100%;">
+                            <h5 class="message-title" data-ng-if="friend.firstName" style=" height: 50%; position: absolute;bottom: 25px;">
+                                <span class="cursor-pointer" style="outline: none">{{::friend.firstName}}</span>
+                            </h5>
+                        </div>
+                    </li>
+                </ul>
+                <div data-ng-if="chatCtrl.friendsList.length == 0 && chatCtrl.groupList.length == 0">
+                <div class="pt-3" style="width:100%;font-size: 80px;text-align: center;color:black;">
+                    <i class="zmdi zmdi-comment-text"></i>
+                </div>
+                <div style="width:100%;text-align: center;color:black;">
+                    No contacts.
+                </div>
+                </div>
+            </div>
+        </div>
+        <!--chat div-->
+        <div class="chat-message contacts p-0" data-ng-show="!chatCtrl.openContacts && chatCtrl.openGroup">
+            <div class="chat-message-head">
+                <div class="chat-message-head-img" style=" width: 19%;padding-left: 2px;">
+ 					<span class="cursor-pointer pr-1" style="vertical-align:middle;"
+                          data-ng-click="chatCtrl.openContactChat()">
+ 						<i class="zmdi zmdi-long-arrow-left zmdi-hc-lg" style="width:14px;"></i>
+ 					</span>
+                    <img src="assets/images/Woman.png" alt="user" class="rounded-circle" data-ng-if="chatCtrl.friendInitialDetails.profileImagePath ==undefined">
+                    <img class="rounded-circle" data-ng-src="{{chatCtrl.friendInitialDetails.profileImagePath}}"
+                         data-image-on-error data-ng-if="chatCtrl.friendInitialDetails.profileImagePath != undefined"/>
+                </div>
+                <div class="mail-contnet pl-0 chat-message-head-content">
+                    <p class="message-title friend-name">{{chatCtrl.friend.firstName}}</p>
+                    <span class="status"
+                          data-ng-if="chatCtrl.friend.subscriptionMode !='not friend' && chatCtrl.typing == false">{{chatCtrl.friend.status}}</span>
+                    <span class="status"
+                          data-ng-if="chatCtrl.friend.subscriptionMode !='not friend' && chatCtrl.typing == true">typing...</span>
+                </div>
+            </div>
+            <!--single chat body-->
+            <div class="chat-message-body" when-scrolled callback="chatCtrl.scrollMethod()">
+                <div data-ng-if="chatCtrl.messages.length == 0 && chatCtrl.deny !=true ">
+                    <div class="pt-3" style="width:100%;font-size: 80px;text-align: center;color:rgba(0,0,0,.12);">
+                        <i class="zmdi zmdi-comment-text"></i>
+                    </div>
+                    <div data-ng-if="chatCtrl.friend.subscriptionMode =='both'"
+                         style="width:100%;text-align: center;color:rgba(21, 21, 21, 0.36);">
+                        Start a conversation by typing your message below.
+                    </div>
+                    <div data-ng-if="chatCtrl.friend.subscriptionMode =='from'"
+                         style="width:100%;text-align: center;color:rgba(21, 21, 21, 0.36);">
+                        Add to your contacts.
+                    </div>
+                    <div data-ng-if="chatCtrl.friend.subscriptionMode =='to'"
+                         style="width:100%;text-align: center;color:rgba(21, 21, 21, 0.36);">
+                        You'll able to chat {{chatCtrl.friend.firstName}} once </br> your request has been accepted.
+                    </div>
+                </div>
+                <div data-ng-if="chatCtrl.deny" class="deny-content">
+                    <md-dialog md-theme="dark-teal" aria-label="Are you sure ..." ng-class="dialog.css"
+                               class="md-dark-teal-theme md-transition-in div-align-center" role="dialog" tabindex="-1"
+                               aria-describedby="dialog_1" style="max-width:100%;width:100%">
+                        <md-dialog-content class="md-dialog-content" role="document" tabindex="-1" id="dialog_1"><h2
+                                class="md-title ng-binding">Are you sure want to deny?</h2>
+                        </md-dialog-content>
+                        <md-dialog-actions>
+                            <button class="md-primary md-button ng-scope md-dark-teal-theme md-ink-ripple" type="button"
+                                    data-ng-click="chatCtrl.openOrCloseDenyContent(false)"
+                                    style=""><span>Cancel</span></button>
+                            <button class="md-primary md-button md-dark-teal-theme md-ink-ripple" type="button"
+                                    data-ng-click="chatCtrl.denyUser(chatCtrl.friend.friendId)">
+                                <span>yes, Please it!</span></button>
+                        </md-dialog-actions>
+                    </md-dialog>
+                </div>
+                <!--message-->
+                <ul style="list-style: none;margin-top: 0;padding-left: 0;width: 100%;" class="chat-messages">
+                    <li style="width:100%" data-ng-repeat="message in chatCtrl.messages | orderBy:$index:true">
+                        <div>
+                            <div data-ng-if="chatCtrl.getMessageGroupHeader(message.createdAt, $index)">
+                                <h4 class="groupHeader my-2 text-center"><span class="header">{{chatCtrl.dateConverter(chatCtrl.messageGroupHeaderName) | date : "MMM dd,yyyy"}}</span>
+                                </h4>
+                            </div>
+                            <div class="chat-message-content" data-ng-if="chatCtrl.chatId == message.fromId">
+                                <span></span>
+                                <div class="chat-content-message-out">
+                                    <div class="box-out bg-light-info">
+                                        <span class="tail-container tail-container-rtl"></span>
+                                        <div class="message">{{::message.message}}</div>
+                                        <div class="time">{{chatCtrl.dateConverter(message.createdAt) | date : "h.mm a"}}
+                                        </div>
+                                    </div>
+                                    <div ng-init="chatCtrl.messages.length == $index+1  ? chatCtrl.scrollBottom() : '' "></div>
+                                </div>
+                            </div>
+                            <div class="chat-message-content" data-ng-if="chatCtrl.chatId != message.fromId">
+                                <span></span>
+                                <div class="chat-content-message-in" style="float:left">
+                                    <div class="box-in bg-light-info">
+                                        <span class="tail-container tail-container-ltr"></span>
+                                        <div class="message">{{::message.message}}</div>
+                                        <div class="time">{{chatCtrl.dateConverter(message.createdAt) | date : "h.mm a"}}
+                                        </div>
+                                    </div>
+                                    <div ng-init="chatCtrl.messages.length == $index+1  ? chatCtrl.scrollBottom() : '' "></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--single chat footer-->
+            <div class="chat-message-footer">
+                <div class="message-form" data-ng-if="chatCtrl.friend.subscriptionMode =='both'">
+                    <form name="messageForm" data-ng-submit="chatCtrl.sendMessage(chatCtrl.messageForm)">
+                        <input type="text" data-ng-model="chatCtrl.messageForm.message" placeholder="Type a message"
+                               class="form-control" ng-keyup="chatCtrl.stopTyping()"
+                               ng-keydown="chatCtrl.messageTyping()"/>
+                        <button class="send-button" type="submit"><span class="send-icon"><i
+                                class="zmdi zmdi-mail-send"></i></span></button>
+                    </form>
+                </div>
+                <div data-ng-if="chatCtrl.friend.subscriptionMode =='from'" >
+                    <div class="row mx-0">
+                        <div class="col-12  white-border contacts-accept">
+                            <h4 class="my-1" style="color: white">Requested Contact</h4>
+                        </div>
+                    </div>
+                    <div class="row mx-0">
+                        <div class="col-6 ">
+                            <button class="btn white-border" style="box-shadow: none;background-color: grey;width: 100%;height: 35px;"
+                                    data-ng-click="chatCtrl.openOrCloseDenyContent(true)" type="button"><i class="zmdi zmdi-close-circle zmdi-hc-lg"></i> Deny
+                            </button>
+                        </div>
+                        <div class="col-6 " >
+                            <button class="btn white-border" style="box-shadow: none;background-color: grey;width: 100%;height: 35px;"
+                                    data-ng-click="chatCtrl.acceptUser(chatCtrl.friend.friendId)" type="button"><i class="zmdi zmdi-accounts zmdi-hc-lg"></i> Accept
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-if="chatCtrl.friend.subscriptionMode == 'none'" class="contacts-accept">
+                    <div class="row mx-0">
+                        <div class="col-12 white-border">
+                            <h4 class="my-1" style="color: white">Add to your contacts</h4>
+                        </div>
+                        <div class="col-12 white-border">
+                            <button class="btn w-100" style="box-shadow: none;background-color: grey;"
+                                    data-ng-click="chatCtrl.requestUser(chatCtrl.friend.baseUserId,chatCtrl.friend.baseReferenceId)" type="button"><i class="zmdi zmdi-account-add zmdi-hc-lg"></i>&nbsp;&nbsp;Add To Contact
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div data-ng-if="chatCtrl.friend.subscriptionMode == undefined" class="contacts-accept" style="height:auto">
+                    <div class="row mx-0">
+                        <div class="col-12 white-border">
+                            <h4 class="my-1" style="color: white">User not available in chat..!</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--group chat-->
+        <div class="chat-message contacts p-0" data-ng-show="!chatCtrl.openGroup && chatCtrl.openContacts">
+            <!--group chat head-->
+            <div class="chat-message-head">
+                <div class="chat-message-head-img" style=" width: 19%;padding-left: 2px;">
+ 									<span class="cursor-pointer pr-1" style="vertical-align:middle;"
+                                          data-ng-click="chatCtrl.openGroupChat()">
+ 										<i class="zmdi zmdi-long-arrow-left zmdi-hc-lg" style="width:14px;"></i>
+ 									</span>
+                    <img class="user-img" src="assets/images/group_avatar.png" alt="user">
+                </div>
+                <div class="mail-contnet pl-0 chat-message-head-content">
+                    <p class="message-title friend-name" data-ng-class="chatCtrl.typing != true?'line-height':''">{{chatCtrl.group.name}}</p>
+                    <span class="status"
+                          data-ng-if="chatCtrl.typing == true">{{chatCtrl.receiverName}} is typing...</span>
+                </div>
+            </div>
+            <!--group chat body-->
+            <div class="chat-message-body chat-group-message-body" when-scrolled callback="chatCtrl.scrollMethod()">
+                <div data-ng-if="chatCtrl.messages.length == 0">
+                    <div class="pt-3" style="width:100%;font-size: 80px;text-align: center;color:rgba(0,0,0,.12);">
+                        <i class="zmdi zmdi-comment-text"></i>
+                    </div>
+                    <div data-ng-if="chatCtrl.isMemberOfGroup"
+                         style="width:100%;text-align: center;color:rgba(21, 21, 21, 0.36);">
+                        Start a conversation by typing your message below.
+                    </div>
+                    <div data-ng-if="!chatCtrl.isMemberOfGroup"
+                         style="width:100%;text-align: center;color:rgba(21, 21, 21, 0.36);">
+                        Join the group.
+                    </div>
+                </div>
+                <ul style="list-style: none;margin-top: 0;padding-left: 0;width: 100%;" class="chat-messages">
+                    <li style="width:100%" data-ng-repeat="message in chatCtrl.messages | orderBy:$index:true">
+                        <div>
+                            <div data-ng-if="chatCtrl.getMessageGroupHeader(message.createdAt, $index)">
+                                <h4 class="groupHeader my-2 text-center"><span class="header">{{chatCtrl.dateConverter(chatCtrl.messageGroupHeaderName) | date : "MMM dd,yyyy"}}</span>
+                                </h4>
+                            </div>
+                            <div class="chat-message-content" data-ng-if="chatCtrl.chatId == message.fromId">
+                                <span></span>
+                                <div class="chat-content-message-out">
+                                    <div class="box-out bg-light-info">
+                                        <span class="tail-container tail-container-rtl"></span>
+                                        <div class="message">{{::message.message}}</div>
+                                        <div class="time">{{chatCtrl.dateConverter(message.createdAt) | date : "h.mm a"}}
+                                        </div>
+                                    </div>
+                                    <div ng-init="chatCtrl.messages.length == $index+1 && chatCtrl.pageNo == 1 ? chatCtrl.scrollBottom() : '' "></div>
+                                </div>
+                            </div>
+                            <div class="chat-message-content" data-ng-if="chatCtrl.chatId != message.fromId">
+                                <span></span>
+                                <div class="chat-content-message-in" style="float:left">
+                                    <div class="box-in bg-light-info">
+                                        <span class="tail-container tail-container-ltr"></span>
+                                        <div class="message sender-name">{{::message.chatUser.firstName}}</div>
+                                        <div class="message">{{::message.message}}</div>
+                                        <div class="time">{{chatCtrl.dateConverter(message.createdAt) | date : "h.mm a"}}
+                                        </div>
+                                    </div>
+                                    <div ng-init="chatCtrl.messages.length == $index+1 && chatCtrl.pageNo == 1 ? chatCtrl.scrollBottom() : '' "></div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--group chat footer-->
+            <div class="chat-message-footer">
+                <div class="message-form" data-ng-if="chatCtrl.isMemberOfGroup">
+                    <form name="messageForm" data-ng-submit="chatCtrl.sendMessage(chatCtrl.messageForm)">
+                        <input type="text" data-ng-model="chatCtrl.messageForm.message" placeholder="Type a message"
+                               class="form-control" ng-keyup="chatCtrl.stopTypingInGroup()"
+                               ng-keydown="chatCtrl.messageTypingInGroup()"/>
+                        <button class="send-button" type="submit"><span class="send-icon"><i
+                                class="zmdi zmdi-mail-send"></i></span></button>
+                    </form>
+                </div>
+                <div data-ng-if="!chatCtrl.isMemberOfGroup" >
+                    <div class="row mx-0">
+                        <div class="col-12 " style="text-align:center;">
+                            <button class="btn white-border " style="box-shadow: none;background-color: grey;width:80%;height: 35px;"
+                                    data-ng-click="chatCtrl.joinGroup()" type="button"><i class="zmdi zmdi-account-add zmdi-hc-lg"></i>&nbsp;&nbsp;Join Group
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="cip" data-ng-controller="SystemController as systemCtrl"
+      data-ng-init="systemCtrl.systemInit()">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no"/>
+
+    <title>Camp Info</title>
+
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/assets/css/angular-material.css">
+    <link rel="stylesheet" href="/assets/fonts/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/jquery.fancybox.min.css">
+    <link rel="stylesheet" href="/assets/css/zebra_datepicker_default.css">
+    <link rel="stylesheet" href="/assets/css/custome.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/css/menu.css">
+    <link rel="stylesheet" href="/assets/css/fonts.css">
+    <link rel="stylesheet" href="/assets/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="/assets/css/notification.css">
+    <link rel="stylesheet" href="/assets/css/datatable.css">
+    <link rel="stylesheet" href="/assets/css/form.css">
+    <link rel="stylesheet" href="/assets/css/stylesheet.css">
+    <link rel="stylesheet" href="/assets/css/fullcalendar.min.css">
+    <link rel="stylesheet" href="/assets/css/owl.carousel.css">
+    <link rel="stylesheet" href="/assets/css/owl.theme.css">
+    <link rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css">
+    <link rel="stylesheet" href="/assets/css/angucomplete-alt.css">
+    <link rel="stylesheet" href="/assets/css/report.css">
+    <link rel="stylesheet" href="/assets/css/ngTable.css">
+    <link rel="stylesheet" href="/assets/css/js-image-slider.css">
+    <link rel="stylesheet" href="/assets/textangular/textAngular.css">
+    <link rel="stylesheet" href="/assets/baguettebox.js/baguetteBox.css">
+    <!-- endinject -->
+
+    <style type="text/css">
+        /**
+         * Hide when Angular is not yet loaded and initialized
+         */
+
+        [ng\:cloak],
+        [ng-cloak],
+        [data-ng-cloak],
+        [x-ng-cloak],
+        .ng-cloak,
+        .x-ng-cloak {
+            display: none !important;
+        }
+
+    </style>
+</head>
+
+<body layout="column" ng-cloak>
+ <md-toolbar class="header-card" data-ng-if="systemCtrl.loggedIn">
+    <div data-ng-include="'app/system/views/header.html'"></div>
+</md-toolbar>
+<div flex layout="row">
+    <div id="appLoader" class="loader-backdrop" data-loading data-ng-if="!hideLoader">
+        <img alt="Loading" src="../assets/images/default.svg">
+    </div>
+    <div id="sidebar" data-ng-if="systemCtrl.loggedIn" class="sidebar" data-ng-include="'app/system/views/sidebar-left.html'"></div>
+    <md-content flex id="content" style="background-color: initial; height: 90vh;" class="m-2" >
+        <ui-view></ui-view>
+    </md-content>
+     <div data-ng-if="hideNotificationLayout && systemCtrl.loggedIn" class="notification-bar mr-2 mt-2"
+         data-ng-include="'app/system/views/notification-right.html'" style="height:calc(100% - 17px)"></div>
+    <div ng-if="instituteInfo.chatIsEnabled" class="chat-sidebar" data-ng-include="'app/chat/views/chat.html'" id="chat-sidebar"></div>
+</div>
+<md-toolbar data-ng-if="!systemCtrl.loggedIn" style="background-color: white;color: black;" class="header-card">
+    <div data-ng-include="'app/system/views/footer.html'"></div>
+</md-toolbar>
+<!-- inject:js -->
+<script src="/assets/lib/core/jquery-1.10.1.min.js"></script>
+<script src="/assets/lib/core/underscore-min.js"></script>
+<script src="/assets/lib/jquery.dataTables.min.js"></script>
+<script src="/assets/lib/core/angular.min.js"></script>
+<script src="/assets/lib/angular-ui-router.min.js"></script>
+<script src="/assets/lib/angular-resource.min.js"></script>
+<script src="/assets/lib/angular-animate.min.js"></script>
+<script src="/assets/lib/angular-aria.min.js"></script>
+<script src="/assets/lib/angular-material.min.js"></script>
+<script src="/assets/lib/angular-messages.min.js"></script>
+<script src="/assets/lib/zebra_datepicker.js"></script>
+<script src="/assets/lib/jquery.fancybox.min.js"></script>
+<script src="/assets/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+<script src="/assets/lib/angucomplete-alt.js"></script>
+
+<script src="/assets/lib/ng-map.min.js"></script>
+
+<script src="/app/app.js"></script>
+<script src="/app/config/MessageConfig.js"></script>
+<script src="/assets/scripts/bootstrap.js"></script>
+<script src="/assets/scripts/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="/assets/scripts/moment.min.js"></script>
+<script src="/assets/scripts/fullcalendar.min.js"></script>
+<script src="/assets/scripts/owl.carousel.min.js"></script>
+<script src="/assets/lib/ng-table.min.js"></script>
+<script src="/assets/lib/highcharts.js"></script>
+<script src="/assets/lib/highcharts_data.js"></script>
+<script src="/assets/lib/highcharts_drilldown.js"></script>
+<script src="/assets/scripts/tableExport/jspdf.min.js"></script>
+<script src="/assets/scripts/tableExport/tableExport.min.js"></script>
+<script src="/assets/scripts/ngMask.min.js"></script>
+
+
+ <script src="/app/login/Login.js"></script>
+    <script src="/app/login/controller/LoginController.js"></script>
+     <script src="/app/login/routes/LoginRoutes.js"></script>
+    <script src="/app/login/service/LoginService.js"></script>
+    <script src="/app/login/service/LoginFactory.js"></script>
+
+    
+<script src="/app/institute/Institute.js"></script>
+<script src="/app/standard/Standard.js"></script>
+<script src="/app/system/System.js"></script>
+<script src="/app/common/Common.js"></script>
+<script src="/app/academic/Academic.js"></script>
+<script src="/app/department/Department.js"></script>
+<script src="/app/section/Section.js"></script>
+<script src="/app/staff/Staff.js"></script>
+<script src="/app/student/Student.js"></script>
+<script src="/app/subject/Subject.js"></script>
+<script src="/app/importFile/ImportFile.js"></script>
+<script src="/app/holiday/Holiday.js"></script>
+<script src="/app/homework/HomeWork.js"></script>
+<script src="/app/examination/Examination.js"></script>
+<script src="/app/result/Result.js"></script>
+<script src="/app/album/Album.js"></script>
+<script src="/app/report/Report.js"></script>
+<script src="/app/blog/Blog.js"></script>
+<script src="/app/events/Events.js"></script>
+<script src="/app/classifieds/Classifieds.js"></script>
+<script src="/app/payment/Payment.js"></script>
+<script src="/app/email/Email.js"></script>
+<script src="/app/sms/Sms.js"></script>
+<script src="/app/notification/Notification.js"></script>
+<script src="/app/attendanceAnalysis/AttendanceAnalysis.js"></script>
+<script src="/app/role/Role.js"></script>
+<script src="/app/smtp/Smtp.js"></script>
+<script src="/app/feature/Feature.js"></script>
+<script src="/app/smsGateway/SmsGateway.js"></script>
+<script src="/app/paymentGateway/PaymentGateway.js"></script>
+<script src="/app/timeTable/TimeTable.js"></script>
+<script src="/app/apkdetails/ApkDetails.js"></script>
+
+<script src="/app/common/service/MenuConflict.js"></script>
+<script src="/app/common/directive/CustomDirective.js"></script>
+<script src="/app/common/service/CommonService.js"></script>
+<script src="/app/common/service/FileDownloadService.js"></script>
+<script src="/app/common/directive/modelForm.js"></script>
+<script src="/app/common/directive/examModelForm.js"></script>
+<script src="app/common/directive/reportViewer.js"></script>
+<script src="/app/system/controllers/SystemController.js"></script>
+<script src="/app/system/service/SystemService.js"></script>
+<script src="/app/system/service/SystemFactory.js"></script>
+<script src="/app/system/routes/SystemRoutes.js"></script>
+<script src="/app/institute/controller/InstituteController.js"></script>
+<script src="/app/institute/service/InstituteService.js"></script>
+<script src="/app/institute/table-config/InstituteTableConfig.js"></script>
+<script src="/app/institute/service/InstituteFactory.js"></script>
+<script src="/app/institute/routes/InstituteRoutes.js"></script>
+<script src="/app/academic/controller/AcademicController.js"></script>
+<script src="/app/academic/routes/AcademicRoutes.js"></script>
+<script src="/app/academic/table-config/AcademicTableConfig.js"></script>
+<script src="/app/academic/service/AcademicService.js"></script>
+<script src="/app/academic/service/AcademicFactory.js"></script>
+<script src="/app/department/controller/DepartmentController.js"></script>
+<script src="/app/department/table-config/DepartmentTableConfig.js"></script>
+<script src="/app/department/service/DepartmentService.js"></script>
+<script src="/app/department/service/DepartmentFactory.js"></script>
+<script src="/app/department/routes/DepartmentRoutes.js"></script>
+<script src="/app/standard/controller/StandardController.js"></script>
+<script src="/app/standard/table-config/StandardTableConfig.js"></script>
+<script src="/app/standard/service/StandardService.js"></script>
+<script src="/app/standard/service/StandardFactory.js"></script>
+<script src="/app/standard/routes/StandardRoutes.js"></script>
+<script src="/app/section/controller/SectionController.js"></script>
+<script src="/app/section/table-config/SectionTableConfig.js"></script>
+<script src="/app/section/routes/SectionRoutes.js"></script>
+<script src="/app/section/service/SectionService.js"></script>
+<script src="/app/section/service/SectionFactory.js"></script>
+<script src="/app/staff/controller/StaffController.js"></script>
+<script src="/app/staff/table-config/StaffTableConfig.js"></script>
+<script src="/app/staff/service/StaffService.js"></script>
+<script src="/app/staff/service/StaffFactory.js"></script>
+<script src="/app/staff/routes/StaffRoutes.js"></script>
+<script src="/app/student/controller/StudentController.js"></script>
+<script src="/app/student/table-config/StudentTableConfig.js"></script>
+<script src="/app/student/service/StudentService.js"></script>
+<script src="/app/student/service/StudentFactory.js"></script>
+<script src="/app/student/routes/StudentRoutes.js"></script>
+<script src="/app/subject/controller/SubjectController.js"></script>
+<script src="/app/subject/controller/ElectiveSubjectController.js"></script>
+<script src="/app/subject/table-config/SubjectTableConfig.js"></script>
+<script src="/app/subject/routes/SubjectRoutes.js"></script>
+<script src="/app/subject/service/SubjectService.js"></script>
+<script src="/app/subject/service/SubjectFactory.js"></script>
+<script src="/app/importFile/controller/ImportFileController.js"></script>
+<script src="/app/importFile/routes/ImportFileRoutes.js"></script>
+<script src="/app/holiday/controller/HolidayController.js"></script>
+<script src="/app/holiday/table-config/HolidayTableConfig.js"></script>
+<script src="/app/holiday/service/HolidayService.js"></script>
+<script src="/app/holiday/service/HolidayFactory.js"></script>
+<script src="/app/holiday/routes/HolidayRoutes.js"></script>
+<script src="/app/homework/controller/HomeWorkController.js"></script>
+<script src="/app/homework/table-config/HomeWorkTableConfig.js"></script>
+<script src="/app/homework/service/HomeWorkService.js"></script>
+<script src="/app/homework/service/HomeWorkFactory.js"></script>
+<script src="/app/homework/routes/HomeWorkRoutes.js"></script>
+<script src="/app/examination/controller/ExaminationController.js"></script>
+<script src="/app/examination/controller/ExampaperController.js"></script>
+<script src="/app/examination/service/ExaminationService.js"></script>
+<script src="/app/examination/service/ExaminationFactory.js"></script>
+<script src="/app/examination/table-config/ExaminationTableConfig.js"></script>
+<script src="/app/examination/routes/ExaminationRoutes.js"></script>
+<script src="/app/result/controller/ResultController.js"></script>
+<script src="/app/result/routes/ResultRoutes.js"></script>
+<script src="/app/result/service/ResultService.js"></script>
+<script src="/app/result/service/ResultFactory.js"></script>
+<script src="/app/result/table-config/ExamTableConfig.js"></script>
+<script src="/app/result/table-config/ResultBySubject.js"></script>
+<script src="/app/album/controller/AlbumController.js"></script>
+<script src="/app/album/service/AlbumService.js"></script>
+<script src="/app/album/service/AlbumFactory.js"></script>
+<script src="/app/album/table-config/AlbumTableConfig.js"></script>
+<script src="/app/album/routes/AlbumRoutes.js"></script>
+<script src="/app/report/routes/ReportRoutes.js"></script>
+<script src="/app/events/controller/EventController.js"></script>
+<script src="/app/events/service/EventService.js"></script>
+<script src="/app/events/service/EventFactory.js"></script>
+<script src="/app/events/table-config/EventTableConfig.js"></script>
+<script src="/app/events/table-config/ViewEventTableConfig.js"></script>
+<script src="/app/events/routes/EventsRoutes.js"></script>
+<script src="/app/blog/routes/BlogRoutes.js"></script>
+<script src="/app/blog/controller/BlogController.js"></script>
+<script src="/app/blog/service/BlogService.js"></script>
+<script src="/app/blog/service/BlogFactory.js"></script>
+<script src="/app/classifieds/controller/ClassifiedController.js"></script>
+<script src="/app/classifieds/table-config/ClassifiedTableConfig.js"></script>
+<script src="/app/classifieds/service/ClassifiedService.js"></script>
+<script src="/app/classifieds/service/ClassifiedFactory.js"></script>
+<script src="/app/classifieds/routes/ClassifiedRoutes.js"></script>
+<script src="/app/email/routes/EmailRoutes.js"></script>
+<script src="/app/email/controller/EmailController.js"></script>
+<script src="/app/email/service/EmailService.js"></script>
+<script src="/app/email/service/EmailFactory.js"></script>
+<script src="/app/sms/routes/SmsRoutes.js"></script>
+<script src="/app/sms/service/SmsService.js"></script>
+<script src="/app/sms/service/SmsFactory.js"></script>
+<script src="/app/sms/controller/SmsController.js"></script>
+<script src="/app/payment/controller/PaymentController.js"></script>
+<script src="/app/payment/table-config/PaymentTableConfig.js"></script>
+<script src="/app/payment/service/PaymentService.js"></script>
+<script src="/app/payment/service/PaymentFactory.js"></script>
+<script src="/app/payment/routes/PaymentRoutes.js"></script>
+<script src="/app/notification/controller/NotificationController.js"></script>
+<script src="/app/notification/table-config/NotificationTableConfig.js"></script>
+<script src="/app/notification/service/NotificationService.js"></script>
+<script src="/app/notification/service/NotificationFactory.js"></script>
+<script src="/app/notification/routes/NotificationRoutes.js"></script>
+
+<script src="/app/common/service/SharedService.js"></script>
+<script src="/app/report/controller/ReportController.js"></script>
+<script src="/app/report/service/ReportService.js"></script>
+<script src="/app/report/service/ReportFactory.js"></script>
+<script src="/app/attendanceReport/AttendanceReport.js"></script>
+<script src="/app/attendanceReport/routes/AttendanceReportRoutes.js"></script>
+<script src="/app/attendanceReport/controller/AttendanceReportController.js"></script>
+<script src="/app/attendanceReport/service/AttendanceReportService.js"></script>
+<script src="/app/attendanceReport/service/AttendanceReportFactory.js"></script>
+<script src="/app/viewAttendance/ViewAttendance.js"></script>
+<script src="/app/viewAttendance/routes/ViewAttendanceRoutes.js"></script>
+<script src="/app/viewAttendance/controller/ViewAttendanceController.js"></script>
+<script src="/app/viewAttendance/service/ViewAttendanceService.js"></script>
+<script src="/app/viewAttendance/service/ViewAttendanceFactory.js"></script>
+<script src="/app/attendance/Attendance.js"></script>
+<script src="/app/attendance/routes/AttendanceRoutes.js"></script>
+<script src="/app/attendance/controller/AttendanceController.js"></script>
+<script src="/app/attendance/service/AttendanceService.js"></script>
+<script src="/app/attendance/service/AttendanceFactory.js"></script>
+
+<script src="/app/attendanceAnalysis/routes/AttendanceAnalysisRoutes.js"></script>
+<script src="/app/attendanceAnalysis/controller/AttendanceAnalysisController.js"></script>
+<script src="/app/attendanceAnalysis/service/AttendanceAnalysisService.js"></script>
+<script src="/app/attendanceAnalysis/service/AttendanceAnalysisFactory.js"></script>
+<script src="/app/feedback/Feedback.js"></script>
+<script src="/app/feedback/routes/FeedbackRoutes.js"></script>
+<script src="/app/feedback/controller/FeedbackController.js"></script>
+<script src="/app/feedback/service/FeedbackService.js"></script>
+<script src="/app/feedback/service/FeedbackFactory.js"></script>
+<script src="/app/feedback/table-config/PendingFeedbackTableConfig.js"></script>
+<script src="/app/feedback/table-config/ClosedFeedbackTableConfig.js"></script>
+<script src="/app/feedback/table-config/FeedbackTableConfig.js"></script>
+<script src="/app/role/controller/RoleController.js"></script>
+<script src="/app/role/table-config/RoleTableConfig.js"></script>
+<script src="/app/role/service/RoleService.js"></script>
+<script src="/app/role/service/RoleFactory.js"></script>
+<script src="/app/role/routes/RoleRoutes.js"></script>
+<script src="/app/smtp/controller/SmtpController.js"></script>
+<script src="/app/smtp/table-config/SmtpTableConfig.js"></script>
+<script src="/app/smtp/service/SmtpService.js"></script>
+<script src="/app/smtp/service/SmtpFactory.js"></script>
+<script src="/app/smtp/routes/SmtpRoutes.js"></script>
+<script src="/app/feature/controller/FeatureController.js"></script>
+<script src="/app/feature/table-config/FeatureTableConfig.js"></script>
+<script src="/app/feature/service/FeatureService.js"></script>
+<script src="/app/feature/service/FeatureFactory.js"></script>
+<script src="/app/feature/routes/FeatureRoutes.js"></script>
+<script src="/app/reportAnalysis/ReportAnalysis.js"></script>
+<script src="/app/reportAnalysis/routes/ReportAnalysisRoutes.js"></script>
+<script src="/app/reportAnalysis/controller/ReportAnalysisController.js"></script>
+<script src="/app/smsGateway/controller/SmsGatewayController.js"></script>
+<script src="/app/smsGateway/table-config/SmsGatewayTableConfig.js"></script>
+<script src="/app/smsGateway/service/SmsGatewayService.js"></script>
+<script src="/app/smsGateway/service/SmsGatewayFactory.js"></script>
+<script src="/app/smsGateway/routes/SmsGatewayRoutes.js"></script>
+<script src="/app/paymentGateway/controller/PaymentGatewayController.js"></script>
+<script src="/app/paymentGateway/table-config/PaymentGatewayTableConfig.js"></script>
+<script src="/app/paymentGateway/service/PaymentGatewayService.js"></script>
+<script src="/app/paymentGateway/service/PaymentGatewayFactory.js"></script>
+<script src="/app/paymentGateway/routes/PaymentGatewayRoutes.js"></script>
+<script src="/app/timeTable/controller/TimeTableController.js"></script>
+<script src="/app/timeTable/routes/TimeTableRoutes.js"></script>
+<script src="/app/timeTable/service/TimeTableService.js"></script>
+<script src="/app/timeTable/service/TimeTableFactory.js"></script>
+<script src="/app/updateStudent/StudentUpgrade.js"></script>
+<script src="/app/updateStudent/routes/StudentUpgradeRoutes.js"></script>
+<script src="/app/updateStudent/controller/StudentUpgradeController.js"></script>
+<script src="/app/apkdetails/controller/ApkDetailsController.js"></script>
+<script src="/app/apkdetails/routes/ApkDetailsRoute.js"></script>
+<script src="/app/apkdetails/service/ApkService.js"></script>
+<script src="/app/apkdetails/service/ApkFactory.js"></script>
+<script src="/app/apkdetails/table-config/ApkTableConfig.js"></script>
+<script src="/app/subjectAllotment/SubjectAllotment.js"></script>
+<script src="/app/subjectAllotment/routes/SubjectAllotmentRoutes.js"></script>
+<script src="/app/subjectAllotment/controller/SubjectAllotmentController.js"></script>
+<script src="/app/subjectAllotment/service/SubjectAllotmentService.js"></script>
+<script src="/app/subjectAllotment/service/SubjectAllotmentFactory.js"></script>
+<script src="/app/studentsElectiveSubject/StudentsElectiveSubject.js"></script>
+<script src="/app/studentsElectiveSubject/controller/StudentsElectiveSubjectController.js"></script>
+<script src="/app/studentsElectiveSubject/routes/StudentsElectiveSubjectRoutes.js"></script>
+<script src="/app/studentsElectiveSubject/service/StudentsElectiveSubjectFactory.js"></script>
+<script src="/app/studentsElectiveSubject/service/StudentsElectiveSubjectService.js"></script>
+<script src="/app/consolidatedmark/ConsolidatedMark.js"></script>
+<script src="/app/consolidatedmark/controller/ConsolidatedMarkController.js"></script>
+<script src="/app/consolidatedmark/routes/ConsolidatedMarkRoutes.js"></script>
+<script src="/app/consolidatedmark/service/ConsolidatedMarkFactory.js"></script>
+<script src="/app/consolidatedmark/service/ConsolidatedMarkService.js"></script>
+<script src="/app/attendanceCorrection/AttendanceCorrection.js"></script>
+<script src="/app/attendanceCorrection/controller/AttendanceCorrectionController.js"></script>
+<script src="/app/attendanceCorrection/routes/AttendanceCorrectionRoutes.js"></script>
+<script src="/app/attendanceCorrection/service/AttendanceCorrectionFactory.js"></script>
+<script src="/app/attendanceCorrection/service/AttendanceCorrectionService.js"></script>
+<script src="/app/attendanceCorrection/table-config/AttendanceCorrectionTableConfig.js"></script>
+<script src="/app/workPlan/WorkPlan.js"></script>
+<script src="/app/workPlan/controller/WorkPlanController.js"></script>
+<script src="/app/workPlan/routes/WorkPlanRoutes.js"></script>
+<script src="/app/workPlan/service/WorkPlanFactory.js"></script>
+<script src="/app/workPlan/service/WorkPlanService.js"></script>
+<script src="/app/workPlan/table-config/WorkPlanTableConfig.js"></script>
+<script src="/app/workPlan/table-config/DailyPlanDetailTableConfig.js"></script>
+<script src="/app/studentHomework/StudentHomework.js"></script>
+<script src="/app/studentHomework/controller/StudentHomeworkController.js"></script>
+<script src="/app/studentHomework/service/StudentHomeworkFactory.js"></script>
+<script src="/app/studentHomework/service/StudentHomeworkService.js"></script>
+<script src="/app/studentHomework/routes/StudentHomeworkRoutes.js"></script>
+<script src="/app/studentHomework/table-config/StudentHomeworkTableConfig.js"></script>
+<script src="/app/feesStructure/FeesStructure.js"></script>
+<script src="/app/feesStructure/controller/FeesStructureController.js"></script>
+<script src="/app/feesStructure/routes/FeesStructureRoutes.js"></script>
+<script src="/app/feesStructure/service/FeesStructureFactory.js"></script>
+<script src="/app/feesStructure/service/FeesStructureService.js"></script>
+<script src="/app/feesStructure/table-config/FeesStructureTableConfig.js"></script>
+<script src="/app/feesStructure/table-config/StudentFeesStructureDataTable.js"></script>
+<script src="/app/payment/table-config/PaymentByFilterTableConfig.js"></script>
+<script src="/app/vehicle/Vehicle.js"></script>
+<script src="/app/vehicle/controller/VehicleController.js"></script>
+<script src="/app/vehicle/routes/VehicleRoutes.js"></script>
+<script src="/app/vehicle/service/VehicleFactory.js"></script>
+<script src="/app/vehicle/service/VehicleService.js"></script>
+<script src="/app/vehicle/table-config/VehicleTableConfig.js"></script>
+<script src="/app/vehicle/controller/TrackVehicleController.js"></script>
+<script src="/app/semester/Semester.js"></script>
+<script src="/app/semester/controller/SemesterController.js"></script>
+<script src="/app/semester/routes/SemesterRoutes.js"></script>
+<script src="/app/semester/service/SemesterFactory.js"></script>
+<script src="/app/semester/service/SemesterService.js"></script>
+<script src="/app/semester/table-config/SemesterTableConfig.js"></script>
+<script src="/app/vehicle/controller/VehicleRouteController.js"></script>
+<script src="/app/vehicle/service/VehicleRouteService.js"></script>
+<script src="/app/vehicle/table-config/VehicleRouteTableConfig.js"></script>
+<script src="/app/vehicle/service/VehicleRouteFactory.js"></script>
+<script src="/app/vehicle/service/VehicleRouteTripService.js"></script>
+<script src="/app/vehicle/service/VehicleRouteTripFactory.js"></script>
+<script src="/app/vehicle/service/VehicleStudentService.js"></script>
+<script src="/app/vehicle/service/VehicleStudentFactory.js"></script>
+
+<script src="/app/chat/Chat.js"></script>
+<script src="/app/chat/controller/ChatController.js"></script>
+<script src="/app/chat/service/ChatFactory.js"></script>
+<script src="/app/chat/service/ChatService.js"></script>
+
+<!-- endinject -->
+
+<!-- Minify Js -->
+<!--<script src="/assets/all-min.js"></script>-->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB_MlpmZePQ-31VDob3JSR7MUBHYAKXLc&sensor=false&extension=.js&v=3"></script>
+<script src="/assets/ckeditor/ng-ckeditor/ng-ckeditor.js"></script>
+<script src="/assets/ckeditor/ckeditor/ckeditor.js"></script>
+<script src="/assets/lib/socket.io/socket.io.js"></script>
+<script src="/assets/scripts/js-image-slider.js"></script>
+<script src="/assets/textangular/textAngular-rangy.min.js"></script>
+<script src="/assets/textangular/textAngular-sanitize.min.js"></script>
+<script src="/assets/textangular/textAngular.min.js"></script>
+<script src="/assets/baguettebox.js/baguetteBox.js"></script>
+</body>
+
+</html>

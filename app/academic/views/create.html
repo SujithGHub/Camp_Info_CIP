@@ -1,0 +1,50 @@
+<div layout="column" class="md-inline-form" data-ng-init="mScope.mForm.id ? '':mScope.mForm.isCurrentAcademic =true">
+    <md-content layout-padding>
+        <div layout-gt-sm="row">
+            <md-input-container class="md-block required-mark" flex-gt-sm>
+                <label>From date</label>
+                <input datepicker class="md-input" type="text" name="fromDate" data-ng-required="true" data-ng-model="mScope.mForm.fromDate">
+                <div data-ng-messages="modelForm.fromDate.$error" data-ng-if="modelForm.fromDate.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block">
+                        <small>From Date is required !</small>
+                    </div>
+                </div>
+            </md-input-container>
+            <md-input-container class="md-block required-mark" flex-gt-sm>
+                <label>To date</label>
+                <input class="md-input" datepicker type="text" data-ng-model="mScope.mForm.toDate" data-ng-class="(mScope.mForm.fromDate == null)?' ' : mScope.checkAcademic(mScope.mForm.fromDate,mScope.mForm.toDate)" data-ng-minlength="mScope.isValid" data-ng-required="true" name="toDate" data-my-validation-check="mScope.isValid">
+                <div data-ng-messages="modelForm.toDate.$error" data-ng-if="modelForm.toDate.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block" class="message">
+                        <small>To Date is required !</small>
+                    </div>
+                    <div ng-if="mScope.isValid" ng-class="mScope.isValid == true? modelForm.$valid = false: modelForm.$valid = true;" class="help-block" class="message">
+                        <small class="errormessage">Academic year should be within 10-12 months.</small>
+                    </div>
+                    <div data-ng-message="checkTrue" class="help-block" class="message">
+                        <small>Academic year should be within 10-12 months.</small>
+                    </div>
+                    <div data-ng-message="validationError" class="help-block" class="message">
+                        this is the error</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div layout-gt-sm="row">
+            <div class="pl-0 col-sm-6">
+            <label class="radio-label">Status</label>
+                <md-radio-group ng-model="mScope.mForm.status">
+                    <md-radio-button value="ACTIVE">Active</md-radio-button>
+                    <md-radio-button value="INACTIVE">InActive</md-radio-button>
+                </md-radio-group>
+            </div>
+            <div class="col-sm-6">
+                <md-checkbox class="md-check-dark-teal" ng-model="mScope.mForm.isCurrentAcademic"  style="margin-top: 2px;">
+				</md-checkbox>
+            <label class="radio-label" style="width: 137px"> Is Current Academic</label></div>
+        </div>
+    </md-content>
+</div>
+<style>
+md-checkbox.md-checked.md-check-dark-teal .md-icon {
+    background-color: rgb(0,150,136);
+}
+</style>

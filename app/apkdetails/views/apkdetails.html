@@ -1,0 +1,33 @@
+<div class="card-header" data-ng-init="apkDetailsCtrl.init()" id="apkDetailsDiv">
+   <div class="row">
+      <div class="col-sm-6">
+         <div>
+            <h2>
+               APK Details
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">APK Config Details</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-sm-5">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="searchValue" data-ng-change="apkDetailsCtrl.init()" autocomplete="off" >
+         </md-input-container>
+      </div>
+      <div class="col-sm-1">
+         <md-button class="md-fab md-mini md-primary" aria-label="add" 
+         template-url="/app/apkdetails/views/create.html" form-modal
+            m-title="APK Details" m-scope="apkDetailsCtrl.mScope" form-submit="apkDetailsCtrl.saveOrUpdateApkDetails(mForm)" 
+            init-data="apkDetailsCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add APK Details</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content">
+   <table id="ApkDetailsDataTable" class="display table" cellspacing="0">
+   </table>
+</div>

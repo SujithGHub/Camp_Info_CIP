@@ -1,0 +1,161 @@
+   <div class="card-header ch-al pb-1-25 pt-1-25">
+    <div class="row">
+        <h2>Subject Allotment</h2>
+    </div>
+</div>
+<div class="card-body" data-ng-init='subjectAllotmentCtrl.init()'>
+    <form class="form-horizontal pad-top" role="form" name="subjectAllotmentForm" novalidate>
+        <div class="row" style="margin: 0px !important">
+            <div class="col-md-3 col-sm-3 col-xs-3 p-0">
+                <div class="card allSides content">
+                    <div style="padding: 10px;">
+                        <h4 class="card-title" style="margin-top: 0px; padding-top: 0px; font-family: roboto !important; text-align: center; font-weight: 400;">
+						</h4>
+                        <div ng-show="subjectAllotmentCtrl.role == 'ROLE_STAFF_HOD'">
+                        <md-input-container class="align-center required-mark" ng-show="subjectAllotmentCtrl.instituteType == 'College'">
+                            <label>Department</label>
+                            <md-select data-ng-model="subjectAllotmentCtrl.form.department" disabled
+                                       name="dept" data-ng-required="subjectAllotmentCtrl.instituteType == 'College'" data-ng-change="subjectAllotmentCtrl.getClassByDepartmentId(subjectAllotmentCtrl.form.department)">
+                                <md-option ng-repeat="dept in subjectAllotmentCtrl.departmentList" ng-value="dept.id">{{dept.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="subjectAllotmentForm.dept.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="subjectAllotmentForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        </div>
+                        <md-input-container class="align-center required-mark" ng-show="subjectAllotmentCtrl.instituteType == 'College'
+                                                                && subjectAllotmentCtrl.role != 'ROLE_STAFF_HOD'">
+                            <label>Department</label>
+                            <md-select data-ng-model="subjectAllotmentCtrl.form.department" name="dept" data-ng-required="subjectAllotmentCtrl.instituteType == 'College'" data-ng-change="subjectAllotmentCtrl.getClassByDepartmentId(subjectAllotmentCtrl.form.department)">
+                                <md-option ng-repeat="dept in subjectAllotmentCtrl.departmentList" ng-value="dept.id">{{dept.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="subjectAllotmentForm.dept.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="subjectAllotmentForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Department is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label data-ng-if="subjectAllotmentCtrl.instituteType != 'School'">Year</label>
+                            <label data-ng-if="subjectAllotmentCtrl.instituteType == 'School'">Standard</label>
+                            <md-select data-ng-model="subjectAllotmentCtrl.form.classType.id" 
+                            data-ng-change="subjectAllotmentCtrl.getSection(subjectAllotmentCtrl.form.classType.id); subjectAllotmentCtrl.instituteType != 'School' ? subjectAllotmentCtrl.getSemesterByClassYear(subjectAllotmentCtrl.form.classType.id):null;" 
+                            name="class" required="" aria-label="class year">
+                                <md-option ng-repeat="class in subjectAllotmentCtrl.classList" ng-value="class.id">{{class.name}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="subjectAllotmentForm.class.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="subjectAllotmentForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small ng-show="subjectAllotmentCtrl.instituteType == 'School'">Standard
+									is required !</small> <small ng-show="subjectAllotmentCtrl.instituteType != 'School'">Year
+									is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container class="align-center required-mark" ng-show="subjectAllotmentCtrl.instituteType == 'College'">
+                            <label>Semester</label>
+                            <md-select name="semester" data-ng-model="subjectAllotmentCtrl.form.semester" id="semester" data-ng-required="subjectAllotmentCtrl.instituteType == 'College'">
+                                <md-option ng-value="semester" data-ng-repeat="semester in subjectAllotmentCtrl.semestersLists">{{::semester}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="subjectAllotmentForm.semester.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="subjectAllotmentForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Semester is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+                        <md-input-container class="align-center required-mark">
+                            <label>Section</label>
+                            <md-select data-ng-model="subjectAllotmentCtrl.form.section" name="section" required="">
+                                <md-option ng-repeat="section in subjectAllotmentCtrl.sectionList" ng-value="section.id">{{section.sectionName}}</md-option>
+                            </md-select>
+                            <div data-ng-messages="subjectAllotmentForm.section.$error" class="has-error">
+                                <div data-ng-message="required" data-ng-if="subjectAllotmentForm.$submitted" class="help-block" style="margin-top: 0px !important; margin-bottom: 0px !important">
+                                    <small>Section is required !</small>
+                                </div>
+                            </div>
+                        </md-input-container>
+
+                        <button type="submit" style="margin-top: 8px;" data-ng-click="subjectAllotmentForm.$valid ? subjectAllotmentCtrl.getSubjects(subjectAllotmentCtrl.form) : null;" class="btn btn-danger">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 col-sm-9 col-xs-9 pr-0">
+                <div class="card-container content pl-5 py-4" style="display: none;">
+
+                    <div data-ng-repeat="allotment in subjectAllotmentCtrl.subjectAllotmentList track by $index">
+
+                        <div class="w-100">
+                            <h5 class="pt-0 my-0">{{allotment.subject.subjectName}}
+                                <span ng-if="allotment.subject.isElective">/{{allotment.subjectElective.electiveSubjectName}}</span>
+                            </h5>
+                        </div>
+
+                        <div class="form-group my-0" style="height: 70px;">
+                        <div class="row p-1 m-1">
+                            <div class="col-sm-12 col-xs-9">
+                                <md-input-container class="col-sm-7 col-xs-6 m-0 align-center pb-0">
+                                    <angucomplete-alt pause="180" remote-url="{{subjectAllotmentCtrl.baseApi}}/staff/name?name=" initial-value="allotment.staff"  selected-object="allotment.allotedstaff" title-field="firstName,lastName" minlength="1" input-class="form-control form-control-small"/>
+                                    
+                                </md-input-container>
+                                <md-input-container class="col-sm-4 col-xs-5 m-0 button-alignment">
+                                    <div class="row">
+                                    <div class="col-sm-2 col-xs-2 px-1 mx-1">
+                                        <button class="btn bgm-teal btn-xs" data-ng-click="subjectAllotmentCtrl.addSubject(allotment, $index)">
+                                            <i class="zmdi zmdi-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-2 col-xs-2 px-1 mx-1" ng-if="allotment.id">
+                                        <button class="btn btn-primary btn-xs btn btn-delete" data-ng-click="subjectAllotmentCtrl.removeSubjectAllotment(allotment.id);">
+                                            <i class="zmdi zmdi-minus"></i>
+                                        </button>
+                                    </div>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group my-0" ng-repeat="additional in subjectAllotmentCtrl.subjectAllotmentList[$index].additional">
+                             <div class="row p-1 m-1">
+                                 <div class="col-sm-12 col-xs-9">
+                                <md-input-container style="width: 57% !important;" class="col-sm-7 m-0 col-xs-6 align-center pb-0 ml-3 pl-0 pr-4">
+                                    <angucomplete-alt pause="180" remote-url="{{subjectAllotmentCtrl.baseApi}}/staff/name?name=" selected-object="additional.allotedstaff" title-field="firstName,lastName" minlength="1" input-class="form-control form-control-small">
+                                    </angucomplete-alt>
+                                </md-input-container>
+                                <md-input-container class="col-sm-4 col-xs-5 pl-0 pt-0 button-alignment">
+                                    <div class="col-sm-2 col-xs-2 pl-0 mx-1">
+                                        <button class="btn btn-primary btn-xs btn btn-delete " data-ng-click="subjectAllotmentCtrl.removeSubject($parent.$index, $index);">
+                                            <i class="zmdi zmdi-minus"></i>
+                                        </button>
+                                    </div>
+                                </md-input-container>
+                            </div>
+                        </div>
+                    </div></div>
+                    <div class="form-group" ng-if="subjectAllotmentCtrl.subjectAllotmentList.length">
+                        <div class="offset-sm-5 col-sm-7 col-xs-7">
+                            <button ng-click="subjectAllotmentCtrl.allotSubjects(subjectAllotmentCtrl.subjectAllotmentList)" class="btn btn-primary btn-sm waves-effect waves-effect bgm-teal">Submit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="!subjectAllotmentCtrl.subjectAllotmentList.length">
+                        <div class="offset-sm-5 col-sm-7">
+                            <h4>No Record Found</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<style>
+    .card-container {
+        height: 500px;
+        overflow: auto;
+        position: relative;
+        background: #FFFFFF;
+        box-shadow: 0px 0px 10px rgba(142, 152, 143, 0.48) !important;
+    }
+</style>

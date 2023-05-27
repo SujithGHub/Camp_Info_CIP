@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd"
+       default-lazy-init="true">
+
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.dao.DataAccessException">
+                    dataAccessFailure
+                </prop>
+            </props>
+        </property>
+    </bean>
+    
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="200097152"/>
+    </bean>
+    
+	<context:component-scan base-package="com.ssb.cip.controller" />  
+    <!-- Configures the @Controller programming model -->
+    <!-- <mvc:annotation-driven/> -->
+    <mvc:default-servlet-handler/>
+    
+    <bean id="gsonBuilder" class="com.google.gson.GsonBuilder" />
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="gsonBuilder" />
+        <property name="targetMethod" value="setPrettyPrinting" />
+    </bean>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter">
+                <property name="gson">
+                    <bean class="com.google.gson.Gson" factory-bean="gsonBuilder" factory-method="create" />
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    
+ 	<context:component-scan base-package="com.ssb.cip.webapp"/>
+    <!-- Convenient way to map URLs to HTML  having a Controller -->
+     <mvc:view-controller path="/login" view-name="login/views/login"/>
+     <mvc:view-controller path="/logout" view-name="login/views/login"/>
+     <mvc:view-controller path="/" view-name="index"/>
+    <!-- View Resolver for HTML -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/app/"/>
+        <property name="suffix" value=".html"/>
+    </bean>
+    
+    <!-- Add additional controller beans here -->
+</beans>
+

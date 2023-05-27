@@ -1,0 +1,50 @@
+<div id="rightnav" class="card" data-ng-controller="NotificationController as notificationCtrl">
+   <div class="listview" data-ng-init="notificationCtrl.getDashboardNotification()">
+		<!-- <div class="dashboard-header warn" id="licence-warn" style="background-color: #FFA500;" 
+		ng-if="systemCtrl.role == 'ROLE_ADMIN' &&(systemCtrl.days_to_expire == 15 || systemCtrl.days_to_expire <8)">
+			<span style="font-family: cursive;">Your License will expire
+				{{systemCtrl.expiryMessage}}.</span>
+			<md-button class="md-icon-button" ng-click="systemCtrl.closeLicenceWarning()"
+				style="position: absolute;top: -11px;right: -17px;">
+			<i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i>
+			</md-button>
+			<br>
+			<span style="font-family: cursive;">Please contact CampInfo
+				Support Team.</span>
+		</div> -->
+	<div class="dashboard-header" style="font-weight: bold;">NOTIFICATION</div>
+      <div class="lv-body content"  style="height: 76vh;overflow-y:auto!important">
+      	<a class="lv-item attendance-correction" href="" ng-repeat="attendanceCorrection in attendanceCorrectionList track by attendanceCorrection.id">
+            <div class="media">
+               <div class="media-body">
+               <div data-ng-if="systemCtrl.role == 'ROLE_STAFF_HOD'">
+               <small class="lv-title attedance-notfication-header"> Reg No : &nbsp;{{attendanceCorrection.student.rollNumber}}</small><br>
+                  <small class="lv-small attedance-notification-descrition">Reason &nbsp;: &nbsp;&nbsp;{{::attendanceCorrection.reason}}</small>
+                  <button class="btn accept-btn btn-xs" data-ng-click="notificationCtrl.rejectAttendanceCorrectionRequest(attendanceCorrection)">Reject</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                  <button style="margin-right: 5px;" class="btn accept-btn btn-xs" data-ng-click="notificationCtrl.acceptAttendanceCorrectionRequest(attendanceCorrection)">Accept</button>
+               </div>
+               <div data-ng-if="systemCtrl.role == 'ROLE_STAFF' && attendanceCorrection.status !='CLOSED'">
+                  <small class="lv-title attedance-notfication-header"> Reg No : &nbsp;{{attendanceCorrection.student.rollNumber}}</small><br>
+                  <small class="lv-small attedance-notification-descrition">Reason &nbsp;: &nbsp;&nbsp;{{::attendanceCorrection.reason}}</small>
+                  <small class="btn accept-btn" data-ng-if="attendanceCorrection.status=='ACCEPTED'"> Accepted</small>
+                  <small class="btn accept-btn" data-ng-if="attendanceCorrection.status=='PENDING'">Pending</small>
+                  </div>
+               </div>
+            </div>
+         </a>
+         <div class="dashboard-header bottom-card" data-ng-if="attendanceCorrectionList.length" data-ui-sref="attendanceCorrection" style="height: 25px" >View All </div>
+         <a class="lv-item" href="" ng-repeat="notification in notificationList" data-ng-click="notificationCtrl.viewNotification(notification)">
+            <div class="media">
+               <div class="pull-left">
+                  <img class="notification-pin" data-ng-src="../assets/images/notification_icon.png">
+               </div>
+               <div class="media-body">
+                  <div class="lv-title" data-ng-bind="notification.title"></div>
+                  <small class="lv-small">{{::notification.description}}<small class="pull-right">{{notificationCtrl.elapsedTime(notification.lastUpdatedDate)}}</small></small>
+               </div>
+            </div>
+         </a>
+         <p data-ng-show="!notificationList.length" style="text-align:center;padding-top: 144px;"><label>Notification is Empty</label><br><img alt=""  src="../assets/images/notific_icon.png"></p>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="card-header ch-al" data-ng-init="emailCtrl.broadCastEmailInit()">
+   <div class="row">
+         <h2>BroadCast Email</h2>
+      </div>
+</div>
+<div class="card-body content" style="height: calc(80% - 10%);">
+   <form role="form" novalidate name="broadCastForm">
+      <div class="form-group row" style="margin-bottom: 0px">
+        <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+        <label>BroadCast Email</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select data-ng-model="emailCtrl.form.broadcastType" name="choose" data-ng-required="true">
+                  <!-- <md-option disabled value="Select an Option">Select an Option</md-option> -->
+					<md-option value="choose">Choose and BroadCast</md-option>
+					<md-option value="all">All</md-option>
+               </md-select>
+              <div data-ng-messages="broadCastForm.choose.$error" data-ng-if="broadCastForm.$submitted">
+                     <div data-ng-message="required"><small>Email option is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+       <div class="form-group row" style="margin-bottom: 0px" data-ng-if="emailCtrl.form.broadcastType=='choose' && emailCtrl.instituteType=='College'">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+        <label>Department</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+        	<md-input-container class="align-center">
+               <md-select name="department" ng-model="emailCtrl.form.department"  data-ng-change="emailCtrl.getClassByDepartmentId(emailCtrl.form.department.id)" data-ng-required="true">
+               	<md-option ng-value="department" data-ng-repeat="department in emailCtrl.departmentsList">{{::department.name}}</md-option>
+               </md-select>
+                <div data-ng-messages="broadCastForm.department.$error" data-ng-if="broadCastForm.$submitted">
+                     <div data-ng-message="required"><small>Department is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+       <div class="form-group row" style="margin-bottom: 0px" data-ng-if="emailCtrl.form.broadcastType=='choose'">
+        <div data-ng-class="emailCtrl.instituteType=='School' ? 'col-xs-4 col-sm-3 col-md-3 control-label required-mark' :' col-xs-4 col-sm-3 col-md-3 control-label'">
+        <label data-ng-if="emailCtrl.instituteType=='College'">Year</label>
+       <label data-ng-if="emailCtrl.instituteType=='School'">Standard</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="class" ng-model="emailCtrl.form.classYear" data-ng-change="emailCtrl.getSectionByStandard(emailCtrl.form)" data-ng-required="emailCtrl.instituteType=='School'">
+               	<md-option ng-value="standard" data-ng-repeat="standard in emailCtrl.standardList">{{::standard.name}}</md-option>
+               </md-select>
+               <div data-ng-messages="broadCastForm.class.$error" data-ng-if="broadCastForm.$submitted">
+                     <div data-ng-message="required" data-ng-if="emailCtrl.instituteType=='School'"><small>Standard is required !</small></div>
+                     <div data-ng-message="required" data-ng-if="emailCtrl.instituteType=='College'"><small>Year is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+       <div class="form-group row" style="margin-bottom: 0px" data-ng-if="emailCtrl.form.broadcastType=='choose'">
+        <div class="col-xs-4 col-sm-3 col-md-3 control-label">
+        <label>Section</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="section" data-ng-model="emailCtrl.form.section" >
+                  <md-option ng-value="section" data-ng-repeat="section in emailCtrl.sectionList">{{::section.sectionName}}</md-option>
+               </md-select>
+                <div data-ng-messages="broadCastForm.section.$error" data-ng-if="broadCastForm.$submitted">
+                     <div data-ng-message="required"><small>Section is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+      <div class="form-group row required-mark" style="margin-bottom: 0px">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+         <label>Subject</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container flex><input class="md-input" data-ng-required="true" name="subject"
+             data-ng-model="emailCtrl.form.subject" data-ng-minlength="3" data-ng-maxlength="150">
+             <div data-ng-messages="broadCastForm.subject.$error" data-ng-show="broadCastForm.subject.$touched || broadCastForm.$submitted">
+                     <div data-ng-message="required"><small>Subject is required !</small></div>
+          			<div data-ng-message="minlength"><small>Subject is too short.</small></div>
+          			<div data-ng-message="maxlength"><small>Subject is too long.</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+      </div>
+    <div id="htmlContent" style="display:none"></div>
+         <div class="form-group row">
+         <div class="col-xs-4 col-sm-3 col-md-1 control-label required-mark">
+         <label>Body</label></div>
+        <div class="col-xs-6 col-sm-6 col-md-10">
+         <md-input-container>
+            <textarea class="form-control input-sm" rows="3" data-ckeditor="editorOptions"
+            name="body" data-ng-model="emailCtrl.form.body"  data-ng-required="true" data-ng-minlength="3" data-ng-maxlength="20000" ></textarea>
+             <div data-ng-messages="broadCastForm.body.$error" data-ng-show="broadCastForm.body.$touched || broadCastForm.$submitted" class="has-error">
+          			<div data-ng-message="required"><small>Email content is	required !</small></div>
+          			<div data-ng-message="minlength"><small>Email content is too short.</small></div>
+          				<div data-ng-message="maxlength"><small>Email content is too short.</small></div>
+         	</div>
+         </md-input-container>
+         </div>
+      </div>
+      <div class="form-group row">
+      <div class="col-xs-4 col-sm-3 col-md-3"></div>
+         <div class="col-xs-6 col-sm-6 col-md-6" style="padding-bottom:20px">
+            <button type="submit" class="btn btn-danger" data-ng-click="broadCastForm.$valid ? emailCtrl.sendMail(emailCtrl.form,'broadcastEmail') : null">SEND<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i></button>
+         </div>
+      </div>
+   </form>
+</div>
+<!-- <script type="text/javascript">CKEDITOR.replace('textEditor', {
+	resize_enabled:false,
+	removePlugins:'elementspath', height:'30vh',
+	toolbar: [
+              { name: 'document', items: [ 'Source', '-', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+              { name: 'clipboard', items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+              { name: 'editing', items: [ ] },
+              '/',
+              { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+              { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+              { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+              { name: 'insert', items: ['Smiley', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak'] },
+              { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+              { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+              ]
+}); </script> -->

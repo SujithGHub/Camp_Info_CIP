@@ -1,0 +1,31 @@
+<div class="card-header" data-ng-init="workPlanCtrl.initWorkPlanDataTable();workPlanCtrl.init()">
+   <div class="row">
+      <div class="col-sm-6">
+         <div>
+            <h2>
+               WorkPlan Details
+               <small class="hidden-xs">
+                  <div class="grid-ellipsis ">Details of all WorkPlan</div>
+               </small>
+            </h2>
+         </div>
+      </div>
+      <div class="col-sm-5">
+         <md-input-container>
+            <label>Search here</label>
+            <input type="search" id="search" data-ng-model="search" data-ng-change="workPlanCtrl.initWorkPlanDataTable()">
+         </md-input-container>
+      </div>
+      <div class="col-sm-1">
+         <md-button class="md-fab md-mini md-primary m-0" aria-label="add" id="modelForm"
+            template-url="/app/workPlan/views/create.html" form-modal
+            m-title="WorkPlan" m-scope="workPlanCtrl.mScope" form-submit="workPlanCtrl.saveOrUpdateWorkPlan(mForm)" init-data="workPlanCtrl.initData" ok-button-text="SUBMIT">
+            <md-icon class="material-icons">+</md-icon>
+            <md-tooltip>Add WorkPlan</md-tooltip>
+         </md-button>
+      </div>
+   </div>
+</div>
+<div id="table-responsive" class="table-responsive content" style="height: calc(100% - 92px);overflow-y:auto!important">
+   <table id="workPlanDataTable" class="display table" cellspacing="0" width="100%"></table>
+</div>

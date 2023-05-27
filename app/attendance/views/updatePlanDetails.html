@@ -1,0 +1,52 @@
+<md-dialog-content class="card-header">
+<div class="">
+	<div class="col-md-6 col-sm-6">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Pending</h3>
+			</div>
+			<ul class="list-plan">
+				<li data-ng-repeat="workPlan in mScope.workPlanDetail"
+					data-ng-if="workPlan.status=='PENDING'">
+					<div class="pending-plan">
+						<div>
+							<md-checkbox md-no-ink aria-label="Checkbox No Ink"
+								data-ng-model="mScope.workPlanDetail[$index].status"
+								class="md-primary" ng-true-value="'CLOSED'"
+								ng-false-value="'PENDING'"></md-checkbox>
+						</div>
+						<div>{{workPlan.planNotes}}</div>
+					</div>
+					<div class="expect-date">
+						Expected Date : {{workPlan.expectedDate}}
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="col-md-6 col-sm-6">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Completed</h3>
+			</div>
+			<ul class="list-plan">
+				<li data-ng-repeat="completedWorkPlan in mScope.workPlanDetail"
+						data-ng-if="completedWorkPlan.status=='CLOSED'">
+					<div class="pending-plan">
+						<div>
+							<md-checkbox md-no-ink aria-label="Checkbox No Ink"
+								data-ng-model="mScope.workPlanDetail[$index].status"
+								class="md-primary" ng-true-value="'CLOSED'"
+								ng-false-value="'PENDING'"></md-checkbox>
+						</div>
+						<div>{{completedWorkPlan.planNotes}}</div>
+					</div>
+					<div class="expect-date" data-ng-if="completedWorkPlan.completionDate">
+						Completion Date : {{completedWorkPlan.completionDate}}
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</md-dialog-content>

@@ -1,0 +1,45 @@
+<div data-ng-init="systemCtrl.initProfile()">
+	<div class="card" id="profile-main">
+		<div class="pm-overview content" style="height: 100%">
+			<div class="pmo-pic">
+				<div class="show-image">
+					<img data-ng-src="{{systemCtrl.userDetails.profilePath || '/assets/images/1.jpg'}}" style="max-width: 259px; min-width: 259px; height: 265px" />
+					<input style="display:none" type="file" id="fileInput" accept=".jpg" onchange="angular.element(this).scope().uploadFile(this,true)" data-ng-model="systemCtrl.form.profile"/>
+					<input class="update btn btn-default btn-block waves-effect" data-ng-click="systemCtrl.click('#fileInput')" type="button" value="Upload New Photo" />
+					<input class="delete btn btn-default btn-block waves-effect" data-ng-click="systemCtrl.setProfilePicture('')" type="button" value="Remove Profile Picture" />
+				</div>
+			</div>
+
+			<div class="pmo-block pmo-contact hidden-xs">
+				<h2>Contact</h2>
+				<ul>
+					<li data-ng-show="systemCtrl.profileData.phoneNumber.length"><i class="zmdi zmdi-phone"></i> {{ systemCtrl.profileData.phoneNumber }}</li>
+					<li data-ng-hide="systemCtrl.profileData.phoneNumber.length"><i class="zmdi zmdi-phone"></i> XXXXXXXXX</li>
+					<li style="word-wrap: break-word;" data-ng-show="systemCtrl.profileData.emailId.length"><i class="zmdi zmdi-email"></i> {{ systemCtrl.profileData.emailId }}</li>
+					<li data-ng-hide="systemCtrl.profileData.emailId.length"><i class="zmdi zmdi-email"></i>XXXXXXXXX</li>
+				</ul>
+			</div>
+
+			<div class="pmo-pic" data-ng-if="systemCtrl.userDetails.roles[0].name=='ROLE_ADMIN'">
+				<div class="show-image">
+					<img data-ng-show="systemCtrl.institute.logo" data-ng-src="{{systemCtrl.institute.logo}}" style="min-width: 259px; height: 265px" /> 
+					<img data-ng-hide="systemCtrl.institute.logo" src="assets/images/logo2.png" style="min-width: 259px; height: 265px" /> 
+					<input style="display:none" type="file" id="uploadLogoId" accept=".jpg" onchange="angular.element(this).scope().uploadLogo(this)" data-ng-model="form.profile"/>
+					<input class="update btn btn-default btn-block waves-effect" type="button" data-ng-click="systemCtrl.click('#uploadLogoId')" value="Update Logo" style="left: 35%;width: 100%;"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="pm-body clearfix" style="padding-left: 300px;">
+			<ul class="tab-nav tn-justified">
+				<md-content style="height:84vh">
+   					<md-tabs md-selected="tabIndex" md-border-bottom="" md-autoselect="" style="min-height: 100%;">
+      					<md-tab label="ABOUT"> <div  data-ng-include="'app/system/views/profileAbout.html'"></div></md-tab>
+      					<md-tab label="PROFILE PHOTOS"><div  data-ng-include="'app/system/views/profilePhotos.html'"></div></md-tab>
+       					<md-tab label="BACKGROUND IMAGES" data-ng-if="systemCtrl.userDetails.roles[0].name=='ROLE_ADMIN'"><div  data-ng-include="'app/system/views/profileBackgroundImage.html'"></div> </md-tab>
+   					</md-tabs>
+				</md-content>
+			</ul>
+		</div>
+	</div>
+</div>

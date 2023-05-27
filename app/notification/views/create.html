@@ -1,0 +1,117 @@
+<div class="card-header ch-al p-0-75" data-ng-init="notificationCtrl.broadCastNotificationInit()">
+   <div class="row">
+         <div class="col-sm-12 col-xs-12">
+         <h2>BroadCast Notification</h2>
+      </div>
+      </div>
+      
+</div>
+<div class="card-body content" style="height: calc(100% - 10%);">
+   <form class="form-horizontal pad-top" role="form" name="notificationForm" novalidate>
+      <div class="form-group" style="margin-bottom: 0px">
+      <div class="row">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+        <label>BroadCast Notification</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="choose" data-ng-model="notificationCtrl.form.broadcastType" data-ng-required="true">
+                  <md-option value="choose">Choose and BroadCast</md-option> 
+                  <md-option value="all">All</md-option>
+               </md-select>
+               <div data-ng-messages="notificationForm.choose.$error" data-ng-if="notificationForm.$submitted">
+                     <div data-ng-message="required"><small>Notification option is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div></div>
+      </div>
+      	<div class="form-group" style="margin-bottom: 0px" data-ng-if="notificationCtrl.form.broadcastType=='choose' && notificationCtrl.instituteType=='College'">
+       <div class="row">
+        <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+        <label>Department</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+        	<md-input-container class="align-center">
+               <md-select name="department" ng-model="notificationCtrl.form.departmentId" data-ng-change="notificationCtrl.getClassByDepartmentId(notificationCtrl.form.departmentId)" data-ng-required="true">
+               	<md-option ng-value="department.id" data-ng-repeat="department in notificationCtrl.departmentsList">{{::department.name}}</md-option>
+               </md-select>
+                <div data-ng-messages="notificationForm.department.$error" data-ng-if="notificationForm.$submitted">
+                     <div data-ng-message="required"><small>Department is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div>
+         </div>
+      </div>
+       <div class="form-group" style="margin-bottom: 0px" data-ng-if="notificationCtrl.form.broadcastType=='choose'">
+       <div class="row">
+       <div data-ng-class="notificationCtrl.instituteType=='School' ? 'col-xs-4 col-sm-3 col-md-3 control-label required-mark' :' col-xs-4 col-sm-3 col-md-3 control-label'">
+       <label data-ng-if="notificationCtrl.instituteType=='College'">Year</label>
+       <label data-ng-if="notificationCtrl.instituteType=='School'">Standard</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="class"  data-ng-model="notificationCtrl.form.classYearId" 
+               data-ng-change="notificationCtrl.getSectionByStandard(notificationCtrl.form)" data-ng-required="notificationCtrl.instituteType=='School'">
+              <md-option ng-value="standard.id" data-ng-repeat="standard in notificationCtrl.standardList">{{::standard.name}}</md-option>
+               </md-select>
+               <div data-ng-messages="notificationForm.class.$error" data-ng-if="notificationForm.$submitted">
+                     <div data-ng-message="required" data-ng-if="notificationCtrl.instituteType=='School'"><small>Standard is required !</small></div>
+                     <div data-ng-message="required" data-ng-if="notificationCtrl.instituteType=='College'"><small>Year is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div></div>
+      </div>
+       <div class="form-group" style="margin-bottom: 0px" data-ng-if="notificationCtrl.form.broadcastType=='choose'">
+        <div class="row">
+         <div class="col-xs-4 col-sm-3 col-md-3 control-label">
+        <label>Section</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <md-input-container class="align-center">
+               <md-select name="section" data-ng-model="notificationCtrl.form.sectionId" >
+                  <md-option ng-value="section.id" data-ng-repeat="section in notificationCtrl.sectionList">{{::section.sectionName}}</md-option>
+               </md-select>
+                <div data-ng-messages="notificationForm.section.$error" data-ng-if="notificationForm.$submitted">
+                     <div data-ng-message="required"><small>Section is required !</small></div>
+                  </div>
+            </md-input-container>
+         </div></div>
+      </div>
+       <div class="form-group" style="margin-bottom: 0px">
+         <div class="row">
+          <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+         <label>Title</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+         <md-input-container flex>
+            <input class="md-input" 
+               data-ng-model="notificationCtrl.form.title"  data-ng-minlength="2" data-ng-maxlength="40"
+               name="title"  required>
+                 <div data-ng-messages="notificationForm.title.$error" data-ng-show="notificationForm.title.$touched || notificationForm.$submitted">
+                     <div data-ng-message="required"><small>Title is required !</small></div>
+                    <div data-ng-message="minlength"><small>Title is too short.</small></div>
+                    <div data-ng-message="maxlength"><small>Title is too long.</small></div>
+                  </div>
+                  </md-input-container>
+         </div></div>
+      </div>
+       <div class="form-group" >
+         <div class="row">
+          <div class="col-xs-4 col-sm-3 col-md-3 control-label required-mark">
+         <label>Description</label></div>
+         <div class="col-xs-6 col-sm-6 col-md-6">
+            <textarea class="input-sm" 
+               data-ng-model="notificationCtrl.form.description"  rows="5" data-ng-minlength="3" data-ng-maxlength="150"
+               name="description" placeholder="Type the description here...." required></textarea>
+                 <div data-ng-messages="notificationForm.description.$error" data-ng-show="notificationForm.description.$touched || notificationForm.$submitted">
+                     <div data-ng-message="required"><small style="color: rgb(213,0,0);">Description is required !</small></div>
+                    <div data-ng-message="minlength"><small style="color: rgb(213,0,0);">Description is too short.</small></div>
+                    <div data-ng-message="maxlength"><small style="color: rgb(213,0,0);" >Description is too long.</small></div>
+                  </div>
+         </div></div>
+      </div>
+      <div class="form-group">
+          <div class="row">
+              <div class="col-xs-4 col-sm-3 col-md-3"></div>
+              <div class="col-xs-6 col-sm-6 col-md-6">
+                 <button type="submit" class="btn btn-danger" data-ng-click="notificationForm.$valid ? notificationCtrl.broadCastNotification(notificationCtrl.form): null">SEND<i class="zmdi zmdi-mail-send zmdi-hc-fw"></i></button>
+              </div>
+         </div>
+      </div>
+   </form>
+</div>

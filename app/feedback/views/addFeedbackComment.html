@@ -1,0 +1,38 @@
+<md-dialog aria-label="feedbackComment" ng-cloak style="width: 642px;">
+    <form name="academicForm" role="form" novalidate>
+        <div class="md-toolbar-tools modal-header" style="height: 50px">
+            <h2 style="color: white;">Feedback</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="modal.hide()"><i
+                    class="zmdi zmdi-close zmdi-hc-fw" style="color: white;"></i></md-button>
+        </div>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+
+                <md-input-container class="align-center"><label>Status</label>
+                    <md-select name="myModel" data-ng-model="modal.mForm.feedbackStatus">
+                        <md-option value="PENDING">PENDING</md-option>
+                        <md-option value="WORK_IN_PROGRESS">WORK_IN_PROGRESS</md-option>
+                        <md-option value="CLOSED">CLOSED</md-option>
+                    </md-select>
+                </md-input-container>
+                <div class="layout-sm-column layout-row mb-3">
+                    <div class="col-sm-12 col-xs-12 p-0">
+                        <label>Comment</label>
+                        <textarea class="form-control" name="comment" rows="2"
+                                  data-ng-model="modal.mForm.comment"
+                                  placeholder="Write your comment"></textarea>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <div class="md-actions" layout="row">
+            <button aria-label="..." class="btn bgm-teal" type="submit" data-ng-click="modal.addComment(modal.mForm)">
+                Update
+            </button>
+
+            &nbsp&nbsp&nbsp&nbsp
+            <button aria-label="..." class="btn btn-cancel" data-ng-click="modal.hide()">Cancel</button>
+        </div>
+    </form>
+</md-dialog>
