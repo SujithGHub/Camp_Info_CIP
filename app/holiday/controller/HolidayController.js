@@ -272,14 +272,14 @@
 								controllerAs: 'modal',
 								template: '<md-dialog aria-label="Notification" ng-cloak style="width: 50%;"><md-toolbar style="background-color:'+vm.calendarEvent.color+';height: 38px; min-height: 40px!important;">'
 							           +'<div class="md-toolbar-tools" style="height: 50px;min-height: 40px!important;">'
-							           +'<h2>'+vm.calendarEvent.title+'</h2><span flex></span><md-button class="md-icon-button" ng-click="modal.cancel()"><i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i></md-button>'
+							           +'<h2>'+vm.calendarEvent.title+" Exam - "+vm.calendarEvent.subject.classYear.name+" Std"+'</h2><span flex></span><md-button class="md-icon-button" ng-click="modal.cancel()"><i class="zmdi zmdi-close zmdi-hc-fw ng-scope" style="color: white;"></i></md-button>'
 							           +'</div></md-toolbar>'
 							           +'<md-dialog-content style="font-size:13px"><div class="md-dialog-content">'
 							           +'<md-input-container><p>'+vm.calendarEvent.description+'</p> </md-input-container>'	
 							           +'</div></md-dialog-content></md-dialog>',	
 								parent: angular.element(document.body),
 								targetEvent: jsEvent,
-								clickOutsideToClose: false
+								clickOutsideToClose: true
 							});
 						}
 					}

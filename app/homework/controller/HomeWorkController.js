@@ -130,6 +130,7 @@
 
         function getSection(){
     		var id = vm.classYear;
+            vm.section = ''
     		sectionService.getsectionByClassYearIdIsRestrict({id:id}, successCb, errorCb);
 			function successCb(result){
 				$log.debug("SUCCESS:",result)

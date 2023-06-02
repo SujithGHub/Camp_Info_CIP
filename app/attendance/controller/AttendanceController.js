@@ -95,7 +95,7 @@
 						$log.debug("FAILURE:",error);
 					}
 				} else {
-					standardService.getActiveStandardIsRestrict(successCb, errorCb);
+					standardService.getClassYearByRole(successCb, errorCb);
 					function successCb(result) {
 						vm.classYear = result;
 					}

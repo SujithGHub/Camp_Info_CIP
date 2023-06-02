@@ -13,7 +13,7 @@
     function AttendanceFactory($resource,commonService) {
         return $resource( commonService.baseApi+'/attendance', {}, {
             getClassList : {
-            	url:  commonService.baseApi+'/classyear/active/status',
+            	url:  commonService.baseApi+'/classyear/role',
             	method: 'GET'
             },
             getStudentList : {

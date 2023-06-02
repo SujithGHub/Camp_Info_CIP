@@ -29,7 +29,7 @@
         </md-select>
         <md-select name="classYear" id="classyear" data-ng-model="homeWorkCtrl.classYear"
           data-ng-if="homeWorkCtrl.mScope.instituteType =='School'" data-ng-change="homeWorkCtrl.getSection()">
-          <md-option value="">All</md-option>
+          <!-- <md-option value="">All</md-option> -->
           <md-option ng-repeat="class in homeWorkCtrl.yearAndStandardList" ng-value="class.id">
             {{class.name}}
           </md-option>
