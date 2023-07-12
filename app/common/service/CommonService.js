@@ -158,7 +158,9 @@
                 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
                     ];
-                var date = new Date(date);
+                let parts = date.split('-'); // Split the string into day, month, and year parts
+                let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                var date = new Date(formattedDate);
                 return ("0" + date.getDate()).slice(-2)+"/"+(monthNames[date.getMonth()])+"/"+date.getFullYear();
             }
         };

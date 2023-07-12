@@ -461,6 +461,25 @@
             </md-input-container>
 
         </div>
+        <div>
+            <md-input-container class="flex required-mark">
+                <label>ADMISSION NUMBER</label>
+                <input type="text" class="md-input" data-ng-model="mScope.mForm.admissionNo" data-ng-maxlength="30"
+                       data-ng-minlength="3" name="admissionNo" required autocomplete="off">
+                <div data-ng-messages="modelForm.admissionNo.$error"
+                     data-ng-if="modelForm.admissionNo.$touched || modelForm.$submitted" class="has-error">
+                    <div data-ng-message="required" class="help-block">
+                        <small>Admission Number is required !</small>
+                    </div>
+                    <div data-ng-message="minlength" class="help-block">
+                        <small>Admission Number is too short.</small>
+                    </div>
+                    <div data-ng-message="maxlength" class="help-block">
+                        <small>Admission Number is too long.</small>
+                    </div>
+                </div>
+            </md-input-container>
+        </div>
 
         <div class="row fluid" data-ng-if="mScope.instituteType =='College'" style="margin-bottom: 3%;">
             <label class="radio radio-inline">First Graduate</label>
